@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>车辆管理</title>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/head.css" />
+		<style type="text/css">
+			.el-main {
+				line-height: 40px;
+				overflow: hidden;
+			}
+			
+			.el-row {
+				margin-bottom: 0;
+				text-align: left;
+			}
+			
+			.color-style-1 {
+				color: #67C23A;
+			}
+			
+			.color-style-2 {
+				color: #409EFF;
+			}
+			
+			.color-style-3 {
+				color: #E6A23C;
+			}
+			
+			.grid-content {
+				padding: 10px;
+				background-color: white;
+			}
+			
+			.car-box-left {
+				height: 40px;
+				width: 40px;
+				border-radius: 40px;
+				border: 1px solid #EBEBEB;
+				text-align: center;
+				overflow: hidden;
+			}
+			
+			.text-align-right {
+				text-align: right;
+			}
+			
+			.add-car-box button {
+				width: 80%;
+				border: 1px dashed #409EFF;
+				border-radius: 20px;
+				height: 30px;
+				background-color: transparent;
+				color: #409EFF;
+			}
+			/*滑動*/
+			
+			.list-item {
+				position: relative;
+				/*height: 160px;*/
+				-webkit-transition: all 0.2s;
+				transition: all 0.2s;
+			}
+			
+			.list-item[data-type="0"] {
+				transform: translate3d(0, 0, 0);
+			}
+			
+			.list-item[data-type="1"] {
+				transform: translate3d(-80px, 0, 0);
+			}
+			
+			.list-item:after {
+				content: " ";
+				position: absolute;
+				left: 20px;
+				bottom: 0;
+				right: 0;
+				height: 1px;
+				border-bottom: 1px solid #ccc;
+				color: #ccc;
+				-webkit-transform-origin: 0 100%;
+				transform-origin: 0 100%;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				z-index: 2;
+			}
+			
+			.list-box {
+				overflow: hidden;
+			}
+			
+			.list-item .delete {
+				width: 80px;
+				height: 62px;
+				background: #ff4949;
+				font-size: 17px;
+				color: #fff;
+				text-align: center;
+				line-height: 62px;
+				position: absolute;
+				top: 0;
+				right: -80px;
+			}
+			
+			.el-row {}
+			
+			li {
+				list-style: none;
+			}
+			
+			ul {
+				padding: 0;
+				overflow: hidden;
+			}
+			
+			.autoplayspan {
+				color: #262626;
+			}
+			
+			.platenumbers {
+				margin-left: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<el-container>
+				<el-header id="find_car_cont" style='background-color: #F2BE14;height: auto;'>
+					<h3><i class="el-icon-arrow-left"></i>车辆管理</h3>
+
+				</el-header>
+				<el-main>
+					<div style="overflow: hidden;">
+						<div class="list-item" style="margin-bottom: 10px;" v-for='(item,index) in allVehicles' data-type="0">
+
+							<el-row>
+								<el-col :span="24">
+									<div class="grid-content bg-purple-dark list-box" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">
+										<el-row class=''>
+
+											<el-row>
+												<el-col :span="12">
+													<el-row>
+														<el-col :span="6">
+															<div class="car-box-left">{{item.platenumber1}}</div>
+														</el-col>
+														<el-col :span="18">
+															<span class="platenumbers">{{item.platenumber}}</span>
+
+														</el-col>
+
+													</el-row>
+												</el-col>
+												<el-col :span="12" class='text-align-right'>
+													<span class="autoplayspan">自动支付</span>
+													<el-switch v-model="item.autopayment" active-color="#13ce66" inactive-color="#ff4949">
+													</el-switch>
+												</el-col>
+
+											</el-row>
+
+									</div>
+									<!--<div class="delete" @click="deleteItem" :data-index="index">删除</div>-->
+									<div class="delete" @click="unbindCars(item.carnumber)" :data-index="index">删除</div>
+								</el-col>
+								</el-row>
+
+						</div>
+					</div>
+
+					<!--add-->
+					<el-row class='add-car-box' style='line-height: 50px;background-color: white;text-align: center;margin-top: 10px;'>
+						<el-col :span="24">
+							<a href="addcar.html"><button><i class="el-icon-circle-plus-outline"></i>添加车辆</button></a>
+						</el-col>
+					</el-row>
+		</div>
+		</el-main>
+
+		</el-container>
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../dist/vehiclemanagement.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getuserInfo = getuserInfo; //通过openid获取用户信息
+
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						allrecords: [],
+						startX: 0,
+						endX: 0,
+						value1: true,
+						value2: true,
+						allVehicles: []
+					};
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+						//加载完成执行
+						this.allrecords = allrecords;
+						//加载车辆列表
+						this.getAllCars();
+						//						console.log(allrecords)
+
+					})
+				},
+				methods: {
+					//跳转
+					skip() {
+						if(this.checkSlide()) {
+							this.restSlide();
+						} else {
+							//							alert('You click the slide!')
+						}
+					},
+					//滑动开始
+					touchStart(e) {
+						// 记录初始位置
+						this.startX = e.touches[0].clientX;
+						//						console.log('start')
+					},
+					//滑动结束
+					touchEnd(e) {
+						// 当前滑动的父级元素
+						let parentElement = e.currentTarget.parentElement.parentElement.parentElement;
+						// 记录结束位置
+						this.endX = e.changedTouches[0].clientX;
+						// 左滑
+						//						console.log(parentElement.parentElement.parentElement)
+						if(parentElement.dataset.type == 0 && this.startX - this.endX > 30) {
+							this.restSlide();
+							parentElement.dataset.type = 1;
+						}
+						// 右滑
+						if(parentElement.dataset.type == 1 && this.startX - this.endX < -30) {
+							this.restSlide();
+							parentElement.dataset.type = 0;
+						}
+						this.startX = 0;
+						this.endX = 0;
+						console.log('end')
+					},
+					//判断当前是否有滑块处于滑动状态
+					checkSlide() {
+						let listItems = document.querySelectorAll('.list-item');
+						for(let i = 0; i < listItems.length; i++) {
+							if(listItems[i].dataset.type == 1) {
+								return true;
+							}
+						}
+						return false;
+					},
+					//复位滑动状态
+					restSlide() {
+						let listItems = document.querySelectorAll('.list-item');
+						// 复位
+						for(let i = 0; i < listItems.length; i++) {
+							listItems[i].dataset.type = 0;
+						}
+					},
+					//删除
+					deleteItem(e) {
+						// 当前索引
+						let index = e.currentTarget.dataset.index;
+						// 复位
+						this.restSlide();
+						// 删除
+						this.allrecords.splice(index, 1);
+					},
+					//获取车辆列表
+					getAllCars: function() {
+						var _this = this;
+						axios.get(baseUrl + '/api/car/list', {
+								params: {
+									userId: userId
+								}
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									_this.allVehicles = [];
+									//从后台获取所有的车辆
+									for(var i = 0; i < res.data.data.content.length; i++) {
+										if(res.data.data.content[i].isBind){
+											_this.allVehicles.push({
+												carnumber: res.data.data.content[i].carNo,
+												platenumber1: res.data.data.content[i].carNo.substr(0, 1) + "*",
+												platenumber: "***" + res.data.data.content[i].carNo.substr(-2)
+											})
+										}
+										
+									}
+									console.log(_this.allVehicles)
+								}
+							})
+							.catch(function(err) {
+
+							})
+
+					},
+					//解除用户绑定的车辆
+					unbindCars: function(carnumber) {
+						var _this = this;
+						var params = new URLSearchParams();
+						params.append('carNo', carnumber);
+						params.append('userId', userId);
+						axios.post(baseUrl + '/api/car/unbind', params)
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									console.log('解绑成功');
+									//调用车辆列表
+									// 复位
+									_this.restSlide();
+									_this.getAllCars();
+
+								}else{
+									console.log(res)
+								}
+							})
+							.catch(function(err) {
+
+							})
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+
+	</body>
+
+</html>

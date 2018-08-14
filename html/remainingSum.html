@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>钱包充值</title>
+		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+
+		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.1.0-web/css/all.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<style type="text/css">
+			html,
+			body {
+				background-color: white;
+				position: relative;
+			}
+			
+			.remainingSumBox {
+				padding: 0 20px;
+				margin: 0 auto;
+				box-sizing: border-box;
+			}
+			
+			.month-car-button ul {
+				overflow: hidden;
+				padding: 0;
+			}
+			
+			.month-car-button li {
+				list-style: none;
+				width: 47%;
+				margin-bottom: 15px;
+			}
+			
+			.floatLeft {
+				float: left;
+			}
+			
+			.floatRight {
+				float: right;
+			}
+			
+			.month-car-button div {
+				box-sizing: border-box;
+				width: 100%;
+				padding: 20px 10px;
+				padding: 15px 0;
+				text-align: center;
+				border-radius: 4px;
+			}
+			
+			.month-car-button div p {
+				margin: 0;
+			}
+			
+			.normalButton {
+				background-color: #F2F2F2;
+			}
+			
+			.activeButton {
+				background-color: #26a2ff;
+				color: white;
+			}
+			
+			.paymentImg {
+				width: 24px;
+				vertical-align: middle;
+			}
+			
+			.paymentBox ul {
+				overflow: hidden;
+				padding: 0;
+				margin: 0;
+			}
+			
+			.paymentBox li {
+				list-style: none;
+				float: left;
+				line-height: 56px;
+			}
+			
+			.paymentBox li:nth-of-type(1) {
+				width: 8%;
+			}
+			
+			.paymentBox li:nth-of-type(2) {
+				width: 92%;
+			}
+			/*修改*/
+			
+			.mint-cell-wrapper {
+				padding: 0;
+			}
+			
+			.payBox {
+				width: 100%;
+				padding: 15px 20px;
+				box-sizing: border-box;
+				position: fixed;
+				bottom: 0;
+			}
+			
+			.protocol {
+				text-align: center;
+			}
+			
+			.protocol span {
+				color: red;
+			}
+			/*遮罩层*/
+			
+			.popBox {
+				width: 100%;
+				height: 100%;
+				position: fixed;
+				top: 0;
+				left: 0;
+				background-color: rgba(0, 0, 0, 0.7);
+			}
+			/*数字键盘开始*/
+			
+			.clearfix:after {
+				content: "\200B";
+				display: block;
+				height: 0;
+				clear: both;
+			}
+			
+			.clearfix {
+				*zoom: 1;
+			}
+			/*IE/7/6*/
+			
+			#div1 {
+				/*text-align: center;*/
+			}
+			/*.shuru div::-webkit-scrollbar {
+				width: 0;
+				height: 0;
+				-webkit-transition: 1s;
+			}
+			
+			.shuru div::-webkit-scrollbar-thumb {
+				background-color: #a7afb4;
+				background-clip: padding-box;
+				min-height: 28px;
+			}
+			
+			.shuru div::-webkit-scrollbar-thumb:hover {
+				background-color: #525252;
+				background-clip: padding-box;
+				min-height: 28px;
+			}
+			
+			.shuru div::-webkit-scrollbar-track-piece {
+				background-color: #ccd0d2;
+			}
+			
+			.shuru div {
+				border: none;
+				width: 100%;
+				height: 50px;
+				font-size: 25px;
+				line-height: 50px;
+				
+				text-indent: 30px;
+				outline: none;
+				white-space: pre;
+				overflow-x: scroll;
+			}*/
+			
+			.shuru input::-webkit-scrollbar {
+				width: 0;
+				height: 0;
+				-webkit-transition: 1s;
+			}
+			
+			.shuru input::-webkit-scrollbar-thumb {
+				background-color: #a7afb4;
+				background-clip: padding-box;
+				min-height: 28px;
+			}
+			
+			.shuru input::-webkit-scrollbar-thumb:hover {
+				background-color: #525252;
+				background-clip: padding-box;
+				min-height: 28px;
+			}
+			
+			.shuru input::-webkit-scrollbar-track-piece {
+				background-color: #ccd0d2;
+			}
+			
+			.shuru input {
+				border: none;
+				width: 100%;
+				height: 50px;
+				font-size: 25px;
+				line-height: 50px;
+				text-indent: 30px;
+				outline: none;
+				white-space: pre;
+				overflow-x: scroll;
+			}
+			
+			.wrap {
+				position: relative;
+				margin: auto;
+				max-width: 640px;
+				min-width: 320px;
+				width: 100%;
+				height: 100%;
+				background: #F0EFF5;
+				overflow: hidden;
+			}
+			
+			.layer-content {
+				/*position: absolute;
+				left: 50%;*/
+				bottom: -200px;
+				width: 100%;
+				max-width: 640px;
+				height: auto;
+				/*z-index: 12;*/
+				/*-webkit-transform: translateX(-50%);
+				transform: translateX(-50%);*/
+				background-color: white;
+				/*修改*/
+				position: fixed;
+				bottom: 0;
+				z-index: 101;
+				display: none;
+			}
+			/* 输入表单 */
+			
+			.edit_cash {
+				display: block;
+				margin-top: 15px;
+				padding: 15px;
+				margin: 0 auto;
+				width: 90%;
+				border: 1px solid #CFCFCF;
+				border-radius: 10px;
+				background-color: #fff;
+			}
+			
+			.edit_cash p {
+				font-size: 14px;
+				color: #8D8D8F;
+			}
+			
+			.shuru {
+				position: relative;
+				margin-bottom: 10px;
+				padding: 0 20px;
+				border-bottom: 1px solid #CFCFCF;
+			}
+			
+			.shuru span {
+				position: absolute;
+				top: 5px;
+				font-size: 25px;
+			}
+			
+			.submit {
+				display: block;
+				margin: 0 auto 10px;
+				width: 90%;
+				height: 40px;
+				font-size: 16px;
+				color: #fff;
+				/*background: #80D983;*/
+				background-color: #8D8D8F;
+				border: 0px;
+				border-radius: 3px;
+				/**/
+			}
+			
+			.active {
+				background: #80D983;
+			}
+			/* 键盘 */
+			
+			.form_edit {
+				width: 100%;
+				background: #D1D4DD;
+			}
+			
+			.form_edit>div {
+				margin-bottom: 2px;
+				margin-right: 0.5%;
+				float: left;
+				width: 33%;
+				height: 45px;
+				text-align: center;
+				color: #333;
+				line-height: 45px;
+				font-size: 18px;
+				font-weight: 600;
+				background-color: #fff;
+				border-radius: 5px;
+			}
+			
+			.form_edit>div:nth-child(3n) {
+				margin-right: 0;
+			}
+			
+			.form_edit>div:last-child {
+				background-color: #DEE1E9;
+			}
+			/*其他金额*/
+			
+			.otherMoney {
+				/*padding: 0 20px;*/
+			}
+			
+			.otherMoneyHead {
+				border-bottom: 1px solid #DCDFE6;
+			}
+			
+			.otherMoneyHead ul {
+				overflow: hidden;
+				width: 100%;
+				margin: 0;
+			}
+			
+			.otherMoneyHead li {
+				list-style: none;
+				line-height: 60px;
+				width: 33%;
+				float: left;
+				text-align: center;
+				font-size: 12px;
+			}
+			
+			.otherMoneyHead .fontsize1 {
+				font-size: 18px;
+			}
+			/*数字键盘结束*/
+			/*用户协议*/
+			
+			.userAgumentBbox {
+				
+				display: none;
+				width: 100%;
+				min-height: 100%;
+				/*height: auto;*/
+				background-color: white;
+				position: fixed;
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding: 15px;
+				box-sizing: border-box;
+				z-index: 300;
+			}
+			
+			.userAgumentBbox h3 {
+				text-align: center;
+			}
+			
+			.userAgumentBbox p {
+				text-indent: 28px;
+				font-size: 14px;
+			}
+			
+			.closeImg {
+				width: 24px;
+				height: 24px;
+				float: right;
+				top: 15px;
+				right: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<mt-header title="钱包充值">
+				<a href="home.html" slot="left">
+					<mt-button icon="back"></mt-button>
+				</a>
+			</mt-header>
+			<div class="remainingSumBox">
+				<div class="month-car-button">
+					<p>充值金额</p>
+					<ul>
+						<li v-for="(ruleItem,index) in rechargeRules" v-on:click="chooseMonth(index,ruleItem.id)" :class="{floatRight:index%2==1,floatLeft:index%2!=1}">
+							<div v-if="ruleItem.rechargeMoney!='其他金额'" v-bind:class="{activeButton:currentIndex==index,normalButton:currentIndex!=index,shuzi:ruleItem.rechargeMoney=='其他金额'}">
+								<p class="font-size-4">{{ruleItem.rechargeMoney/100}}元</p>
+								<p class="font-size-1">售价:{{ruleItem.payPrice/100}}元</p>
+							</div>
+							<div v-else-if="ruleItem.rechargeMoney=='其他金额'&&otherMoney==''" v-bind:class="{normalButton:currentIndex==index,normalButton:currentIndex!=index,shuzi:ruleItem.rechargeMoney=='其他金额'}">
+								其他金额空
+							</div>
+							<div v-else-if="ruleItem.rechargeMoney=='其他金额'&&otherMoney!=''" v-bind:class="{activeButton:currentIndex==index,normalButton:currentIndex!=index,shuzi:ruleItem.rechargeMoney=='其他金额'}">
+								{{otherMoney}}
+							</div>
+						</li>
+
+					</ul>
+				</div>
+				<!--选择充值方式-->
+				<div class="paymentBox">
+					<ul>
+						<li>
+							<img class="paymentImg" src="../img/wechat_pay.png" />
+						</li>
+						<li>
+							<mt-radio align="right" v-model="payment" :options="payments">
+								<!--<img src="../img/wechat_pay.png"/>-->
+							</mt-radio>
+						</li>
+					</ul>
+
+				</div>
+
+			</div>
+			<div class="payBox">
+				<p class="protocol">点击冲击及表示已阅读并同意 <span onclick="check()">充值协议</span></p>
+				<mt-button v-if="payment==''" type="default" size='large'>去充值</mt-button>
+				<mt-button v-else @click="submitRecharge" type="primary" size='large'>去充值</mt-button>
+			</div>
+
+			<!--数字键盘-->
+			<div class="layer-content">
+				<div class="otherMoney">
+					<!---->
+					<div class="otherMoneyHead">
+						<ul>
+							<li class="cancelBtn" @click="cancelBtn">取消</li>
+							<li class="fontsize1">其他金额</li>
+							<li style="color: transparent;"></li>
+						</ul>
+					</div>
+
+					<!--展示金额-->
+					<div class="shuru">
+						<span>&yen;</span>
+						<input id="div1" v-model="otherMoney" readonly="readonly" />
+
+					</div>
+					<!--<div class="confirmBox">
+					<button>确定</button>
+				</div>-->
+					<input @click="confirmMoney" type="button" value="确定" class="submit" />
+				</div>
+
+				<div class="form_edit clearfix">
+					<div class="num">1</div>
+					<div class="num">2</div>
+					<div class="num">3</div>
+					<div class="num">4</div>
+					<div class="num">5</div>
+					<div class="num">6</div>
+					<div class="num">7</div>
+					<div class="num">8</div>
+					<div class="num">9</div>
+					<div class="num">.</div>
+					<div class="num">0</div>
+					<div id="remove">删除</div>
+				</div>
+			</div>
+
+			<!--用户协议-->
+			<div class="userAgumentBbox">
+				<h3>
+				充值协议
+				<img class="closeImg" src="../img/close.png"/>
+			</h3>
+				<p>
+					爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，
+				</p>
+
+			</div>
+
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<!--支付流程 1-->
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getuserInfo = getuserInfo; //通过openid获取用户信息
+			//支付流程  2 ： 获取网页配置信息
+			var getConfigInfoFun = getConfigInfo(); //获取网页配置信息
+
+			//其他金额
+			var otherMoneyVal;
+
+			//选中的充值
+			var lastIndex = 0;
+			var otherIndex;
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						//充值金额
+						currentIndex: 0,
+						choosedMoney: '',
+						moneys: [1000, 500, 300, 200, 100, 50, '其他金额'],
+						rechargeRules: [],
+						//支付方式
+						payment: '',
+						payments: [{
+							label: "微信",
+							value: 'wechatpay'
+						}],
+						//其他金额
+						otherMoney: '',
+						//支付金额
+						payMoney: ''
+					};
+				},
+				computed: {
+
+				},
+				mounted: function() {
+					//初始化充值规则
+					this.getRechargeRuleList();
+					this.$nextTick(function() {
+						//加载完成执行
+					})
+				},
+				watch: {
+
+				},
+				methods: {
+					//获取充值规则列表
+					getRechargeRuleList: function() {
+						var _this = this;
+						axios.get(baseUrl + '/api/balance/rechargerule/list', {
+								params: {
+
+								}
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									//									"id": "297e0bc46536444c01653644a9b20000",
+									//							        "name": "冲19.8享20元",
+									//							        "rechargeMoney": 2000,
+									//							        "payPrice": 1980,
+									//							        "activationStatus": "ACTIVATION",
+									//							        "remark": null
+									_this.rechargeRules = res.data.data.content;
+
+								}
+							})
+							.catch(function(err) {
+
+							})
+					},
+					//					选择一个充值套餐
+					chooseMonth: function(index, id) {
+						if(this.currentIndex != index) {
+							if(this.moneys[index] == "其他金额" && this.otherMoney == "") {
+								this.currentIndex = lastIndex;
+								otherIndex = index; //保存其他金额的index
+							} else {
+								this.currentIndex = index;
+								lastIndex = index;
+							}
+						} else {
+							this.currentIndex = 0;
+						}
+					},
+					//提交订单 1 ：订单签名
+					submitRecharge: function() { //去充值
+
+						if(this.rechargeRules[this.currentIndex].rechargeMoney != "其他金额") {
+							//支付流程  3 ：通过config接口注入权限验证配置
+							wx.config({
+								debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+								appId: getConfigInfoFun.appid, // 必填，公众号的唯一标识
+								timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
+								nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
+								signature: getConfigInfoFun.signature, // 必填，签名
+								jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表
+							});
+							//支付流程   4 ：通过ready接口处理成功验证
+							wx.ready(function() {
+								console.log('配置成功')
+								//支付流程  5 ：配置成功后调用创建支付订单的接口
+								createPayOrder(); //此处为创建支付订单函数
+							});
+							//			通过error接口处理失败验证
+							wx.error(function(res) {
+								// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+							});
+
+						} else {
+							this.payMoney = this.otherMoney;
+						}
+
+					},
+					//支付流程  5 :创建支付订单
+					createPayOrder: function() {
+						var params = new URLSearchParams();
+						params.append('payModes', 'WECHATPAY'); //支付方式（微信、支付宝）WECHATPAY|ALIPAY = ['WECHATPAY', 'ALIPAY']
+						params.append('billStatus', 'WAITPAY'); //支付方式（微信、支付宝）WECHATPAY|ALIPAY = ['WECHATPAY', 'ALIPAY']
+						params.append('payPrice', this.rechargeRules[this.currentIndex].payPrice); //支付金额
+						params.append('rechargeMoney', this.rechargeRules[this.currentIndex].rechargeMoney); //充值金额
+						params.append('rechargeRuleId', this.rechargeRules[this.currentIndex].id); //引用的充值规则ID
+						params.append('productName', this.rechargeRules[this.currentIndex].name); //商品名称
+						params.append('userId', userId); //用户id
+						axios.post(baseUrl + '/api/balance/rechargebill/addAndSign', params)
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									//										订单id
+									//										res.data.data.id
+									//支付流程6 ： 订单创建成功之后调微信的支付接口
+									payOrder(res.data.data.id, res.data.data.payPrice);
+
+								}
+							})
+							.catch(function(err) {
+
+							})
+						this.payMoney = this.moneys[this.currentIndex];
+					},
+					//支付流程6 ： 微信支付签名
+					payOrder: function(orderCode, payPrice) {
+						$.ajax({
+							type: "post",
+							url: baseUrl + "/api/wechat/publicaccount/pay/bill/sing/test",
+							data: {
+//								body: '充值订单', //商品描述
+//								billCode: orderCode, //订单号
+//								total_fee: payPrice, //总金额
+//								openid: , //用户标识
+//								attach: //附加数据
+							},
+							success: function(data) {
+								if(data.code == 200) {
+									//7 支付流程 ：签名成功之后调用支付接口
+									function onBridgeReady() {
+										WeixinJSBridge.invoke(
+											'getBrandWCPayRequest', {
+												"appId": data.data.sign.appId, //公众号名称，由商户传入     
+												"timeStamp": data.data.sign.timeStamp, //时间戳，自1970年以来的秒数     
+												"nonceStr": data.data.sign.nonceStr, //随机串     
+												"package": data.data.sign.package,
+												"signType": "MD5", //微信签名方式：     
+												"paySign": data.data.sign.sign //微信签名 
+											},
+											function(res) {
+
+												if(res.err_msg == "get_brand_wcpay_request:ok") {
+													promptBtnFun("交易成功")
+													window.location.href = "";
+												}
+												if(res.err_msg == "get_brand_wcpay_request:cancel") {
+													promptBtnFun("交易取消");
+													window.location.href = "";
+												}
+												if(res.err_msg == "get_brand_wcpay_request:fail") {
+													promptBtnFun("支付失败");
+													window.location.href = "";
+												}
+
+											}
+										);
+									}
+									if(typeof WeixinJSBridge == "undefined") {
+										if(document.addEventListener) {
+											document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+										} else if(document.attachEvent) {
+											document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+											document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+										}
+									} else {
+										onBridgeReady();
+									}
+
+								}
+							},
+							error: function(data) {
+								promptBtnFun(data.msg)
+							}
+						});
+					},
+
+					cancelBtn: function() { //取消
+						this.otherMoney = '';
+					},
+					confirmMoney: function() { //确定输入的金额
+						this.otherMoney = otherMoneyVal;
+
+						if(this.otherMoney != '') {
+							this.currentIndex = otherIndex;
+						}
+					}
+				},
+				components: {
+
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app');
+
+			//数字键盘
+			$(function() {
+				// 监听#div内容变化，改变支付按钮的颜色
+				$('#div1').bind('DOMNodeInserted', function() {
+					if($("#div1").val() != "" || $("#div1").val() > '0') {
+						$('.submit').addClass('active');
+					} else {
+						$('.submit').removeClass('active');
+					}
+				})
+				$('#div1').trigger('DOMNodeInserted');
+
+				$('.shuzi').click(function(e) {
+					$("#div1").val("");
+					$('.layer-content').fadeIn();
+
+					e.stopPropagation();
+				})
+				$('.submit').click(function() {
+					$('.layer-content').fadeOut();
+				})
+
+				$(".cancelBtn").click(function() {
+					$('.layer-content').fadeOut();
+				})
+
+				$('.form_edit .num').click(function() {
+					var oDiv1 = document.getElementById("div1");
+					oDiv1.value += this.innerHTML;
+					otherMoneyVal = oDiv1.value;
+				})
+				$('#remove').click(function() {
+					var oDiv = document.getElementById("div1");
+					var oDivHtml = oDiv.value;
+					oDiv.value = oDivHtml.substring(0, oDivHtml.length - 1);
+					otherMoneyVal = oDiv.value;
+				})
+			})
+
+			//查看协议
+			function check() {
+				$(".userAgumentBbox").fadeIn();
+			}
+			$(".closeImg").click(function() {
+				$(".userAgumentBbox").fadeOut();
+			})
+		</script>
+
+	</body>
+
+</html>

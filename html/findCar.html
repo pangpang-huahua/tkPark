@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>车辆查找</title>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/keybord.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
+		<link rel="stylesheet" type="text/css" href="../css/head.css"/>
+		
+	</head>
+
+	<body>
+		<div id="app">
+			<div id="find_car_cont">
+				<el-container>
+					<el-header style='background-color: #F2BE14;'>
+						<h3><i class="el-icon-arrow-left"></i>车辆查找</h3>
+					</el-header>
+					<div id="find_car_cont_cont">
+					
+						<el-main>
+							<el-row>
+								<el-col :span="12">
+									<div class="grid-content">北京物美停车场总部</div>
+								</el-col>
+								<el-col :span="12">
+									<div class="grid-content text-align-right">切换<i class="el-icon-caret-right"></i></div>
+								</el-col>
+							</el-row>
+							<el-row>
+								<el-col :span="24">
+									<div class="grid-content ">
+										入场时间
+										<el-select v-model="value" placeholder="请选择">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</div>
+								</el-col>
+
+							</el-row>
+							<div id="license-plate-number">
+								<p>请输入真是有效的车牌号查询</p>
+								<div class="car_input">
+									<ul class="clearfix ul_input"  v-bind:style="{width:ulWidth}">
+										<li class="input_pro"><span></span></li>
+										<li class="input_pp input_zim"><span></span></li>
+										<li class="input_pp"><span></span></li>
+										<li class="input_pp"><span></span></li>
+										<li class="input_pp"><span></span></li>
+										<li class="input_pp"><span></span></li>
+										<li class="input_pp"><span></span></li>
+									<li class="input_pp" v-if="checked"><span></span></li>
+						</ul>
+					</div>
+					<div id="jp_pro"></div>
+					
+					<el-checkbox v-model="checked">新能源车牌</el-checkbox>
+							</div>
+						</el-main>
+					
+					</div>
+							<div class="cars-list">
+								<a href="parkpayment.html"><el-main>
+								<el-row>
+									<el-col :span="5">
+										<!--<div class="grid-content">北京物美停车场总部</div>-->
+										<img class="img-show-100" src="../img/1-1506131104550-L.jpg"/>
+									</el-col>
+									<el-col :span="19">
+										<el-row class=''>
+											<el-col :span="9"><span class='margin-left-style font-size-sty2'>京A 56ABC</span></el-col>
+											<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">12元</span></el-col>
+											<el-col :span="3" class='text-align-right'>
+												<i class="el-icon-question color-style-1"></i>
+											</el-col>
+										</el-row>
+										<el-row class='margin-sty'>
+											<el-col :span="24" class='font-size-1'>
+												<div class='margin-left-style font-color-sty3'>
+													入场时间：<span id="entry-time">2018-7-3 AM：9:20</span>   收费：<span id="charge-money"></span>3元/小时
+												</div>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="24">
+												<div class='margin-left-style font-size-sty3'>停车场：北京物美总部  2号立体车库  E19</div> 
+											</el-col>
+											
+										</el-row>
+									</el-col>
+								</el-row>
+								</el-main>
+								</a>
+							</div>
+							<div class="cars-list">	
+								<el-main>
+								<el-row>
+									<el-col :span="5">
+										<!--<div class="grid-content">北京物美停车场总部</div>-->
+										<img class="img-show-100" src="../img/1527fa26ccd6c695c420a7a63da77c03.jpg"/>
+									</el-col>
+									<el-col :span="19">
+										<el-row class=''>
+											<el-col :span="9"><span class='margin-left-style font-size-sty2'>京A 56ABC</span></el-col>
+											<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">12元</span></el-col>
+											<el-col :span="3" class='text-align-right'>
+												<i class="el-icon-question color-style-1"></i>
+											</el-col>
+										</el-row>
+										<el-row class='margin-sty'>
+											<el-col :span="24" class='font-size-1'>
+												<div class='margin-left-style font-color-sty3'>
+													入场时间：<span id="entry-time">2018-7-3 AM：9:20</span>   收费：<span id="charge-money"></span>3元/小时
+												</div>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="24">
+												<div class='margin-left-style font-size-sty3'>停车场：北京物美总部  2号立体车库  E19</div> 
+											</el-col>
+											
+										</el-row>
+									</el-col>
+								</el-row>
+								</el-main>
+							</div>
+							<div class="cars-list">	
+								<el-main>
+								<el-row>
+									<el-col :span="5">
+										<!--<div class="grid-content">北京物美停车场总部</div>-->
+										<img class="img-show-100" src="../img/240957599088.jpg"/>
+									</el-col>
+									<el-col :span="19">
+										<el-row class=''>
+											<el-col :span="9"><span class='margin-left-style font-size-sty2'>京A 56ABC</span></el-col>
+											<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">12元</span></el-col>
+											<el-col :span="3" class='text-align-right'>
+												<i class="el-icon-question color-style-1"></i>
+											</el-col>
+										</el-row>
+										<el-row class='margin-sty'>
+											<el-col :span="24" class='font-size-1'>
+												<div class='margin-left-style font-color-sty3'>
+													入场时间：<span id="entry-time">2018-7-3 AM：9:20</span>   收费：<span id="charge-money"></span>3元/小时
+												</div>
+											</el-col>
+										</el-row>
+										<el-row>
+											<el-col :span="24">
+												<div class='margin-left-style font-size-sty3'>停车场：北京物美总部  2号立体车库  E19</div> 
+											</el-col>
+											
+										</el-row>
+									</el-col>
+								</el-row>
+								</el-main>
+							</div>
+						
+					</el-main>
+				</el-container>
+
+			</div>
+		</div>
+
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/index.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						options: [{
+							value: '选项1',
+							label: '1小时内'
+						}, {
+							value: '选项2',
+							label: '2小时内'
+						}, {
+							value: '选项3',
+							label: '2小时30分钟内'
+						}],
+						value: '',
+						checked: false,
+						ulWidth: '300px'
+					};
+				},
+				watch:{
+					checked: function() {
+						if(this.checked){
+							this.ulWidth = '350px' ;
+						}else{
+							this.ulWidth = '300px' ;
+						}
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+	</body>
+
+</html>

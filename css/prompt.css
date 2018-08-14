@@ -1,0 +1,18 @@
+#prompt{
+	border: none;
+	padding: none;
+	padding: 0 10px;
+	width:150px;
+	height: 54px;
+	background-color: rgba(0,0,0,0.8);
+	color: white;
+	border-radius: 6px;
+	position: fixed;
+	top: 70%;
+	left: 50%;
+	margin-left: -80px;
+	/*margin-top: -25px;*/
+	display: none;
+	box-sizing: border-box;
+	font-size: 14px;
+}

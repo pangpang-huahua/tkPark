@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>个人设置</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<style type="text/css">
+			.personalsetting-box{
+				margin-top: 15px;
+			}
+			.sign-out{
+				padding: 20px;
+				margin-top: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<mt-header title="个人设置">
+				<a href="home.html" slot="left">
+					<mt-button icon="back"></mt-button>
+				</a>
+			</mt-header>
+			<div class="personalsetting-box">
+				<mt-cell title="当前账号" to='modifyPhone.html' is-link :value="userName">
+					
+				</mt-cell>
+				<mt-cell title="注册时间" :value="registrationData"></mt-cell>
+				<div class="sign-out">
+					<mt-button type="primary" size='large' @click="signOut()">退出</mt-button>
+				</div>
+				
+			</div>
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script type="text/javascript">
+			
+//			import Axios from 'axios'
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getuserInfo = getuserInfo; //通过openid获取用户信息
+
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						userName: '15982414496',
+						registrationData: ''
+					};
+				},
+
+				mounted: function() {
+					this.$nextTick(function() {
+						//加载完成执行
+						this.registrationData = new Date();
+					})
+				},
+				watch: {
+					
+				},
+				methods: {
+					signOut: function(){//退出登录
+						//退出成功跳转到home.html
+						axios.post(baseUrl + '/api/user/logout')
+						    .then(function (response) {
+						    	if(response.status==200){
+						    		window.location.href = 'home.html' ;
+						    	}
+						    })
+						    .catch(function (error) {
+						    	console.log(error)
+						    });
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+
+	</body>
+
+</html>

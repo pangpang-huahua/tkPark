@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;">
+		<title>塔库泊车</title>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<!--<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+		<link rel="stylesheet" type="text/css" href="../css/home.css" />-->
+		
+		<style type="text/css">
+			.activeBorder{
+				border: 1px solid red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<p>颜色</p>
+			<div>
+				<!--<input type="button" name="" id="" value="" />-->
+				<button v-bind:class="{activeBorder:index==num}" @click="chooseColor(index)" v-for="(item,index) in good.colors">{{item}}</button>
+			</div>
+			<p>材质</p>
+			<div>
+				<button @click="chooseTexture(index)" v-for="(item,index) in good.texture">{{item}}</button>
+			</div>
+			<p>尺码</p>
+			<div>
+				<button @click="chooseSize(index)" v-for="(item,index) in good.size">{{item}}</button>
+			</div>
+			
+		</div>
+		<script type="text/javascript">
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						good:{
+							colors:['红','黄色','蓝'],
+							texture:['棉麻','真丝','涤纶'],
+							size:['XS','S','M','L']
+						},
+						states:[],
+						borderCss: 'activeBorder',
+						isActive: false,
+						num:-1
+					};
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+						//加载完成执行
+//						this.payMoney = this.payorderInfo[5].price - this.payorderInfo[7].allCoupon[0].price
+//						console.log('loading')
+						//				this.logoUrl = "img/logo1.png"
+					})
+				},
+				methods: {
+					chooseSize: function(index) {
+						console.log(index)
+						
+						
+					},
+					chooseTexture: function(index) {//提交缴费订单
+						console.log(index)
+//						console.log('缴费')
+					},
+					chooseColor:function(index){
+						this.num = index;
+						console.log(index)
+//						this.isActive=true;
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+		
+	</body>
+</html>

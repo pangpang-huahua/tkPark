@@ -1,0 +1,115 @@
+
+html,body{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	outline: none;
+	border: none;
+	background-color: #F0F0F0;
+	font-size: 14px;
+	color: #101010;
+}
+a{
+	text-decoration: none;
+	color: #101010;
+}
+h3,h4{
+	padding: 0;
+	margin: 0;
+	/*line-height: 0;*/
+}
+
+.margin-left-style{
+	margin-left: 5px;
+}
+
+.text-align-right{
+	text-align: center;
+	
+}
+.bg-color-y{
+	background-color: rgb(242, 190, 20);
+}
+.color-style-1{
+	color: rgb(242, 190, 20);
+	font-size: 16px;
+	color: #101010;
+	/*color: red;*/
+}
+.color-sty-2{
+	color: #F2C944;
+	font-size: 14px;
+}
+.font-color-sty3{
+	color: #777676;
+	font-size: 12px;
+}
+
+/*字体*/
+.font-size-1{
+	font-size: 12px;
+}
+.font-size-sty2{
+	font-size: 16px;
+	font-weight: bold;
+}
+.font-size-sty3{
+	font-size: 14px;
+}
+.font-size-4{
+	font-size: 16px;
+}
+
+
+/*背景色*/
+.subject-color-sty1{
+	background-color: #F2BE14;
+	font-weight: bold;
+	padding: 2px 3px;
+	border-radius: 4px;
+}
+
+
+/*生效的按钮*/
+.normalButton {
+				background-color: white;
+				color: ;
+			}
+			.activeButton {
+				background-color: #26a2ff;
+				color: white;
+			}
+			.unactiveButton{
+				background-color: #B8BABE;
+				color: white;
+			}
+
+
+/*头部*/
+			.headerBox{
+				padding: 0 15px;
+				background-color: #26a2ff;
+			}
+			.headerBox ul{
+				overflow: hidden;
+				margin: 0;
+				padding: 0;
+				color: white;
+			}
+			.headerBox ul li{
+				list-style: none;
+				float: left;
+				line-height: 60px;
+				height: 60px;
+			}
+			.headerBox ul li:nth-of-type(1),.headerBox ul li:nth-of-type(3){
+				width: 25%;
+				
+			}
+			.headerBox ul li:nth-of-type(2){
+				width: 50%;
+				text-align: center;
+			}
+			.headerBox ul li:nth-of-type(3){
+				text-align: right;
+			}

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>停车记录</title>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<!--<link rel="stylesheet" type="text/css" href="../css/findCar.css" />-->
+		<link rel="stylesheet" type="text/css" href="../css/head.css" />
+		<style type="text/css">
+			.el-main {
+				line-height: 30px;
+			}
+			
+			.el-row {
+				margin-bottom: 0;
+				text-align: left;
+			}
+			
+			.color-style-1 {
+				color: #67C23A;
+			}
+			
+			.color-style-2 {
+				color: #409EFF;
+			}
+			
+			.color-style-3 {
+				color: #E6A23C;
+			}
+			
+			.grid-content {
+				padding: 10px;
+				background-color: white;
+			}
+			
+			/*新增*/
+			.item-cell-box{
+				line-height: 30px;
+			}
+			.margin-left-style{
+				margin-left: 8px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+				<div class="headerBox">
+					<ul>
+						<li>
+							<i class="fal fa-angle-left"></i>
+						</li>
+						<li>停车记录</li>
+						<li></li>
+					</ul>
+	
+				</div>
+				<div class="parkingRecordCont" style="padding: 10px 15px;">
+					
+					<div style="margin-bottom: 10px;background-color: white;" v-for='(item,index) in allrecords'>
+						<!--标题-->
+						<div class="item-cell-box">
+							<mt-cell v-if="item.enterTime==''" :title="item.platenumber" to="//github.com" is-link value="预约中">
+							 <span class="color-style-1">预约中</span>
+							</mt-cell>
+							<mt-cell v-else-if="item.enterTime!=''&&item.leaveTime==''" :title="item.platenumber" to="//github.com" is-link value="停车中">
+								<span class="color-style-2">停车中</span>
+							</mt-cell>
+							<mt-cell v-else :title="item.platenumber" value="完成">
+								<span class="color-style-3">完成</span>
+							</mt-cell>
+						</div>
+						<div class="item-cell-box">
+							<!--<mt-cell :title="item.parking"></mt-cell>-->
+							<div class='margin-left-style font-size-sty3'>{{item.parking}}</div>
+							
+						</div>
+						<div class="item-cell-box">
+							<div v-if="item.enterTime==''" class='margin-left-style font-color-sty3'>
+								入场时间：未入场（预计入场时间 : {{item.anticipateTime}}）
+							</div>
+							<div v-else class='margin-left-style font-color-sty3'>
+								入场时间：{{item.enterTime}}
+								<span style="margin-left: 10px;">
+									时长：
+									<span v-if="item.stopTime.day!=0">
+										{{item.stopTime.day}}天
+									</span>
+									<span v-if="item.stopTime.hour!=0">
+										{{item.stopTime.hour}}小时
+									</span>
+									<span v-if="item.stopTime.minutes!=0">
+										{{item.stopTime.minutes}}分钟
+									</span>
+									<span v-if="item.stopTime.seconds!=0">
+										{{item.stopTime.seconds}}秒
+									</span>
+								</span>
+							</div>
+						</div>
+						<div class="item-cell-box">
+							<div v-if="item.leaveTime!=''" class='margin-left-style font-color-sty3'>
+								<!--离场时间：{{item.leaveTime}} 停车费：{{item.parkingPrice}}-->
+								离场时间：{{item.leaveTime}} 支付：{{item.parkingPrice}}
+							</div>
+							<div v-else class='margin-left-style font-color-sty3'>
+								离场时间：未立场
+								<!--停车费：{{item.parkingPrice}}-->
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</mt-loadmore>	
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<!--引入计算停留时间的js-->
+		<script src="../js/stoping_time.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getuserInfo = getuserInfo; //通过openid获取用户信息
+			
+			//计算停留时间
+			var stopTimeFun = getStopingTime ;
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						allrecords: [{
+								platenumber: '京 AJK90K',
+								parking: '北京天上人间',
+								enterTime: '',
+								leaveTime: '',
+								stopTime: '',
+								parkingPrice: '',
+								anticipateTime: '2018-7-20 11:20'
+							}, {
+								platenumber: '京 AJK90K',
+								parking: '北京天上人间',
+								enterTime: '2018-7-13 9:30',
+								leaveTime: '',
+								stopTime: {
+									day: 0, 
+									hour: 10,
+									minutes: 0,
+									seconds: 10
+								},
+								parkingPrice: '15'
+							}, {
+								platenumber: '京 AJK90K',
+								parking: '北京天上人间',
+								enterTime: '2018-6-9 15:15',
+								leaveTime: '2018-6-9 19:5',
+								stopTime: {
+									day: 0, 
+									hour: 2,
+									minutes: 10,
+									seconds: 0
+								},
+								parkingPrice: '48'
+							}, {
+								platenumber: '京 AJK90K',
+								parking: '北京天上人间',
+								enterTime: '2018-5-13 16:20',
+								leaveTime: '2018-5-13 17:45',
+								stopTime: {
+									day: 1, 
+									hour: 0,
+									minutes: 0,
+									seconds: 10
+								},
+								parkingPrice: '45'
+							}
+
+						],
+						//分页相关
+						pageData:{
+							pageNumber: 0,
+							pageSize: 20
+						},
+						isHaveMore : true,
+						allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+        				scrollMode:"auto" //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+					};
+				},
+				mounted: function() {
+					//初次访问查询列表
+					this.getParkingRecordList();
+//					this.getCarsList();
+		
+					this.$nextTick(function() {
+						
+					})
+				},
+				methods: {
+					loadTop:function() { //组件提供的下拉触发方法
+				        //下拉重新加载
+				        this.pageData = {
+				        	pageNumber: 0,
+							pageSize: 20
+				        }
+				        this.getParkingRecordList();
+//						this.getCarsList();
+				        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+				    },
+				    loadBottom:function() {
+//				    	alert('下拉加载更多')
+				        // 上拉刷新
+				        this.moreRecordList();// 上拉触发的分页查询
+				        this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
+				    },
+					//获取订单列表
+					getParkingRecordList: function() {
+						var _this = this ; 
+						axios.get(baseUrl + '/api/park/parking/list', {
+							params: {
+								page: _this.pageData.pageNumber,
+								size: _this.pageData.pageSize,
+								sort: 'asc', //排序，格式为property asc|desc，默认升序
+								listOpenParkings:false //只列出还没有完结的泊车订单，默认为false，代表列出所有订单
+							}
+						})
+						.then(function(res){
+							if(res.status == 200 && res.data.code == 200){
+								//获取总的页数
+								if(_this.pageData.pageNumber == res.data.data.totalPages){
+									_this.isHaveMore = false ;
+								}
+								//获取每一项添加到订单记录的数组中
+								for(var i = 0 ; i< res.data.data.content.length ; i++){
+									var stopTimeItem = stopTimeFun(res.data.data.content[i].enterTime,res.data.data.content[i].leaveTime)
+									_this.allrecords.push({
+										parking: res.data.data.content[i].parkingLotName,
+										platenumber: res.data.data.content[i].carNo,
+										enterTime: res.data.data.content[i].enterTime,
+										leaveTime: res.data.data.content[i].leaveTime,
+										stopTime: stopTimeItem,
+										parkingPrice : '',//支付价格
+										payInfo: res.data.data.content[i].payInfo//支付信息
+									})
+								}
+							}
+						})
+						.catch(function(err){
+							
+						})
+					},
+					//获取车辆列表
+					getCarsList: function () {
+						console.log('列表')
+						var _this = this ;
+						axios.get(baseUrl + '/api/car/list' ,{
+							params:{
+								userId: userId,
+								page: _this.pageData.pageNumber,
+								size: _this.pageData.pageSize
+							}
+						})
+						.then(function(res){
+							if(res.status == 200 && res.data.code == 200){
+								//获取总的页数
+								if(_this.pageData.pageNumber == res.data.data.totalPages){
+									alert(_this.pageData.pageNumber)
+									alert(res.data.data.totalPages)
+									alert('数据已全部加载')
+									_this.isHaveMore = false ;
+								}else{
+									
+								}
+							}
+						})
+						.catch(function(err){
+							
+						})
+					},
+					//获取更多记录
+					moreRecordList : function(){
+						//判断所有数据是否已经加载完成
+						if(this.isHaveMore == true){
+							this.pageData.pageNumber = parseInt(this.pageData.pageNumber) + 1;
+							this.getParkingRecordList();
+//							this.getCarsList();
+						}else{
+							this.allLoaded = true ;
+							
+						}
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+
+	</body>
+
+</html>

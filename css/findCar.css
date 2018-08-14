@@ -1,0 +1,48 @@
+
+.el-main{
+	line-height: 10px;
+}
+.el-row{
+	margin-bottom: 0;
+	
+}
+
+.el-checkbox{
+				float: right;
+			}
+.cars-list .el-main{
+	/*padding: 10px 0;*/
+	border-bottom: 1px solid #ECECEC;
+	background-color: white;
+}
+
+
+#find_car_cont_cont{
+	margin-bottom: 15px;
+}
+#find_car_cont_cont .el-main{
+	text-align: left;
+	background-color:white;
+}
+
+.text-align-right{
+	text-align: right;
+	margin-top: -6px;
+}
+
+#license-plate-number{
+	margin-top: 20px;
+}
+
+.img-show-100{
+	width: 100%;
+}
+
+.margin-sty{
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+
+#license-plate-number p{
+	margin-bottom: 10px;
+}

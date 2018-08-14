@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+	</head>
+
+	<body>
+		<div id="app">
+			<mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script type="text/javascript">
+			var Main = {
+				methods: {
+					onValuesChange(picker, values) {
+						console.log(picker)
+						console.log(values)
+						console.log(picker.getSlotValue(0))
+						if(values[0] > values[1]) {
+							picker.setSlotValue(1, values[0]);
+						}
+					}
+				},
+				data() {
+					return {
+						slots: [{
+							flex: 1,
+							values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+							className: 'slot1',
+							textAlign: 'right'
+						}, {
+							divider: true,
+							content: '-',
+							className: 'slot2'
+						}, {
+							flex: 1,
+							values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+							className: 'slot3',
+							textAlign: 'left'
+						}]
+					};
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+	</body>
+
+</html>

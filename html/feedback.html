@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>问题反馈</title>
+		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+
+		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.1.0-web/css/all.css" />
+
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/head.css" />
+		<link rel="stylesheet" type="text/css" href="../css/slideshow.css" />
+		<style type="text/css">
+			.feedbackBox h3,.feedbackBox p{
+				text-align: center;
+			}
+			.feedbackBox p{
+				color: red;
+			}
+			.operationBox{
+				padding: 30px 20px;
+			}
+			.operationBox button:nth-of-type(2){
+				margin-top: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app" class="feedbackBox">
+			<mt-header title="问题反馈">
+				<a href="home.html" slot="left">
+					<mt-button icon="back"></mt-button>
+				</a>
+			</mt-header>
+			<h3>选择你要反馈的问题</h3>
+			<mt-radio
+  align="right"
+  v-model="value"
+  :options="options">
+</mt-radio>
+<p>如果您的车辆还未驶离停车场请勿操作</p>
+<div class="operationBox">
+	<mt-button type="primary" size='large' @click='submit'>提交</mt-button>
+	<mt-button type="default" size='large'>返回</mt-button>
+</div>
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getuserInfo = getuserInfo; //通过openid获取用户信息
+
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						value: '',
+						options:[{
+								label:'我已经驶离停车场',
+								value:'1'
+							},{
+								label:'这条记录不是我的',
+								value:'2'
+							}]
+					};
+				},
+				computed:{
+					
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+						//加载完成执行
+					})
+				},
+				watch: {
+					
+
+				},
+				methods: {
+					submit:function(){
+						//通过this.value获取选中的对象
+						console.log(this.value)
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>我的卡</title>
+		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+
+		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.1.0-web/css/all.css" />-->
+
+		<!--<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />-->
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<style type="text/css">
+			html,body{
+				background-color: white;
+			}
+			#myCarContent {}
+			.grid-car-content{
+				border-bottom: 1px solid #E5E7E9;
+				padding: 15px;
+			}
+			.grid-car-content ul{
+				overflow: hidden;
+				padding: 0;
+				margin: 0;
+			}
+			.grid-car-content ul li{
+				list-style: none;
+				line-height: 100%;
+				float: left;
+			}
+			.grid-car-content ul li:nth-of-type(1){
+				width: 55%;
+			}
+			.grid-car-content ul li:nth-of-type(2){
+				width: 45%;
+				padding-left: 12px;
+				box-sizing: border-box;
+			}
+			.grid-car-content ul li:nth-of-type(2) p:nth-of-type(1){
+				font-size: 18px;
+			}
+			.grid-car-content ul li:nth-of-type(2) p:nth-of-type(2){
+				color: #A3A5AA;
+			}
+			.grid-car-content ul li img{
+				width: 100%;
+				/*border-radius: 10px;*/
+			}
+			.car-item-content{
+				border-radius: 10px;
+				overflow: hidden;
+			}
+			.car-item-content div{
+				line-height: 30px;
+				background-color: #EDEDED;
+				color: #101010;
+				padding: 0 15px;
+				
+			}
+			.original-price{
+				font-size: 10px;
+				color: #C9CBD2;
+				text-decoration: line-through;
+				margin-left: 8px;
+			}
+			.mint-button--small{
+				height: 26px;
+				line-height: 26px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="myCarContent">
+			<mt-header title="我的卡">
+				<a href="" slot="left">
+					<mt-button icon="back"></mt-button>
+				</a>
+			</mt-header>
+			<div class="grid-car-content" v-for="(car,index) in cars">
+				<ul>
+					<li>
+						<div class="car-item-content">
+							<img src="../img/3_02.png"/>
+							<!--<div>5元<span class="original-price">8元</span></div>-->
+							<div>{{car.price}}元<span class="original-price">{{car.originalPrice}}元</span></div>
+						</div>
+						
+					</li>
+					<li>
+						<div>
+							<p>塔库停车·月卡</p>
+							<mt-button size='small'  v-if='car.effect' v-bind:class="{activeButton:car.effect==true,unactiveButton:car.effect==false}" type="primary">
+								生效中
+								
+							</mt-button>
+							<mt-button size='small' v-else v-bind:class="{activeButton:car.effect==true,unactiveButton:car.effect==false}" type="primary">
+								已失效
+								
+							</mt-button>
+							<p>失效日：{{car.expiryDate}}</p>
+						</div>
+						
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getuserInfo = getuserInfo; //通过openid获取用户信息
+
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						cars:''
+					};
+				},
+				computed: {
+					
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+						//加载完成执行
+						//首先后去所有月卡的列表
+						this.cars = [{
+							validity: '30天',
+							originalPrice: 400,
+							price: 360,
+							expiryDate: '2018-8-30',
+							effect:true
+						},{
+							validity: '30天',
+							originalPrice: 400,
+							price: 360,
+							expiryDate: '2018-9-30',
+							effect:true
+						},{
+							validity: '30天',
+							originalPrice: 400,
+							price: 360,
+							expiryDate: '2018-7-28',
+							effect:false
+						}
+						
+						]
+					})
+				},
+				watch: {
+					//					chooseInfo:function(){
+					//						console.log('watch')
+					//						
+					//					}
+				},
+				methods: {
+
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#myCarContent')
+		</script>
+	</body>
+
+</html>

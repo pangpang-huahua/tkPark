@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>塔库泊车</title>
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<style type="text/css">
+			.loginBanner {
+				width: 100%;
+			}
+			
+			#login .userInfo {
+				padding: 0 15px;
+				background-color: white;
+			}
+			
+			.loginTab {
+				width: 100%;
+			}
+			
+			.loginTab td {
+				background-color: white;
+			}
+			
+			.borderBottom {
+				border-bottom: 1px solid #E8E7E7;
+				border-bottom: 1px solid #F1F1F1;
+			}
+			
+			.loginTab input {
+				line-height: 48px;
+				width: 100%;
+				outline: none;
+				border: none;
+				background-color: transparent;
+			}
+			
+			.verificationCode {
+				text-align: right;
+			}
+			
+			.userDeal {
+				font-size: 12px;
+				text-align: center;
+				color: #757575;
+			}
+			
+			.userDeal span {
+				color: #26a2ff;
+			}
+			
+			.nextBotton {
+				padding: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="login">
+			<img class="loginBanner" src="../img/3.jpg" />
+			<div class="userInfo">
+				<!--<form>-->
+				<table class="loginTab" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="borderBottom" colspan="2">
+							<input v-model="phone" type="tel" name="" id="" value="" placeholder="请输入电话号码" />
+						</td>
+					</tr>
+					<tr>
+						<td class="borderBottom"><input v-model="captcha" type="" placeholder="请输入您收到的验证码" /></td>
+						<td class="borderBottom verificationCode">
+							<mt-button v-bind:disabled="disabled" size="normal" v-bind:type="buttonType" v-on:click="getCaptcha">{{captchaText}}</mt-button>
+						</td>
+
+					</tr>
+					<tr>
+						<td colspan="2">
+							<p class="userDeal">
+								点击下一步表示你已阅读并同意
+								<a v-bind:href="agreementHrefN"><span @click="showAgreement">《使用规则及停车服务协议》</span></a>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="nextBotton">
+							<mt-button size="large" type="primary" v-on:click="register">下一步</mt-button>
+						</td>
+					</tr>
+
+				</table>
+				<!--</form>-->
+			</div>
+		</div>
+
+		<!-- 先引入 Vue -->
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/getUserInfo.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			var getParam = GetQueryString;
+			var getCode = getUserInfoFun;
+//			getCode();
+			//			alert("code:"+getParam("code"));
+			new Vue({
+				el: '#login',
+				data() {
+					return {
+						phone: '',
+						captcha: '',
+						verifyPhone: false,
+						verifyCaptcha: false,
+						showAgree: false,
+						agreementHref: 'agreement.html',
+						agreementData: '',
+						buttonType: 'primary',
+						disabled: false,
+						captchaText: '获取验证码',
+						countDownT: 60
+					}
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+						if(getParam('phone') != '' && getParam('phone') != null) {
+							this.phone = getParam('phone');
+						}
+						if(getParam('captcha') != '' && getParam('captcha') != null) {
+							this.captcha = getParam('captcha');
+						}
+					})
+				},
+				computed: {
+					//监听输入框的变化 ，改变URL的值
+					agreementHrefN: function() {
+						return "agreement.html?phone=" + this.phone + "&captcha=" + this.captcha
+					}
+				},
+				watch: {
+
+				},
+				methods: {
+					//验证手机号
+					verifyPhoneF: function() {
+						var phone = this.phone;
+						if(phone == '' || phone == null) {
+							this.$toast("请输入电话号码");
+							return;
+						} else if(!regTel.test(phone)) {
+							this.$toast("请输入有效的电话号码");
+							return;
+						} else {
+							this.agreementHref = "agreement.html?phone=" + this.phone + "&captcha=" + this.captcha
+							return this.verifyPhone = true;
+						}
+					},
+					//验证验证码是否输入
+					verifyCaptchaF: function() {
+						var captcha = this.captcha;
+						if(captcha == '' || captcha == null) {
+							this.$toast("请输入验证码");
+							return;
+						} else {
+							this.agreementHref = "agreement.html?phone=" + this.phone + "&captcha=" + this.captcha
+							return this.verifyCaptcha = true;
+						}
+					},
+					//获取验证码
+					getCaptcha: function() {
+						this.verifyPhoneF();
+						if(this.verifyPhone) {
+							var _this = this;
+							var phone = this.phone;
+							var params = new URLSearchParams();
+							params.append('phone', phone);
+							axios.post(baseUrl + '/api/user/sms/send', params, {
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									}
+								})
+								.then(function(response) {
+									//发送成功后调用倒计时
+									if(response.status == 200 && response.data.code == 200) {
+										_this.countDown();
+									}
+
+								})
+								.catch(function(error) {
+									console.log(error)
+								});
+						}
+					},
+					//验证码倒计时
+					countDown: function() {
+						console.log('倒计时')
+						//首先判断是否大于0
+						if(this.countDownT > 0) {
+							console.log()
+							//1 button改为禁止点击的状态
+							this.disabled = true;
+							//2 文字改为倒计时
+							this.captchaText = this.countDownT + 's';
+							//3 调用倒计时函数
+							//									this.countDown();
+							this.countDownT--;
+
+							setTimeout(this.countDown, 1000)
+						} else {
+							//1 button改为点击的状态
+							this.disabled = false;
+							//2 文字改为'重新发送'
+							this.captchaText = "重新发送";
+							this.countDownT = 60;
+						}
+					},
+					//注册
+					register: function() {
+						this.verifyPhoneF();
+						if(this.verifyPhone) {
+							this.verifyCaptchaF();
+						}
+						if(this.verifyPhone && this.verifyCaptcha) {
+							alert("code::" + getParam("code"));
+							var params = new URLSearchParams();
+							params.append('phone', this.phone)
+							params.append('verifyCode', this.captcha)
+//							params.append('code', getParam("code"));
+							params.append('code', 'jjkkkk');
+							params.append('entrance', 'ALIPAY');
+
+							axios.post(baseUrl + '/api/user/verify', params, {
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									}
+								})
+								.then(function(res) {
+									if(res.data.code == 200){
+										window.location.href='home.html';
+									}else{
+										this.$toast(res.data.msg)
+									}
+								}).catch(function(err) {
+//									alert(err)
+								})
+						}
+					},
+					//点击显示协议
+					showAgreement: function() {
+						this.showAgree = true;
+					}
+				}
+			})
+		</script>
+	</body>
+	<!--点击倒计时之后，首先判断是否大于0，是就执行倒计时并且修改状态为不可点击，否则就设置时间为60，设置状态为可以点击，文字改为‘重新发送’-->
+
+</html>

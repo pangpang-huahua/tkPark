@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>协议</title>
+	</head>
+	<body>
+		<div id="agreementBox">
+		<a v-bind:href="loginHref"><button>关闭</button></a>
+		<!--<button onclick="closeAgreement">关闭</button>-->
+		<h1>协议</h1>
+		</div>
+		<!-- 先引入 Vue -->
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var getParam = GetQueryString;
+			new Vue({
+				el:"#agreementBox",
+				data(){
+					return{
+						loginHref: 'login.html?phone='+getParam('phone')+'&captcha=' + getParam('captcha')
+					}
+				},
+				computed:{
+					
+				},
+				watch:{
+					
+				},
+				methods:{
+					
+				}
+			})
+		</script>
+	</body>
+</html>

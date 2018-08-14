@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>停车缴费</title>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet" type="text/css" href="../css/keybord.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/parkpayment.css" />
+	</head>
+
+	<body>
+		<div id="app">
+			<div id="park-payment">
+				<el-container>
+					<el-header><i class="el-icon-arrow-left float-sty-left"></i>停车缴费</el-header>
+					<el-main>
+						<el-row :gutter="20">
+							<el-col :span="7">
+								<!--<div class="grid-content">-->
+								<img src="../img/1-1506131104550-L.jpg" />
+								<!--</div>-->
+							</el-col>
+							<el-col :span="17">
+								<!--<div class="grid-content">-->
+								<div class="cont-left-sty">
+									<h3>川A JK1268</h3>
+									<p class="color-sty-2">换一辆<i class="el-icon-arrow-right"></i></p>
+								</div>
+								<!--</div>-->
+							</el-col>
+
+						</el-row>
+					</el-main>
+				</el-container>
+
+				<div class="park-payment-box">
+					<ul v-for="(item,index) in payorderInfo">
+						<li>{{item.name}}</li>
+						<li v-if="index==7">
+							
+							<!--{{item.value}}-->
+							<el-select v-if='item.allCoupon.length!=0' v-model="couponval" placeholder="请选择">
+								<el-option v-for="it in item.allCoupon" :key="it.couponval" :label='it.couponval' :value="it.price">
+								</el-option>
+							</el-select>
+							<p v-else>无可用优惠券</p>
+							<!--<img class="scan-code" src="../img/scancode.png"/>-->
+							
+						</li>
+						<li v-else-if="index==1">
+							{{item.name}}
+							<a href="mapdemo.html"><i class="el-icon-location"></i></a>
+						</li>
+						<li v-else-if="index==5">
+							{{item.name}}
+							<i class="el-icon-warning"></i>
+						</li>
+						<li v-else>
+							{{item.value}}
+						</li>
+					</ul>
+					<div class="preferentialRules">
+						<ul>
+							<li v-on:click="showRulsFun()"><i class="el-icon-warning margin-right-sty"></i>优惠规则<i class="el-icon-arrow-down margin-left-sty"></i></li>
+							<li class="subtotle-money">
+								小计：
+								<span class="pay-money" v-if="couponval">￥ {{sumPayMoney - couponval}}</span>
+								<span class="pay-money" v-else>￥ {{sumPayMoney}}</span>
+							</li>
+							
+						</ul>
+						<p v-show="showRuls" class="ruls-tips" v-for="(item,index) in preferentialRules">
+								{{(index + 1) + "、" +item}}
+							</p>
+
+					</div>
+					<ul>
+						<li>发票</li>
+						<li>暂不提供发票</li>
+					</ul>
+				</div>
+				<div style="height: 60px;"></div>
+				
+				<div class="park-payment-footer">
+					<el-row>
+					  	<el-col :span="15">
+					  		<div class="park-payment-footer-left" v-if="couponval">合计：￥{{sumPayMoney - couponval}}</div>
+					  		<div class="park-payment-footer-left" v-else>合计：￥{{sumPayMoney}}</div>
+					  	</el-col>
+					  	<el-col :span="9">
+					  		<div @click="payMoneyFun()" class="park-payment-footer-right">缴费</div>
+					  	</el-col>
+					</el-row>
+				</div>
+				
+			</div>
+		</div>
+		
+		<!--高德地图-->
+		<!--<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+		<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=21321a7e4734f283dbb81616b7a9da96&plugin=AMap.PlaceSearch,AMap.Driving"></script>
+    	<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>-->
+		<!--vue  element-->
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script type="text/javascript">
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						//支付订单的内容
+						payorderInfo: [{
+							name: '订单号',
+							value: 'TK201806091130419'
+						}, {
+							name: '停车场',
+							value: '背景物美总部停车场1号车库'
+						}, {
+							name: '车位',
+							value: 'E419'
+						}, {
+							name: '入场时间',
+							value: '2018-6-9 9:20'
+						}, {
+							name: '停车时长',
+							value: '2小时'
+						}, {
+							name: '停车计费',
+							value: '25元',
+							price: '25'
+						}, {
+							name: '停车码',
+							value: 'TYJJ8999HJJ8'
+						}, {
+							name: '优惠券', //只推送当前停车场可用的券    如果推送的用户的所有优惠券就要显示告诉用户不可用的券及原因
+							value: '',
+							allCoupon: [
+								{
+									couponval: '5元通用优惠券',
+									price:5
+								}, {
+									couponval: '10元通用优惠券',
+									price:10
+								}, {
+									couponval: '12元通用优惠券',
+									price:12
+								}
+							]
+						}],
+						couponval: '',
+						couponPrice: 5 ,
+						sumPayMoney: 25,
+//						payMoney: this.couponPrice - this.sumPayMoney
+						payMoney: this.sumPayMoney - this.couponval,
+						//以上为停车信息
+						
+						//以下为优惠规则
+						preferentialRules: ['使用当前已获得的商家券和停车券',"点击‘扫一扫’按钮扫描商场购物小票可获取优惠券"],
+						showRuls: false
+					}
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+						//加载完成执行
+						this.payMoney = this.payorderInfo[5].price - this.payorderInfo[7].allCoupon[0].price
+						console.log('loading')
+						//				this.logoUrl = "img/logo1.png"
+					})
+				},
+				methods: {
+					showRulsFun: function() {
+						if(this.showRuls){
+							this.showRuls = false;
+						}else{
+							this.showRuls = true;
+						}
+					},
+					payMoneyFun: function() {//提交缴费订单
+//						console.log('缴费')
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+	</body>
+
+</html>

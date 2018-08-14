@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>停车券</title>
+		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+
+		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.1.0-web/css/all.css" />
+
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/head.css" />
+		<link rel="stylesheet" type="text/css" href="../css/slideshow.css" />
+		<style type="text/css">
+			.el-main {
+				line-height: 10px;
+				background: none;
+			}
+			
+			.coupon-box {
+				padding: 10px 15px;
+			}
+			
+			.coupon-content {
+				margin-bottom: 15px;
+			}
+			
+			.coupon-box-cell {
+				width: 100%;
+				height: 109px;
+				background-color: yellow;
+				background-image: url(../img/优惠券_03.png);
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+			
+			.coupon-box-cell ul {
+				padding: 0;
+			}
+			
+			.coupon-box-cell li {
+				float: left;
+				list-style: none;
+				height: 109px;
+			}
+			
+			.coupon-box-cell li:nth-of-type(1) {
+				width: 25%;
+				text-align: center;
+			}
+			
+			.margin-style-2 {
+				margin: 0;
+				margin-top: 20px;
+				line-height: 30px;
+			}
+			
+			.margin-style-3 {
+				margin: 0;
+				line-height: 30px;
+			}
+			
+			.coupon-box-cell li:nth-of-type(2) {
+				box-sizing: border-box;
+				padding-left: 10px;
+				width: 75%;
+				position: relative;
+			}
+			
+			.p-style-1 {
+				line-height: 20px;
+				margin: 0;
+				margin-top: 18px;
+				font-size: 16px;
+			}
+			
+			.p-style-2 {
+				line-height: 20px;
+				margin: 0;
+				margin-top: 8px;
+				font-size: 12px;
+				color: #606266;
+				/*margin-top: 18px;*/
+			}
+			
+			.p-style-2 span {
+				margin-right: 15px;
+			}
+			
+			.wechat-pay {
+				height: 21px;
+				position: absolute;
+				top: 44px;
+				right: 20px;
+			}
+			.overdue-box{
+				margin: 0 auto;
+				width: 100%;
+				padding: 5px 15px;
+				background-color: white;
+				box-sizing: border-box;
+				font-size: 12px;
+				
+			}
+			.overdue-box p{
+				margin: 0;
+				line-height: 28px;
+				color: red;
+			}
+			.overdue-box p img{
+				max-width: 24px;
+				vertical-align: middle;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<mt-header title="停车券">
+				<a href="home.html" slot="left">
+					<mt-button icon="back"></mt-button>
+				</a>
+			</mt-header>
+
+			<mt-navbar v-model="selected">
+				<mt-tab-item id="1">停车券</mt-tab-item>
+				<mt-tab-item id="2">商场券</mt-tab-item>
+			</mt-navbar>
+
+			<!-- tab-container -->
+			<mt-tab-container v-model="selected" class="coupon-box">
+				<mt-tab-container-item id="1">
+					<div class="coupon-content" v-for="(item,index) in tickts">
+						<div class="coupon-box-cell">
+							<ul>
+								<li>
+									<h3 class="margin-style-2">{{item.preriodOfValidity}}</h3>
+									<p class="margin-style-3">{{item.name}}</p>
+								</li>
+								<li>
+									<p class="p-style-1">{{item.describe}}</p>
+									<p class="p-style-2">
+
+										<span>价值：￥{{item.ticktMoney}}</span>
+									</p>
+									<p class="p-style-2">
+										<span>有效期：{{item.preriodOfValidity}}</span>
+										<span>停车场：{{item.parking}}</span>
+
+									</p>
+									<img @click="chooseCoupon(index)" class="wechat-pay" v-bind:src="index==chooseIndex?wechatPayImgC:wechatPayImg" />
+								</li>
+							</ul>
+						</div>
+						<div class="overdue-box" v-if="item.overdue!=''">
+							<p>不可用原因 <img @click="showOverdue(index)" :src="show==true&&chooseIndex==index?upImg:downImg"/></p>
+							<span v-show="show==true&&chooseIndex==index">{{item.overdue}}</span>
+						</div>
+					</div>
+
+				</mt-tab-container-item>
+				<mt-tab-container-item id="2">
+					<div class="coupon-content" v-for="(item,index) in tickts">
+						<div class="coupon-box-cell">
+							<ul>
+								<li>
+									<h3 class="margin-style-2">{{item.preriodOfValidity}}</h3>
+									<p class="margin-style-3">{{item.name}}</p>
+								</li>
+								<li>
+									<p class="p-style-1">{{item.describe}}</p>
+									<p class="p-style-2">
+										<span>价值：￥{{item.ticktMoney}}</span>
+									</p>
+									<p class="p-style-2">
+										<span>有效期：{{item.preriodOfValidity}}</span>
+										<span>停车场：{{item.parking}}</span>
+									</p>
+									<img @click="chooseCoupon(index)" class="wechat-pay" v-bind:src="index==chooseIndex?wechatPayImgC:wechatPayImg" />
+								</li>
+							</ul>
+						</div>
+						<div class="overdue-box" v-if="item.overdue!=''">
+							<p>不可用原因 <img @click="showOverdue(index)" :src="show==true&&chooseIndex==index?upImg:downImg"/></p>
+							<span v-show="show==true&&chooseIndex==index">{{item.overdue}}</span>
+							
+						</div>
+					</div>
+				</mt-tab-container-item>
+
+			</mt-tab-container>
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../dist/vehiclemanagement.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getuserInfo = getuserInfo; //通过openid获取用户信息
+
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						selected: '1',
+						wechatPayImg: '../img/wechat_pay_normal.png',
+						wechatPayImgC: '../img/wechat_pay.png',
+						payChoosed: false,
+						chooseIndex: -1,
+						show: false,
+						downImg: '../img/arrow_down.png',
+						upImg: '../img/arrow_down _up.png',
+						tickts: [{
+								type: '1',
+								name: '停车券',
+								describe: '价值2000元的不限停车场券',
+								ticktMoney: 2000,
+								parking: '不限',
+								preriodOfValidity: '半年',
+								activeState: false,
+								overdue: "过期"
+							},
+							{
+								type: '2',
+								name: '停车券',
+								describe: '价值3000元的不限停车场券',
+								ticktMoney: 3000,
+								parking: '不限',
+								preriodOfValidity: '一年',
+								activeState: true,
+								overdue: ""
+							},
+							{
+								type: '3',
+								name: '停车券',
+								describe: '价值1000元的不限停车场券',
+								ticktMoney: 10,
+								parking: '不限',
+								preriodOfValidity: '三个月',
+								activeState: false,
+								overdue: '已过期'
+							}
+						]
+					};
+				},
+
+				mounted: function() {
+					this.$nextTick(function() {
+						//加载完成执行
+
+					})
+				},
+				watch: {
+					wechatPayImg: function() {
+
+					}
+				},
+				methods: {
+					chooseCoupon: function(index) {
+						console.log('click')
+						if(this.tickts[index].activeState) {
+							this.chooseIndex = index;
+						}
+					},
+					showOverdue: function(index){
+						if(this.show){
+							this.show = false ;
+						}else{
+							this.show = true ;
+							this.chooseIndex = index;
+						}
+						
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title></title>
+		<!--高德地图-->
+		 <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+		 <link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=21321a7e4734f283dbb81616b7a9da96&plugin=AMap.PlaceSearch,AMap.Driving"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+	</head>
+
+	<body>
+		<div id="container"></div>
+		<button id="prompt"></button>
+		<!--<div id="panel"></div>-->
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData ;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun;//提示
+			var getAwardIdFun = getAwardId ;//获取活动的建立计划id
+			var sessionFun = setcodeval;//添加session
+			var getCode = getCode;//通过code获取用户信息
+			var getuserInfo = getuserInfo;//通过openid获取用户信息
+			var latitude; // 纬度，浮点数，范围为90 ~ -90
+			var longitude; // 经度，浮点数，范围为180 ~ -180。
+			//基本地图加载
+		    var map = new AMap.Map("container", {
+		        resizeEnable: true,
+		        center: [116.397428, 39.90923],//地图中心点
+		        zoom: 13 //地图显示的缩放级别
+		    });
+		    
+		    console.log(getParam('longt'), getParam('lat'))
+			
+			//瀏覽器定位
+			map.plugin('AMap.Geolocation', function() {
+		        geolocation = new AMap.Geolocation({
+		            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+		            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+		            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+		            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+		            buttonPosition:'RB'
+		        });
+		        map.addControl(geolocation);
+		        geolocation.getCurrentPosition();
+		        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+		        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+		    });
+		    //解析定位结果
+		    function onComplete(data) {
+//				promptFun('定位成功');
+				drivingFun(data.position.getLng(),data.position.getLat());
+		    }
+		    //解析定位错误信息
+		    function onError(data) {
+		    	promptFun("定位失败")
+//		        document.getElementById('tip').innerHTML = '定位失败';
+		    }
+		    
+		    
+		    //导航
+		    function drivingFun (lng,lat) {
+		    	//构造路线导航类
+			    var driving = new AMap.Driving({
+			        map: map
+	//		        panel: "panel"
+			    }); 
+			    // 根据起终点经纬度规划驾车导航路线    searchOnMAP是調起app
+				driving.searchOnAMAP({origin:[lng,lat], destination:[getParam('longt'), getParam('lat')]})
+		    }
+		</script>
+	</body>
+
+</html>
