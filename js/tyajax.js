@@ -3,7 +3,7 @@
 	//ajax 数据请求
 	// var baseUrl = "http://192.168.0.157:8080";
 //	var baseUrl = "http://www.cdxskj.com.cn:8080/MyDigitallife";
-	var baseUrl = "http://pp8qwy.natappfree.cc";
+	var baseUrl = "http://www.pamirinfo.com";
 	//正式
 //	var appId = "wx16b0cc8be088487c" ;
 	//测试
@@ -13,10 +13,10 @@
 	var configinfoObj = {};
 	
 	
-	var userId = '297e0bc464f875300164f87c83bd0000'
+	var userId = '297e0bc464f875300164f87c83bd0001'
 	
 	//验证手机号码，身份证
-	var regTel = /^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/; //电话号码的正则验证
+	var regTel = /^1[3|4|5|6|7|8|9][0-9]{9}$/; //电话号码的正则验证
 	var resg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
 	function getAjaxData (dataType,dataPara,dataUrl) {
 		$.ajax({
@@ -34,7 +34,7 @@
 				dataArr = data ; 
 			},
 			error:function(err){
-				console.log(err)
+//				console.log(err)
 			}
 		});
 		return dataArr ; 
@@ -44,7 +44,7 @@
 	//获取url参数
 	function GetQueryString(name) {
 	   	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
-	   	var r = window.location.search.substr(1).match(reg);
+	   	var r = decodeURI(window.location.search).substr(1).match(reg);
 	   	if (r!=null) return unescape(r[2]); return null;
 	}
 	
@@ -57,13 +57,7 @@
 			$("#prompt").fadeOut()
 		}, 1500)
 	}
-	
-	//设置session的函数
-	function setcodeval (name,val) {
-		if(sessionStorage.getItem(name)==null){
-			sessionStorage.setItem(name,val);
-		}
-	}
+
 	
 	
 	//通过code获取用户信息
@@ -86,11 +80,14 @@
 		dataP = {
 			openid:x
 		}
-		var openidUserInfo = getAjaxData("get",dataP,"/api/weixin/user/sever/get/info")
+		var openidUserInfo = getAjaxData("get",dataP,"/api/user/get/user/info")
 		if(openidUserInfo.code==200){
 			//将openid加入到session中
-			setcodeval("useropenid",openidUserInfo.data.weiXinUser.openid);
-			setcodeval("userid",openidUserInfo.data.weiXinUser.id);
+			setcodeval("useropenid",openidUserInfo.data.openid);
+			setcodeval("userid",openidUserInfo.data.id);
+			setcodeval('userTel',openidUserInfo.data.phone);
+		}else if(openidUserInfo.code==401){
+			window.location.href = 'login.html'
 		}else{
 			promptBtnFun(openidUserInfo.msg)
 		}
@@ -117,6 +114,7 @@
 	}
 	
 	function getConfigInfo () {
+//		console.log('获取网页配置信息')
 		var configInfo ;
 		//获取网页配置信息
 		$.ajax({
@@ -127,8 +125,12 @@
 				url: window.location.href
 			},
 			success: function(data) {
+//				console.log(data)
 				if(data.code == 200){
+//					console.log(data)
 					configInfo = data.data
+				}else{
+					
 				}
 				
 			}
@@ -155,5 +157,11 @@
 	    return typeof d !== "number" ? Number(resultVal) : Number(resultVal.toFixed(parseInt(d)));
 	}
 	
-
+	
+	//设置session的函数
+	function setcodeval (name,val) {
+		if(sessionStorage.getItem(name)==null){
+			sessionStorage.setItem(name,val);
+		}
+	}
 

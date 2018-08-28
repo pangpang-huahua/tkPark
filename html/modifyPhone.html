@@ -61,7 +61,7 @@
 					<tr>
 						<td class="borderBottom"><input v-model="captcha" type="" placeholder="请输入您收到的验证码" /></td>
 						<td class="borderBottom verificationCode">
-							<mt-button v-bind:disabled="disabled" size="normal" v-bind:type="buttonType" v-on:click="getCaptcha">{{captchaText}}</mt-button>
+							<mt-button v-bind:disabled="disabled" size="normal" v-bind:type="buttonType" v-on:click="getCaptcha" v-cloak>{{captchaText}}</mt-button>
 						</td>
 
 					</tr>
@@ -80,6 +80,7 @@
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script type="text/javascript">
 			
@@ -90,7 +91,7 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			var getuserInfo = getuserInfo; //通过openid获取用户信息
+//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
@@ -159,6 +160,11 @@
 						if(this.verifyPhone) {
 							axios.post(baseUrl + '/api/user/sms/send', {
 								phone: this.phone
+							},{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
 							}).then(function(response) {
 								//发送成功后调用倒计时
 								this.countDown();
@@ -200,6 +206,11 @@
 							axios.post(baseUrl + '/api/user/phone/edit', {
 								phone: this.phone,
 								verifyCode: this.captcha
+							},{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
 							}).then(function(res) {
 
 							}).catch(function(err) {

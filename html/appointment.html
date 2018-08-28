@@ -23,7 +23,7 @@
 				padding: 0;
 				margin: 0;
 				list-style: none;
-				line-height: 60px;
+				line-height: 40px;
 				font-size: 16px;
 			}
 			
@@ -69,7 +69,7 @@
 			}
 			/*选择器*/
 			
-			.piker-cars-box {
+			/*.piker-cars-box {
 				text-align: center;
 				width: 100%;
 				position: fixed;
@@ -91,11 +91,12 @@
 				text-align: center;
 				line-height: 32px;
 				color: #4EB3FF;
-			}
+			}*/
 			
 			.confirm-appointment-box{
 				padding: 15px;
 			}
+			
 		</style>
 	</head>
 
@@ -103,8 +104,9 @@
 		<div id="app">
 			<div class="headerBox">
 				<ul>
-					<li>
-						<i class="fal fa-angle-left"></i>
+					<li class="backIconLi">
+						<!--<i class="fal fa-angle-left"></i>-->
+						<img class="backIcon"  src="../img/backIcon.png"/>
 					</li>
 					<li>预约车辆</li>
 					<li></li>
@@ -112,8 +114,8 @@
 
 			</div>
 			<div>
-				<div>
-					<mt-cell title="行车场" :to='link' is-link>
+				<div v-cloak>
+					<mt-cell title="停车场" :to='link' is-link>
 						<span style="color: green">{{parkingName}}</span>
 					</mt-cell>
 					<mt-cell title="车库" >
@@ -177,6 +179,7 @@
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			var ajaxDataFun = getAjaxData;
 			var getParam = GetQueryString;
@@ -184,7 +187,7 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			var getuserInfo = getuserInfo; //通过openid获取用户信息
+//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			var Main = {
 				data() {
@@ -265,7 +268,6 @@
 				methods: {
 					//选择车辆
 					onchangeVal(picker, values) {
-						
 						var _this = this;
 						if(_this.checkedCar == '') {
 							_this.checkedCar = values[0];
@@ -277,7 +279,9 @@
 						this.showCars = true;
 					},
 					submitFun: function() {
-						this.checkedCar = this.changeCar;
+						if(this.changeCar){
+							this.checkedCar = this.changeCar;
+						}
 						this.showCars = false;
 					},
 					cancelFun: function() {
@@ -296,7 +300,9 @@
 						this.showTime = true;
 					},
 					submitFunt: function() {
-						this.checkedTime = this.changeTime;
+						if(this.changeTime){
+							this.checkedTime = this.changeTime;
+						}
 						this.showTime = false;
 					},
 					cancelFunt: function() {
@@ -315,7 +321,9 @@
 						this.showStoppingTime = true;
 					},
 					submitFunStopt: function() {
-						this.stoppingTime = this.changeStopTime;
+						if(this.changeStopTime){
+							this.stoppingTime = this.changeStopTime;
+						}
 						this.showStoppingTime = false;
 					},
 					cancelFunStopt: function() {
@@ -328,7 +336,12 @@
 							params:{
 								userId:userId
 							}
-						})
+						},{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
 						.then(function(res){
 							if(res.status == 200 && res.data.code == 200){
 								
@@ -337,6 +350,8 @@
 										_this.allcar.push(res.data.data.content[i].carNo)
 									}
 								}
+							}else{
+								_this.$toast(res.data.msg)
 							}
 						})
 						.catch(function(err){
@@ -351,11 +366,18 @@
 							params:{
 								id: id
 							}
-						})
+						},{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
 						.then(function(res){
 							if(res.status == 200 && res.data.code == 200){
 								_this.parkingName = res.data.data.name;
 								
+							}else{
+								_this.$toast(res.data.msg);
 							}
 						})
 						.catch(function(err){
@@ -369,12 +391,19 @@
 							params:{
 								id: getParam('carportId')
 							}
-						})
+						},{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
 						.then(function(res){
 							if(res.status == 200 && res.data.code == 200){
 								_this.getParking(res.data.data.parkingLotId)
 								_this.carportName = res.data.data.name;
 								_this.carportId = res.data.data.id;
+							}else{
+								_this.$toast(res.data.msg)
 							}
 						})
 						.catch(function(err){
@@ -383,30 +412,38 @@
 					},
 					//创建预约
 					createApointment: function(){
+						var _this = this ;
 						if(this.checkedCar != '' && this.checkedCar != '请选择'){
 							var checkedEntryTime = this.checkedTime;
 							var dateN = new Date();
 							var nowMonth = dateN.getMonth()+1;
 							var entryTime = new Date(dateN.getFullYear() + '-' + nowMonth  + '-' + dateN.getDate() + '-' + checkedEntryTime);
-							
 							var params = new URLSearchParams();
 							params.append('carNo',this.checkedCar);//车牌号
 							params.append('garageId',this.carportId);//车库ID
 							params.append('enterTime',entryTime);//入场时间
-							axios.post(baseUrl + '/api/park/booking/add',params)
+							axios.post(baseUrl + '/api/park/booking/add',params,{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
 							.then(function(res){
 								if(res.status == 200 && res.data.code == 200){
-									console.log(res.data)
-//									this.$toast("")
+									_this.$toast('预约成功,2秒后跳转到预约列表')
+									setTimeout(function(){
+										window.location.href = 'parkingrecord.html'
+									},2000)
+									
 								}else{
-									this.$toast(res.data.msg)
+									_this.$toast(res.data.msg)
 								}
 							})
 							.catch(function(err){
-								
+								console.log(err)
 							})
 						}else{
-							this.$toast('请选择一辆车')
+							_this.$toast('请选择一辆车')
 						}
 						
 					}

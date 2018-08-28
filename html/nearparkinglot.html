@@ -4,12 +4,12 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<title>停车场</title>
+		<title>附近停车场</title>
 		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/fontawesome.css" />-->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-		
+
 		<!--引入高德地图-->
 		<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main.css?v=1.0" />
 		<!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">-->
@@ -110,60 +110,49 @@
 				height: 100%;
 			}
 			
-			.item-carport-box{
-				margin-top: ;
+			.item-carport-box {
+				margin-top: 10px;
 				width: 100%;
-				border-top: 2px solid #ECECEC;
+				border-top: 2px solid #20c479;
 				padding: 5px 0;
 			}
-			.item-carport-box ul{
+			
+			.item-carport-box ul {
 				overflow: hidden;
 				margin: 0;
 				padding: 0;
 			}
-			.item-carport-box ul li{
+			
+			.item-carport-box ul li {
 				float: left;
-				height: 50px;
+				/*height: 50px;*/
 				list-style: none;
 				overflow: hidden;
-			}
-			/*.item-carport-box ul li:nth-of-type(1){
-				box-sizing: border-box;
-				padding: 0 8px;
-				text-align: center;
-				border-right: 2px solid #5899F9;
-				width: 20%;
-				position: relative;
-				display: table-cell;
-				text-align: center;
-				vertical-align: middle;
-			}
-			.item-carport-box ul li:nth-of-type(1) p{
-				margin: 0;
 				
-			}*/
-			.item-carport-box ul li:nth-of-type(1){
+			}
+			
+			.item-carport-box ul li:nth-of-type(1) {
 				position: relative;
 				width: 80%;
 			}
-			.item-carport-box ul li:nth-of-type(1) div:nth-of-type(2){
-				/*position: absolute;
-				left: 0;
-				bottom: 0;*/
-			}
-			.item-carport-box ul li:nth-of-type(2){
+			
+			.item-carport-box ul li:nth-of-type(2) {
 				width: 20%;
+				text-align: center;
 			}
-			.item-carport-content{
+			
+			.item-carport-content {
 				margin-top: 8px;
 			}
-			.item-carport-content p{
+			
+			.item-carport-content p {
 				margin: 0;
 				font-size: 14px;
 				font-weight: bold;
 			}
-			.booking-botton{
-				float: right;
+			
+			.booking-botton {
+				/*float: right;*/
 				margin-top: 8px;
 			}
 		</style>
@@ -171,59 +160,57 @@
 
 	<body>
 		<div id="app">
-			<div class="headerBox">
-				<ul>
-					<li>
-						<i class="fal fa-angle-left"></i>
-					</li>
-					<li>车辆查找</li>
-					<li></li>
-				</ul>
-
-			</div>
-
+			<mt-header title="附近停车场">
+				<a href="" slot="left">
+					<mt-button icon="back"></mt-button>
+				</a>
+			</mt-header>
 			<div>
 				<mt-search @keyup.enter.native="searchPark" v-model="searchValue" cancel-text="取消" placeholder="搜索"></mt-search>
 			</div>
 
 			<div>
-				<div class="cars-list" v-for="(item,index) in nearParks">
+				<div class="cars-list" v-for="(item,index) in nearParks" style="border-radius: 6px;margin-bottom: 15px;">
 					<div class="grid-left-box">
-						<p class='margin-left-style font-size-sty2 p-style-1'>{{item.name}}</p>
+						<p class='margin-left-style font-size-sty2 p-style-1' v-cloak>{{item.name}}</p>
 
 						<div class='font-size-1 margin-sty'>
-							<button v-for="(itemtrait,index) in item.trait" v-bind:class="{ hotbotton: itemtrait.hot,  staticbutton: itemtrait.hot==false }">{{itemtrait.value}}</button>
+							<button v-for="(itemtrait,index) in item.trait" v-bind:class="{ hotbotton: itemtrait.hot,  staticbutton: itemtrait.hot==false }" v-cloak>{{itemtrait.value}}</button>
 						</div>
 
-						<div class='margin-left-style font-size-sty3'>
-							空 {{item.info.kongwei}} | 免费{{item.info.free}} | {{item.info.price}}元/小时
+						<div class='margin-left-style font-size-sty3' v-cloak>
+							空 {{item.info.kongwei}} | 免费{{item.info.free}}分钟 
+							<!--| {{item.info.price}}元/小时-->
 						</div>
-						
+
 					</div>
-					<div class="grid-right-box">
+					<div class="grid-right-box" style="text-align: center;" v-cloak>
 						{{item.distance}}
 						<div class='margin-top-sty1'>
 							<a v-bind:href="'mapdemo.html?longt=' + item.longt + '&lat=' + item.lat">
 								<mt-button type="primary" size='small'>前往</mt-button>
 							</a>
 						</div>
-
+						<img @click="showCarport(index)" v-show="item.allCarport.length>0" src="../img/arrow-down.png" style="max-width: 24px;margin-top: 5px;"/>
 						
 					</div>
-					<div class="item-carport-box">
-						<div class="item-carport-content" v-for="carportItem in item.allCarport">
-							<p>{{carportItem.carportName}}</p>
+					<div class="item-carport-box" v-show="currentIndex==index">
+						<div style="border-bottom: 1px dashed #b8b8b8;" class="item-carport-content" v-for="carportItem in item.allCarport">
+							<p v-cloak>{{carportItem.carportName}}</p>
 							<ul>
 								<!--<li><p>{{carportItem.carportName}}</p></li>-->
 								<li>
 									<div class='font-size-1 margin-sty'>
-										<button v-for="(carporttrait,index) in carportItem.carportTrait" v-bind:class="{ hotbotton: carporttrait.hot,  staticbutton: carporttrait.hot==false }">{{carporttrait.value}}</button>
-									</div>
-			
-									<div class='margin-left-style font-size-sty3'>
-										空 {{carportItem.carportLeftSpace}} | {{carportItem.carportBillingSchemeStr}}元/小时
+										<button v-for="(carporttrait,index) in carportItem.carportTrait" v-bind:class="{ hotbotton: carporttrait.hot,  staticbutton: carporttrait.hot==false }" v-cloak>{{carporttrait.value}}</button>
 									</div>
 									
+									<div class='margin-left-style font-size-sty3' v-cloak>
+										
+										空 {{carportItem.carportLeftSpace}} | 
+										<span v-if='carportItem.carportBillingSchemeStr'>{{carportItem.carportBillingSchemeStr}}</span>
+										<span v-else>{{carportItem.carportBillingType}}计费</span>
+									</div>
+
 								</li>
 								<li>
 									<div class='margin-top-sty1 booking-botton'>
@@ -247,7 +234,9 @@
 		<script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			var ajaxDataFun = getAjaxData;
 			var getParam = GetQueryString;
@@ -255,7 +244,8 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			var getuserInfo = getuserInfo; //通过openid获取用户信息
+			var getConfigInfoFun = getConfigInfo(); //获取网页配置信息
+//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			//实现地图定位   start
 			var map = new AMap.Map('', {
@@ -287,58 +277,48 @@
 				},
 				mounted: function() {
 					this.restaurants = this.loadAll();
+					var _this = this;
 					this.$nextTick(function() {
 						//加载完成执行
-						var _this = this;
-						//加载完成执行
-						//高德地图进行定位
-						//瀏覽器定位
-						map.plugin('AMap.Geolocation', function() {
-							geolocation = new AMap.Geolocation({
-								enableHighAccuracy: true, //是否使用高精度定位，默认:true
-								timeout: 10000, //超过10秒后停止定位，默认：无穷大
-								buttonOffset: new AMap.Pixel(10, 20), //定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-								zoomToAccuracy: true, //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-								buttonPosition: 'RB'
-							});
-							map.addControl(geolocation);
-							geolocation.getCurrentPosition();
-							AMap.event.addListener(geolocation, 'complete', onComplete); //返回定位信息
-							AMap.event.addListener(geolocation, 'error', onError); //返回定位出错信息
-						});
-						//解析定位结果
-						function onComplete(data) {
-							console.log('定位结果')
-							console.log(data)
-							_this.currentLongt = data.position.getLng();
-							_this.currentLat = data.position.getLat();
-							console.log(_this.currentLongt);
-							console.log(_this.currentLat)
-							getCityCode(data.addressComponent.city)
-						}
-						//解析定位错误信息
-						function onError(data) {
-							promptFun("定位失败")
-							//		        document.getElementById('tip').innerHTML = '定位失败';
-						}
-
-						//行政区划查询
-						function getCityCode(x) {
-							var opts = {
-								subdistrict: 1, //返回下一级行政区
-								level: 'city',
-								showbiz: false //最后一级返回街道信息
-							};
-							district = new AMap.DistrictSearch(opts); //注意：需要使用插件同步下发功能才能这样直接使用
-							district.search(x, function(status, result) {
-								if(status == 'complete') {
-									//获取停车场列表
-									_this.getParkingList(result.districtList[0].adcode)
-								}
-							});
-						}
-
 					})
+						
+					//配置微信信息
+					wx.config({
+						debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+						appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
+						timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
+						nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
+						signature: getConfigInfoFun.signature, // 必填，签名
+						jsApiList: ["getLocation"] // 必填，需要使用的JS接口列表
+					});
+					//微信定位通过ready接口处理成功验证
+					wx.ready(function() {
+						alert('获取地理信息配置成功')
+						wx.getLocation({
+							type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+							success: function (res) {
+								alert(JSON.stringify(res))
+								var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+								var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+								var speed = res.speed; // 速度，以米/每秒计
+								var accuracy = res.accuracy; // 位置精度
+								_this.currentLongt = res.longitude;
+								_this.currentLat = res.latitude;
+								//获取停车场列表
+//								_this.getParkingList(res.latitude,res.longitude)
+								_this.getNearPark(res.latitude,res.longitude)
+							},
+							fail: function (err) {
+								_this.$toast(err)
+							}
+						});
+						
+					});
+					//			通过error接口处理失败验证
+					wx.error(function(res) {
+						_this.$toast(res)
+						// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+					});
 				},
 				methods: {
 					loadAll() {
@@ -374,42 +354,80 @@
 							return(state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
 						};
 					},
-					handleSelect(item) {
-						
-					},
-					//选择一个停车场
-					chooseParking: function(index) {
-						this.currentIndex = index;
-						
-						//选中之后带上停车场id跳转回长租车页面
-						window.location.href = "langcarrentl.html?parkingId=" + this.nearParks[index].parkingId + "&parkingName=" + this.nearParks[index].name;
+					//首次通过经纬度获取附近停车场
+					getNearPark: function (lat,lgt) {
+						alert(lat,lgt)
+						var _this = this ;
+						//调用搜索停车场的接口 
+							axios.get(baseUrl + '/api/parkinglot/search/nearby', {
+									params: {
+										longitude: lgt,
+										latitude: lat,
+										distance: 20000
+									},
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									},
+									withCredentials: true
+								})
+								.then(function(response) {
+									alert(JSON.stringify(response))
+									if(response.status == 200) {
+										if(response.data.code == 200) {
+											for(var i = 0; i < response.data.data.length; i++) {
+												var p1 = [_this.currentLongt, _this.currentLat];
+												var p2 = [response.data.data[i].longitude, response.data.data[i].latitude]
+												var dis = AMap.GeometryUtil.distance(p1, p2);
+												_this.getParkinglotList(response.data.data[i].freeTime,response.data.data[i].name, response.data.data[i].id, response.data.data[i].longitude, response.data.data[i].latitude, dis)
+											}
+										} else {
+											_this.$toast(res.data.msg)
+										}
+
+									} else {
+
+									}
+								})
+								.catch(function(error) {
+									alert(error);
+								});
 					},
 					//通过搜索获取停车场列表
 					searchPark: function(e) {
-						var _this = this ;
+						var _this = this;
 						_this.nearParks = [];
 						var keyCode = window.event ? e.keyCode : e.which;
 						if(keyCode == 13 && this.searchValue) {
 							//调用搜索停车场的接口 
-							axios.get(baseUrl + '/api/parkinglot/search/nearby', {params:{
-									longitude: _this.currentLongt,
-									latitude: _this.currentLat,
-									distance: '200000',
-									keyword: _this.searchValue
-								}})
+							axios.get(baseUrl + '/api/parkinglot/search/nearby', {
+									params: {
+										longitude: _this.currentLongt,
+										latitude: _this.currentLat,
+										distance: '200000',
+										keyword: _this.searchValue
+									},
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									},
+									withCredentials: true
+								})
 								.then(function(response) {
 									console.log(response)
-									if(response.status == 200){
-										if(response.data.code==200){
+									if(response.status == 200) {
+										if(response.data.code == 200) {
 											for(var i = 0; i < response.data.data.length; i++) {
-												_this.getParkinglotList(response.data.data[i].name, response.data.data[i].id,response.data.data[i].longitude,response.data.data[i].latitude)
+												var p1 = [_this.currentLongt, _this.currentLat];
+												var p2 = [response.data.data[i].longitude, response.data.data[i].latitude]
+												var dis = AMap.GeometryUtil.distance(p1, p2);
+												_this.getParkinglotList(response.data.data[i].freeTime,response.data.data[i].name, response.data.data[i].id, response.data.data[i].longitude, response.data.data[i].latitude, dis)
 											}
-										}else{
+										} else {
 											//提示出错原因
+											_this.$toast(res.data.msg)
 										}
-										
-									}else{
-										
+
+									} else {
+
 									}
 								})
 								.catch(function(error) {
@@ -419,124 +437,158 @@
 						}
 
 					},
-					//获取停车场列表
-					getParkingList: function(c) {
+					//获取所有停车场列表
+					getParkingList: function(lat,lgt) {
+//						alert(lat,lgt)
 						var _this = this;
 						axios.get(baseUrl + '/api/parkinglot/list', {
 								params: {
-									areaCode: c
+									longitude : lgt,
+									latitude : lat
 								}
+							}, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
 							})
 							.then(function(response) {
+								alert(JSON.stringify(response))
 								if(response.status == 200 && response.data.code == 200) {
 									//返回的链接加上parkingId的值
 									//根据停车场获取所有的车库
 									for(var i = 0; i < response.data.data.content.length; i++) {
-										_this.getParkinglotList(response.data.data.content[i].name, response.data.data.content[i].id,response.data.data.content[i].longitude,response.data.data.content[i].latitude)
+										var p1 = [_this.currentLongt, _this.currentLat];
+										var p2 = [response.data.data.content[i].longitude, response.data.data.content[i].latitude]
+										var dis = AMap.GeometryUtil.distance(p1, p2);
+										_this.getParkinglotList(response.data.data.content[i].freeTime,response.data.data.content[i].name, response.data.data.content[i].id, response.data.data.content[i].longitude, response.data.data.content[i].latitude, dis)
 									}
+								}else{
+									_this.$toast(res.data.msg)
 								}
 
 							})
 							.catch(function(error) {
-
+								alert(JSON.stringify(error))
 							})
 					},
 					//获取车库列表
-					getParkinglotList: function(name, id ,longt ,lat) {
+					getParkinglotList: function(freet, name, id, longt, lat, dis) {
+						var showDis;
+						if(dis / 1000 > 1) {
+							showDis = (dis / 1000).toFixed(2) + 'km';
+						} else if(dis < 100) {
+							showDis = '100m内'
+						} else {
+							showDis = parseInt(dis / 1000) + 'm';
+						}
 						var _this = this;
 						axios.get(baseUrl + '/api/parkinglot/garage/list', {
 								params: {
 									parkingLotId: id
 								}
+							}, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
 							})
 							.then(function(response) {
 								//展示所有停车场    只有可以预约的停车场显示预约按钮
 								if(response.status == 200 && response.data.code == 200) {
-									var leftSpaceTotle=0,parkingLotTypeE,isRentableE,isTwentyFourHourE,isBookingE;
-									var carportArr = [] , parkingLotType = [], isRentable = [], isTwentyFourHour = [], isBooking = []
-									for(var i = 0; i < response.data.data.content.length; i++) {
-										var carportTypeE = '';
-										//空余车位总数
-										leftSpaceTotle += parseFloat(response.data.data.content[i].leftSpace);
-										//车库类型
-										if(parkingLotType == '' || parkingLotType.indexOf(response.data.data.content[i].type) == -1) {
-											parkingLotType.push(response.data.data.content[i].type);
-										}
-										//是否可租
-										if(response.data.data.content[i].isRentable == true) {
-											isRentable.push(response.data.data.content[i].isRentable)
-										}
-										//是否24小时停车
-										if(response.data.data.content[i].isTwentyFourHour == true) {
-											isTwentyFourHour.push(response.data.data.content[i].isTwentyFourHour)
-										}
-										//是否可预约
-										if(response.data.data.content[i].isBooking == true) {
-											isBooking.push(response.data.data.content[i].isBooking);
-											//把每一个车库的信息添加到车库数组中
-											if(response.data.data.content[i].type == 'GROUND'){
-												carportTypeE = '地面';
-											}else if(response.data.data.content[i].type == 'UNDERGROUND'){
-												carportTypeE = '地下';
-											}else if(response.data.data.content[i].type == 'SOLID'){
-												carportTypeE = '立体';
-											}else if(response.data.data.content[i].type == 'OTHER'){
-												carportTypeE = '其他';
+									if(response.data.data.content.length > 0) {
+
+										var leftSpaceTotle = 0,
+											parkingLotTypeE, isRentableE, isTwentyFourHourE, isBookingE;
+										var carportArr = [],
+											parkingLotType = [],
+											isRentable = [],
+											isTwentyFourHour = [],
+											isBooking = []
+										for(var i = 0; i < response.data.data.content.length; i++) {
+											console.log(response.data.data.content[i].billingSchemeStr.largeCar_billingSchemeChildDto);
+											var carportTypeE = '';
+											//空余车位总数
+											leftSpaceTotle += parseFloat(response.data.data.content[i].leftSpace);
+											//车库类型
+											if(parkingLotType == '' || parkingLotType.indexOf(response.data.data.content[i].type) == -1) {
+												parkingLotType.push(response.data.data.content[i].type);
 											}
-											
-											carportArr.push({
-												carportId : response.data.data.content[i].id,//车库的id
-												carportName:response.data.data.content[i].name,//车库名字
-												carportLeftSpace : response.data.data.content[i].leftSpace,//车库剩余车位
-//												carportType : response.data.data.content[i].type,//车库类型
-//												carportIsTwentyFourHour : response.data.data.content[i].isTwentyFourHour,//是否支持24小时停车
-//												carportIsRentable : response.data.data.content[i].isRentable,//是否可出租
-//												carportIsBooking : response.data.data.content[i].isBooking,//是否可预约
-												carportBillingSchemeStr : response.data.data.content[i].billingSchemeStr,//计费方式
-												
-												carportTrait:[{
-													hot: response.data.data.content[i].isTwentyFourHour,
-													value: '24小时'
-												}, {
-													hot: false,
-													value: carportTypeE
-												}, {
-													hot: response.data.data.content[i].isBooking,
-													value: '预约'
-												}, {
-													hot: response.data.data.content[i].isRentable,
-													value: '出租'
-												}]
-											})
+											//是否可租
+											if(response.data.data.content[i].isRentable == true) {
+												isRentable.push(response.data.data.content[i].isRentable)
+											}
+											//是否24小时停车
+											if(response.data.data.content[i].isTwentyFourHour == true) {
+												isTwentyFourHour.push(response.data.data.content[i].isTwentyFourHour)
+											}
+											//是否可预约
+											if(response.data.data.content[i].isBooking == true) {
+												isBooking.push(response.data.data.content[i].isBooking);
+												//把每一个车库的信息添加到车库数组中
+												if(response.data.data.content[i].type == 'GROUND') {
+													carportTypeE = '地面';
+												} else if(response.data.data.content[i].type == 'UNDERGROUND') {
+													carportTypeE = '地下';
+												} else if(response.data.data.content[i].type == 'SOLID') {
+													carportTypeE = '立体';
+												} else if(response.data.data.content[i].type == 'OTHER') {
+													carportTypeE = '其他';
+												}
+
+												carportArr.push({
+													carportId: response.data.data.content[i].id, //车库的id
+													carportName: response.data.data.content[i].name, //车库名字
+													carportLeftSpace: response.data.data.content[i].leftSpace, //车库剩余车位
+													//												carportType : response.data.data.content[i].type,//车库类型
+													//												carportIsTwentyFourHour : response.data.data.content[i].isTwentyFourHour,//是否支持24小时停车
+													//												carportIsRentable : response.data.data.content[i].isRentable,//是否可出租
+													//												carportIsBooking : response.data.data.content[i].isBooking,//是否可预约
+													carportBillingSchemeStr: response.data.data.content[i].billingSchemeSummaryInfo.summaryInfoStrSmallCar, //计费方式
+													carportBillingType: response.data.data.content[i].billingSchemeSummaryInfo.billingTypeStr,
+													carportTrait: [{
+														hot: response.data.data.content[i].isTwentyFourHour,
+														value: '24小时'
+													}, {
+														hot: false,
+														value: carportTypeE
+													}, {
+														hot: response.data.data.content[i].isBooking,
+														value: '预约'
+													}, {
+														hot: response.data.data.content[i].isRentable,
+														value: '出租'
+													}]
+												})
+											}
 										}
-									}
-									
-									setTimeout(function(){
-										    if(isTwentyFourHour.length>0){
+
+										setTimeout(function() {    
+											if(isTwentyFourHour.length > 0) {
 												isTwentyFourHourE = true;
-											}else{
-												isTwentyFourHourE = false ;
+											} else {
+												isTwentyFourHourE = false;
 											}
-											if(isBooking.length>0){
+											if(isBooking.length > 0) {
 												isBookingE = true;
-											}else{
+											} else {
 												isBookingE = false;
 											}
-											if(parkingLotType.length>1){
+											if(parkingLotType.length > 1) {
 												parkingLotTypeE = '混合式'
-											}else if(parkingLotType.length==1){
-												if(parkingLotType[0] == 'GROUND'){
+											} else if(parkingLotType.length == 1) {
+												if(parkingLotType[0] == 'GROUND') {
 													parkingLotTypeE = '地面';
-												}else if(parkingLotType[0] == 'UNDERGROUND'){
+												} else if(parkingLotType[0] == 'UNDERGROUND') {
 													parkingLotTypeE = '地下';
-												}else if(parkingLotType[0] == 'SOLID'){
+												} else if(parkingLotType[0] == 'SOLID') {
 													parkingLotTypeE = '立体';
-												}else if(parkingLotType[0] == 'OTHER'){
+												} else if(parkingLotType[0] == 'OTHER') {
 													parkingLotTypeE = '其他';
 												}
-											}
-										 },1)
-										setTimeout(function(){
+											} 
+										}, 0)
+										setTimeout(function() {
 											_this.nearParks.push({
 												parkingId: id,
 												name: name,
@@ -552,25 +604,37 @@
 													hot: isBookingE,
 													value: '预约'
 												}],
-												distance: "560m",
+												distance: showDis,
 												info: {
 													kongwei: leftSpaceTotle,
-													free: "1小时",
-													price: 12
+													free: freet
+//													price: 12
 												},
-												allCarport:carportArr
+												allCarport: carportArr
 											})
-										},2)
+										}, 0)
+									}
+								}else{
+									_this.$toast(res.data.msg)
 								}
 							})
 							.catch(function(error) {
 
 							})
+					},
+					//展示车库
+					showCarport : function (index) {
+						if(this.currentIndex == index){
+							this.currentIndex = -1;
+						}else{
+							this.currentIndex = index ;
+						}
 					}
 				}
 			};
-			var Ctor = Vue.extend(Main)
-			new Ctor().$mount('#app')
+			var Ctor = Vue.extend(Main);
+			new Ctor().$mount('#app');
+
 		</script>
 	</body>
 

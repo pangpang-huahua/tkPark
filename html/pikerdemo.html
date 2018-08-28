@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+	</head>
+
+	<body>
+
+		<div id="pikerBox">
+			<mt-picker value-key='id' :slots="renewCards" @change="onchangeVal"></mt-picker>
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script type="text/javascript">
+			var Main = {
+				data() {
+					return {
+						renewCards: [{
+							flex: 1,
+							defaultIndex: 0,
+							values: [{
+								name: 'demo1',
+								id: '0'
+							}, {
+								name: 'demo2',
+								id: '1'
+							}, {
+								name: 'demo3',
+								id: '2'
+							}],
+							className: 'slot1',
+							textAlign: 'center',
+							valueKey: 0
+						}]
+					}
+				},
+				mounted: function() {
+
+					//					$.ajax({
+					//						type: 'get',
+					//						url:baseUrl + '/api/month/card/user/get/list',
+					//						data:{
+					//							
+					//						},
+					//						success:function(data){
+					//							console.log(data)
+					//						},
+					//						error:function(err){
+					//							console.log(err)
+					//						}
+					//					})
+				},
+				methods: {
+					onchangeVal: function(piker, value) {
+
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#pikerBox')
+
+			$.ajax({
+				type: "get",
+				url: "http://jwd5u4.natappfree.cc/api/user/get/user/info",
+				async: true,
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+
+				},
+				success: function(data) {
+					console.log(data)
+				},
+				error: function(err) {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

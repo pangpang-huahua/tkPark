@@ -23,15 +23,15 @@
 			<p>颜色</p>
 			<div>
 				<!--<input type="button" name="" id="" value="" />-->
-				<button v-bind:class="{activeBorder:index==num}" @click="chooseColor(index)" v-for="(item,index) in good.colors">{{item}}</button>
+				<button v-bind:class="{activeBorder:index==num}" @click="chooseColor(index)" v-for="(item,index) in good.colors" v-cloak>{{item}}</button>
 			</div>
 			<p>材质</p>
 			<div>
-				<button @click="chooseTexture(index)" v-for="(item,index) in good.texture">{{item}}</button>
+				<button @click="chooseTexture(index)" v-for="(item,index) in good.texture" v-cloak>{{item}}</button>
 			</div>
 			<p>尺码</p>
 			<div>
-				<button @click="chooseSize(index)" v-for="(item,index) in good.size">{{item}}</button>
+				<button @click="chooseSize(index)" v-for="(item,index) in good.size" v-cloak>{{item}}</button>
 			</div>
 			
 		</div>

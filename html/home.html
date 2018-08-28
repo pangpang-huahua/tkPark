@@ -9,7 +9,7 @@
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/fontawesome.css"/>-->
-		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/all.css"/>
+		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/all.css" />-->
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
@@ -25,18 +25,29 @@
 							<li>
 								<!--<i class="fas fa-angle-left"></i>-->
 							</li>
-							<li><h3>塔库泊车</h3></li>
 							<li>
-								<a href="personalsetting.html"><i class="fas fa-cog"></i></a>
+								<h3>塔库泊车</h3></li>
+							<li>
+								<!--<a href="personalsetting.html"><i class="fas fa-cog"></i></a>-->
+								<a :href="personalsetUrl">
+									<img src="../img/setIcon.png"/>
+									<!--<i class="fas fa-cog"></i>-->
+								</a>
 							</li>
 						</ul>
-						
+
 					</div>
-					
-					
+
 					<!--<h3 id="" style="">塔库泊车<a href="personalsetting.html"> <i class="el-icon-setting"></i></a></h3>-->
-					<img id="userImg" src="../img/223A54592_0.jpg" />
-					<h4 id="userNickName">15982414496</h4>
+					<div v-show="show.GoToLogin" class="loginBox">
+						<a href="login.html"><button>登&nbsp;&nbsp;录</button></a>
+					</div>
+					<div v-show="show.userInfo">
+						
+					
+						<img id="userImg" :src="userHeadImg" />
+						<h4 id="userNickName" v-cloak>{{userTel}}</h4>
+					</div>
 				</div>
 				<div id="home_contanier_content">
 					<el-row :gutter="12">
@@ -60,7 +71,8 @@
 						</el-col>
 
 						<el-col :span="8">
-							<a href="parkingrecord.html">
+							<!--<a href="parkingrecord.html">-->
+							<a :href="parkingrecordUrl">
 								<div class="grid-content bg-purple">
 									<img src="../img/home_08.png" />
 									<p>停车记录</p>
@@ -70,13 +82,36 @@
 					</el-row>
 					<el-row :gutter="12">
 						<el-col :span="8">
-							<a href="vehiclemanagement.html">
+							<!--<a href="vehiclemanagement.html">-->
+							<a :href="vehiclemanagementUrl">
 								<div class="grid-content bg-purple">
 									<img src="../img/home_13.png" />
 									<p>车辆管理</p>
 								</div>
 							</a>
 						</el-col>
+						
+						<el-col :span="8">
+							<!--<a href="langcarrentl.html">-->
+							<a :href="langcarrentlUrl">
+								<div class="grid-content bg-purple">
+									<img src="../img/home_15.png" />
+									<p>车位长租</p>
+								</div>
+							</a>
+						</el-col>
+						<el-col :span="8">
+							<!--<a href="wallet.html">-->
+							<a :href="walletUrl">
+								<div class="grid-content bg-purple">
+									<img src="../img/home_13.png" />
+									<p>钱包</p>
+								</div>
+							</a>
+						</el-col>
+
+					</el-row>
+					<!--<el-row :gutter="12">
 						<el-col :span="8">
 							<a href="parkingcoupon.html">
 								<div class="grid-content bg-purple">
@@ -85,39 +120,72 @@
 								</div>
 							</a>
 						</el-col>
-						<el-col :span="8">
-							<a href="langcarrentl.html">
-								<div class="grid-content bg-purple">
-									<img src="../img/home_15.png" />
-									<p>车位长租</p>
-								</div>
-							</a>
-						</el-col>
 
-					</el-row>
-					<el-row :gutter="12">
-						<el-col :span="8">
-							<a href="wallet.html">
-								<div class="grid-content bg-purple">
-									<img src="../img/home_13.png" />
-									<p>钱包</p>
-								</div>
-							</a>
-						</el-col>
-						
-					</el-row>
+					</el-row>-->
 				</div>
 			</div>
 		</div>
-
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>-->
 		<script type="text/javascript">
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
+			var baseUrl = "http://www.pamirinfo.com";
 			var Main = {
 				data() {
 					return {
-
+						userTel : '',
+						show:{
+							GoToLogin : true,
+							userInfo : false
+						},
+						personalsetUrl : 'login.html',
+						parkingrecordUrl : 'login.html',
+						vehiclemanagementUrl : 'login.html',
+						langcarrentlUrl : 'login.html',
+						walletUrl : 'login.html',
+						userHeadImg : '../img/223A54592_0.jpg'
 					};
+				},
+				mounted: function() {
+					this.getUserInfo();
+				},
+				methods: {
+					//获取用户信息
+					getUserInfo: function() {
+						var _this = this ;
+						axios.get(baseUrl + '/api/user/get/user/info',{
+							headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+						})
+						.then(function(res){
+							//如果检测到用户未登录那么所有需要登录才查看的界面全部跳转到home.html
+							if(res.status == 200 && res.data.code == 401){
+								
+							}else if(res.status == 200 && res.data.code == 200){
+								//已经登录的情况下直接跳到相应的界面即可
+								
+								_this.userTel = res.data.data.phone;
+								_this.show.GoToLogin = false ;
+								_this.show.userInfo = true ;
+								_this.userHeadImg = res.data.data.headimgurl ;
+								_this.personalsetUrl = 'personalsetting.html';
+								_this.parkingrecordUrl = 'parkingrecord.html';
+								_this.vehiclemanagementUrl = 'vehiclemanagement.html';
+								_this.langcarrentlUrl = 'langcarrentl.html';
+								_this.walletUrl = 'wallet.html';
+							}else{
+								_this.$axios(res.data.msg)
+							}
+						})
+						.catch(function(err){
+							
+						})
+
+					},
 				}
 			}
 			var Ctor = Vue.extend(Main)

@@ -34,6 +34,7 @@
 			}
 			.grid-car-content ul li:nth-of-type(1){
 				width: 55%;
+				font-size: 0;
 			}
 			.grid-car-content ul li:nth-of-type(2){
 				width: 45%;
@@ -59,7 +60,7 @@
 				background-color: #EDEDED;
 				color: #101010;
 				padding: 0 15px;
-				
+				font-size: 14px;
 			}
 			.original-price{
 				font-size: 10px;
@@ -71,6 +72,9 @@
 				height: 26px;
 				line-height: 26px;
 			}
+			.expiry_date{
+				color: #6A6A6A;
+			}
 		</style>
 	</head>
 
@@ -81,20 +85,25 @@
 					<mt-button icon="back"></mt-button>
 				</a>
 			</mt-header>
+			<p v-show="nocontentTips">暂时还没有月卡购买记录</p>
 			<div class="grid-car-content" v-for="(car,index) in cars">
 				<ul>
 					<li>
 						<div class="car-item-content">
 							<img src="../img/3_02.png"/>
 							<!--<div>5元<span class="original-price">8元</span></div>-->
-							<div>{{car.price}}元<span class="original-price">{{car.originalPrice}}元</span></div>
+							<div v-cloak>
+								{{car.price}}元
+								<!--<span class="original-price">{{car.originalPrice}}元</span>-->
+							</div>
 						</div>
 						
 					</li>
 					<li>
 						<div>
 							<p>塔库停车·月卡</p>
-							<mt-button size='small'  v-if='car.effect' v-bind:class="{activeButton:car.effect==true,unactiveButton:car.effect==false}" type="primary">
+							<p style="font-size: 14px;" v-cloak>{{car.parkingName}}</p>
+							<mt-button size='small'  v-if='car.effect == false' v-bind:class="{activeButton:car.effect==false,unactiveButton:car.effect==true}" type="primary">
 								生效中
 								
 							</mt-button>
@@ -102,7 +111,7 @@
 								已失效
 								
 							</mt-button>
-							<p>失效日：{{car.expiryDate}}</p>
+							<p class="expiry_date" v-cloak>失效日：{{car.expiryDate}}</p>
 						</div>
 						
 					</li>
@@ -113,8 +122,10 @@
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 引入组件库 -->
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			var ajaxDataFun = getAjaxData;
 			var getParam = GetQueryString;
@@ -122,44 +133,46 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			var getuserInfo = getuserInfo; //通过openid获取用户信息
+//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
 			var Main = {
 				data() {
 					return {
-						cars:''
+						cars:[],
+						nocontentTips: false
 					};
 				},
 				computed: {
 					
 				},
 				mounted: function() {
+					this.getAllCarList();
 					this.$nextTick(function() {
 						//加载完成执行
 						//首先后去所有月卡的列表
-						this.cars = [{
-							validity: '30天',
-							originalPrice: 400,
-							price: 360,
-							expiryDate: '2018-8-30',
-							effect:true
-						},{
-							validity: '30天',
-							originalPrice: 400,
-							price: 360,
-							expiryDate: '2018-9-30',
-							effect:true
-						},{
-							validity: '30天',
-							originalPrice: 400,
-							price: 360,
-							expiryDate: '2018-7-28',
-							effect:false
-						}
-						
-						]
+//						this.cars = [{
+//							validity: '30天',
+//							originalPrice: 400,
+//							price: 360,
+//							expiryDate: '2018-8-30',
+//							effect:true
+//						},{
+//							validity: '30天',
+//							originalPrice: 400,
+//							price: 360,
+//							expiryDate: '2018-9-30',
+//							effect:true
+//						},{
+//							validity: '30天',
+//							originalPrice: 400,
+//							price: 360,
+//							expiryDate: '2018-7-28',
+//							effect:false
+//						}
+//						
+//						]
 					})
 				},
 				watch: {
@@ -169,7 +182,41 @@
 					//					}
 				},
 				methods: {
-
+					getAllCarList : function () {
+						var _this = this ;
+						axios.get(baseUrl + '/api/month/card/user/get/list',{
+							params:{
+								
+							},
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+							},
+							withCredentials: true
+						})
+						.then(function(res){
+							if(res.status == 200 && res.data.code == 200){
+								if(res.data.data.content.length > 0){
+									for(var i=0 ; i < res.data.data.content.length ; i++){
+										_this.cars.push({
+											parkName : res.data.data.content[i].parkingLotName,
+											validity: res.data.data.content[i].monthNo + '个月',
+	//										originalPrice: 400,
+											price: res.data.data.content[i].price,
+											expiryDate: res.data.data.content[i].endDate,
+											effect: res.data.data.content[i].expired
+										})
+									}
+								}else{
+									_this.nocontentTips = true ;
+								}
+							}else{
+								_this.$toast(res.data.msg)
+							}
+						})
+						.catch(function(err){
+							
+						})
+					}
 				}
 			}
 			var Ctor = Vue.extend(Main)

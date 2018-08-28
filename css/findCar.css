@@ -4,7 +4,6 @@
 }
 .el-row{
 	margin-bottom: 0;
-	
 }
 
 .el-checkbox{
@@ -16,10 +15,6 @@
 	background-color: white;
 }
 
-
-#find_car_cont_cont{
-	margin-bottom: 15px;
-}
 #find_car_cont_cont .el-main{
 	text-align: left;
 	background-color:white;
@@ -45,4 +40,20 @@
 
 #license-plate-number p{
 	margin-bottom: 10px;
+	padding-top: 10px;
 }
+.tipsP{
+	text-align: center;
+	color: #409EFF;
+	line-height: 100px;
+}
+
+.el-col{
+	text-align: left;
+}
+
+.mint-cell-wrapper{
+	padding: 0;
+}
+
+

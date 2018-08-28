@@ -30,7 +30,7 @@
 				<mt-cell title="当前账号" to='modifyPhone.html' is-link :value="userName">
 					
 				</mt-cell>
-				<mt-cell title="注册时间" :value="registrationData"></mt-cell>
+				<!--<mt-cell title="注册时间" :value="registrationData"></mt-cell>-->
 				<div class="sign-out">
 					<mt-button type="primary" size='large' @click="signOut()">退出</mt-button>
 				</div>
@@ -43,6 +43,7 @@
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script type="text/javascript">
 			
@@ -53,7 +54,7 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			var getuserInfo = getuserInfo; //通过openid获取用户信息
+//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
@@ -61,14 +62,15 @@
 				data() {
 					return {
 						userName: '15982414496',
-						registrationData: ''
+//						registrationData: ''
 					};
 				},
 
 				mounted: function() {
+					this.getUserInfo();
 					this.$nextTick(function() {
 						//加载完成执行
-						this.registrationData = new Date();
+//						this.registrationData = new Date();
 					})
 				},
 				watch: {
@@ -76,16 +78,44 @@
 				},
 				methods: {
 					signOut: function(){//退出登录
+						var _this = this ;
 						//退出成功跳转到home.html
-						axios.post(baseUrl + '/api/user/logout')
+						axios.get(baseUrl + '/api/user/logout',{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
 						    .then(function (response) {
-						    	if(response.status==200){
+						    	if(response.status==200 && response.data.code == 200){
 						    		window.location.href = 'home.html' ;
+						    	}else{
+						    		_this.$toast(response.data.msg)
 						    	}
 						    })
 						    .catch(function (error) {
-						    	console.log(error)
+						    	console.log(error);
 						    });
+					},
+					//前端获取用户信息
+					getUserInfo : function () {
+						var _this = this ; 
+						axios.get(baseUrl + '/api/user/get/user/info',{
+							headers:{
+								'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
+							},
+							withCredentials: true
+						})
+						.then(function(res){
+							if(res.status == 200 && res.data.code == 200){
+								_this.userName = res.data.data.phone;
+							}else{
+								_this.$toast(res.data.msg);
+							}
+						})
+						.catch(function(err){
+							
+						})
 					}
 				}
 			}

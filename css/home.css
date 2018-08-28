@@ -1,4 +1,6 @@
-
+html,body{
+	background-color: #F0F0F0;
+}
 #home_contanier{
 	padding: 0;
 	
@@ -13,7 +15,7 @@
 	overflow: hidden;
 }
 #home_contanier #home_container_top h3{
-	line-height: 60px;padding: 0;margin: 0;text-align: center;margin-left: 15px;
+	line-height: 60px;padding: 0;margin: 0;text-align: center;
 }
 #home_contanier #home_container_top h3 i{
 	float: right;line-height: 60px;margin-right: 15px;
@@ -58,4 +60,24 @@
 }
 .headerBox ul{
 	color: #101010;
+}
+
+.loginBox{
+	/*outline: 1px solid red;*/
+	padding: 65px 0;
+}
+.loginBox button{
+	border: 2px solid #4886FA;
+	font-weight: bold;
+	color:#4886FA;
+	outline: none;
+	padding:5px 10px;
+	border-radius:4px;
+	background-color: transparent;
+	font-size: 16px;
+}
+
+.headerBox img{
+	width: 24px;
+	height: 24px;
 }

@@ -146,16 +146,16 @@
 						<div class="list-box" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">
 							<!--<img class="list-img" :src="item.imgUrl" alt="">-->
 							<div class="list-content">
-								<p class="title">{{item.title}}</p>
-								<p class="tips">{{item.tips}}</p>
-								<p class="time">{{item.time}}</p>
+								<p class="title" v-cloak>{{item.title}}</p>
+								<p class="tips" v-cloak>{{item.tips}}</p>
+								<p class="time" v-cloak>{{item.time}}</p>
 							</div>
 						</div>
 						<div class="delete" @click="deleteItem" :data-index="index">删除</div>
 					</li>
 				</ul>
 			</div>
-			<p v-for="(item,index) in list ">{{item.title}}</p>
+			<p v-for="(item,index) in list " v-cloak>{{item.title}}</p>
 		</div>
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/element-ui/lib/index.js"></script>

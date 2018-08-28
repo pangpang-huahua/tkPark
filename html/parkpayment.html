@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>停车缴费</title>
 		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<link rel="stylesheet" type="text/css" href="../css/keybord.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
@@ -14,24 +15,20 @@
 	</head>
 
 	<body>
-		<div id="app">
+		<div id="app" v-cloak>
 			<div id="park-payment">
 				<el-container>
 					<el-header><i class="el-icon-arrow-left float-sty-left"></i>停车缴费</el-header>
 					<el-main>
 						<el-row :gutter="20">
 							<el-col :span="7">
-								<!--<div class="grid-content">-->
 								<img src="../img/1-1506131104550-L.jpg" />
-								<!--</div>-->
 							</el-col>
 							<el-col :span="17">
-								<!--<div class="grid-content">-->
 								<div class="cont-left-sty">
-									<h3>川A JK1268</h3>
-									<p class="color-sty-2">换一辆<i class="el-icon-arrow-right"></i></p>
+									<h3>{{plateNum}}</h3>
+									<!--<p class="color-sty-2">换一辆<i class="el-icon-arrow-right"></i></p>-->
 								</div>
-								<!--</div>-->
 							</el-col>
 
 						</el-row>
@@ -41,23 +38,22 @@
 				<div class="park-payment-box">
 					<ul v-for="(item,index) in payorderInfo">
 						<li>{{item.name}}</li>
+						<!--判断是否有优惠券-->
 						<li v-if="index==7">
-							
-							<!--{{item.value}}-->
 							<el-select v-if='item.allCoupon.length!=0' v-model="couponval" placeholder="请选择">
 								<el-option v-for="it in item.allCoupon" :key="it.couponval" :label='it.couponval' :value="it.price">
 								</el-option>
 							</el-select>
 							<p v-else>无可用优惠券</p>
 							<!--<img class="scan-code" src="../img/scancode.png"/>-->
-							
+
 						</li>
 						<li v-else-if="index==1">
-							{{item.name}}
+							{{item.value}}
 							<a href="mapdemo.html"><i class="el-icon-location"></i></a>
 						</li>
 						<li v-else-if="index==5">
-							{{item.name}}
+							{{item.value}}
 							<i class="el-icon-warning"></i>
 						</li>
 						<li v-else>
@@ -72,11 +68,11 @@
 								<span class="pay-money" v-if="couponval">￥ {{sumPayMoney - couponval}}</span>
 								<span class="pay-money" v-else>￥ {{sumPayMoney}}</span>
 							</li>
-							
+
 						</ul>
 						<p v-show="showRuls" class="ruls-tips" v-for="(item,index) in preferentialRules">
-								{{(index + 1) + "、" +item}}
-							</p>
+							{{(index + 1) + "、" +item}}
+						</p>
 
 					</div>
 					<ul>
@@ -85,35 +81,49 @@
 					</ul>
 				</div>
 				<div style="height: 60px;"></div>
-				
+
 				<div class="park-payment-footer">
 					<el-row>
-					  	<el-col :span="15">
-					  		<div class="park-payment-footer-left" v-if="couponval">合计：￥{{sumPayMoney - couponval}}</div>
-					  		<div class="park-payment-footer-left" v-else>合计：￥{{sumPayMoney}}</div>
-					  	</el-col>
-					  	<el-col :span="9">
-					  		<div @click="payMoneyFun()" class="park-payment-footer-right">缴费</div>
-					  	</el-col>
+						<el-col :span="15">
+							<div class="park-payment-footer-left" v-if="couponval">合计：￥{{sumPayMoney - couponval}}</div>
+							<div class="park-payment-footer-left" v-else>合计：￥{{sumPayMoney}}</div>
+						</el-col>
+						<el-col :span="9">
+							<div @click="payMoneyFun()" class="park-payment-footer-right">缴费</div>
+						</el-col>
 					</el-row>
 				</div>
-				
+
 			</div>
 		</div>
-		
+
 		<!--高德地图-->
 		<!--<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
 		<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=21321a7e4734f283dbb81616b7a9da96&plugin=AMap.PlaceSearch,AMap.Driving"></script>
     	<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>-->
 		<!--vue  element-->
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/stoping_time.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
+
+			var GetParam = GetQueryString;
+			var stopTime = getStopingTime;
+			var orderid = '';
+			var getConfigInfoFun = getConfigInfo(); //获取网页配置信息
+			//			console.log(newStopTime)
+			//			alert('车牌号：' + GetParam('carNo'))
 			var Main = {
 				data() {
 					return {
+						plateNum: '',
 						//支付订单的内容
 						payorderInfo: [{
 							name: '订单号',
@@ -141,48 +151,252 @@
 							name: '优惠券', //只推送当前停车场可用的券    如果推送的用户的所有优惠券就要显示告诉用户不可用的券及原因
 							value: '',
 							allCoupon: [
-								{
-									couponval: '5元通用优惠券',
-									price:5
-								}, {
-									couponval: '10元通用优惠券',
-									price:10
-								}, {
-									couponval: '12元通用优惠券',
-									price:12
-								}
+								//								{
+								//									couponval: '5元通用优惠券',
+								//									price:5
+								//								}, {
+								//									couponval: '10元通用优惠券',
+								//									price:10
+								//								}, {
+								//									couponval: '12元通用优惠券',
+								//									price:12
+								//								}
 							]
 						}],
+
 						couponval: '',
-						couponPrice: 5 ,
-						sumPayMoney: 25,
-//						payMoney: this.couponPrice - this.sumPayMoney
+						couponPrice: 0,
+						sumPayMoney: 0,
+						//						payMoney: this.couponPrice - this.sumPayMoney
 						payMoney: this.sumPayMoney - this.couponval,
 						//以上为停车信息
-						
+
 						//以下为优惠规则
-						preferentialRules: ['使用当前已获得的商家券和停车券',"点击‘扫一扫’按钮扫描商场购物小票可获取优惠券"],
-						showRuls: false
+						preferentialRules: ['使用当前已获得的商家券和停车券', "点击‘扫一扫’按钮扫描商场购物小票可获取优惠券"],
+						showRuls: false,
+
+						//获取订单列表相关的信息
+						getOrderListInfo: []
 					}
 				},
 				mounted: function() {
+					if(GetParam('getFrom') == 'binding') {
+						alert('binding')
+						this.getOrderListInfo = [{
+							toUrl: '/api/park/parking/list',
+							params: {
+								page: 0,
+								size: 10,
+								listOpenParkings: 'true'
+							}
+						}]
+					} else if(GetParam('getFrom') == 'search') {
+						alert('search')
+						this.getOrderListInfo = [{
+							toUrl: '/api/park/parking/search',
+							params: {
+								parkingLotId: GetParam('parklotId'),
+								carNo: GetParam('carNo')
+							}
+						}]
+					}
+
 					this.$nextTick(function() {
-						//加载完成执行
-						this.payMoney = this.payorderInfo[5].price - this.payorderInfo[7].allCoupon[0].price
-						console.log('loading')
-						//				this.logoUrl = "img/logo1.png"
+						//加载完成执行  当有优惠券的时候使用
+						//						if(this.payorderInfo[7].allCoupon.length > 0) {
+						//							this.payMoney = this.payorderInfo[5].price - this.payorderInfo[7].allCoupon[0].price
+						//						}
+
+						this.getOrderList();
+
 					})
 				},
 				methods: {
 					showRulsFun: function() {
-						if(this.showRuls){
+						if(this.showRuls) {
 							this.showRuls = false;
-						}else{
+						} else {
 							this.showRuls = true;
 						}
 					},
-					payMoneyFun: function() {//提交缴费订单
-//						console.log('缴费')
+					//获取待缴费订单列表
+					getOrderList: function() {
+						var _this = this;
+						axios.get(baseUrl + this.getOrderListInfo[0].toUrl, {
+								params: this.getOrderListInfo[0].params,
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									var dataArr = [];
+									if(GetParam('getFrom') == 'binding') {
+										dataArr = res.data.data.content;
+									} else if(GetParam('getFrom') == 'search') {
+										dataArr = res.data.data;
+									}
+									//									离场时间
+									var nowT = new Date();
+									var stopT = stopTime(dataArr[GetParam('arrId')].enterTime, nowT);
+									var newStopTime = '';
+									if(stopT.day) {
+										newStopTime = stopT.day + "天"
+									}
+									if(stopT.hour) {
+										newStopTime += stopT.hour + "小时"
+									}
+									if(stopT.minutes) {
+										newStopTime += stopT.minutes + "分"
+									}
+									if(stopT.seconds) {
+										newStopTime += stopT.seconds + "秒"
+									}
+									_this.plateNum = dataArr[GetParam('arrId')].carNo;
+									_this.sumPayMoney = dataArr[GetParam('arrId')].totalFee;
+
+									orderid = dataArr[GetParam('arrId')].id
+									_this.payorderInfo = [{
+											name: '订单号',
+											value: dataArr[GetParam('arrId')].id
+										}, {
+											name: '停车场',
+											value: dataArr[GetParam('arrId')].parkingLotName
+										},
+										//									{
+										//										name: '车位',
+										//										value: 'E419'
+										//									}, 
+										{
+											name: '入场时间',
+											value: dataArr[GetParam('arrId')].enterTime
+										},
+										{
+											name: '停车时长',
+											value: newStopTime
+										},
+										{
+											name: '停车计费',
+											value: dataArr[GetParam('arrId')].totalFee + '元',
+											price: dataArr[GetParam('arrId')].totalFee
+										}
+										//									{
+										//										name: '停车码',
+										//										value: 'TYJJ8999HJJ8'
+										//									}, 
+										//									{
+										//										name: '优惠券', //只推送当前停车场可用的券    如果推送的用户的所有优惠券就要显示告诉用户不可用的券及原因
+										//										value: '',
+										//										allCoupon: [
+										//											//								{
+										//											//									couponval: '5元通用优惠券',
+										//											//									price:5
+										//											//								}, {
+										//											//									couponval: '10元通用优惠券',
+										//											//									price:10
+										//											//								}, {
+										//											//									couponval: '12元通用优惠券',
+										//											//									price:12
+										//											//								}
+										//										]
+										//									}
+									]
+								} else {
+									_this.$toast(res.data.msg)
+								}
+							})
+							.catch(function(err) {
+								//								alert(JSON.stringify(err))
+							})
+					},
+					//提交缴费订单
+					payMoneyFun: function() {
+						alert(orderid)
+						var _this = this;
+						//支付流程  3 ：通过config接口注入权限验证配置
+						wx.config({
+							debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
+							timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
+							nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
+							signature: getConfigInfoFun.signature, // 必填，签名
+							jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表
+						});
+						//支付流程   4 ：通过ready接口处理成功验证
+						wx.ready(function() {
+//							alert('配置成功')
+							//支付流程  5 ：配置成功后调用创建支付订单的接口
+							//传入订单号，调用签名接口
+							axios.get(baseUrl + '/api/park/parking/sign', {
+									params: {
+										id: orderid
+									},
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									},
+									withCredentials: true
+								})
+								.then(function(res) {
+//									alert(JSON.stringify(res))
+									if(res.status == 200 && res.data.code == 200) {
+										//调用微信支付接口
+										function onBridgeReady() {
+											WeixinJSBridge.invoke(
+												'getBrandWCPayRequest', {
+													"appId": res.data.data.BillSignedDto.appId, //公众号名称，由商户传入     
+													"timeStamp": res.data.data.BillSignedDto.timeStamp, //时间戳，自1970年以来的秒数     
+													"nonceStr": res.data.data.BillSignedDto.nonceStr, //随机串     
+													"package": res.data.data.BillSignedDto.prepay_id,
+													"signType": res.data.data.BillSignedDto.signType, //微信签名方式：     
+													"paySign": res.data.data.BillSignedDto.sign //微信签名 
+												},
+												function(res) {
+													alert(JSON.stringify(res))
+													if(res.err_msg == "get_brand_wcpay_request:ok") {
+														_this.$toast("交易成功")
+														setTimeout(function() {
+															window.location.href = "home.html";
+														}, 1000)
+													}
+													if(res.err_msg == "get_brand_wcpay_request:cancel") {
+														_this.$toast("交易取消");
+														//													window.location.href = "";
+													}
+													if(res.err_msg == "get_brand_wcpay_request:fail") {
+														_this.$toast("支付失败");
+														//													window.location.href = "";
+													}
+
+												}
+											);
+										}
+										if(typeof WeixinJSBridge == "undefined") {
+											if(document.addEventListener) {
+												document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+											} else if(document.attachEvent) {
+												document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+												document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+											}
+										} else {
+											onBridgeReady();
+										}
+
+									} else {
+										_this.$toast(res.data.msg)
+									}
+								})
+								.catch(function(err) {
+//									alert(JSON.stringify(err))
+								})
+
+						});
+						//			通过error接口处理失败验证
+						wx.error(function(res) {
+							_this.$toast(res)
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+						});
+
 					}
 				}
 			}

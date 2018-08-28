@@ -6,7 +6,7 @@ var provinces = new Array("京", "沪", "浙", "苏", "粤", "鲁", "晋", "冀"
 var keyNums = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
 	"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
 	"A", "S", "D", "F", "G", "H", "J", "K", "L",
-	"OK", "Z", "X", "C", "V", "B", "N", "M", "Del");
+	"关闭", "Z", "X", "C", "V", "B", "N", "M", "Del");
 var next = 0;
 
 //新增
@@ -104,12 +104,13 @@ function choosekey(obj, jj) {
 function closePro() {
 	layer.closeAll()
 }
-
+//清除输入的省份
 function cleanPro() {
 	$(".ul_input").find("span").text("");
 	$(".hasPro").removeClass("hasPro");
 	$(".ppHas").removeClass("ppHas");
 	next = 0;
+	console.log($(".ul_input").find("span").text())
 }
 
 function trimStr(str) {

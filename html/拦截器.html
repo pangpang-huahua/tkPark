@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/commonaxios.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			axios.get(baseUrl + '/api/month/card/user/get/list',{
+				params:{
+//					areaCode: '510100'
+				},
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+				},
+				withCredentials: true
+			}).then(function(res){
+				console.log(res)
+			}).catch(function(err){
+				console.log(err)
+			})
+		</script>
+	</body>
+</html>

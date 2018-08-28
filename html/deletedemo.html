@@ -160,7 +160,7 @@
 					<li class="list-item " v-for="(item,index) in list " data-type="0">
 						<div class="list-box" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">
 							<!--<img class="list-img" :src="item.imgUrl" alt="">-->
-							<div class="list-content">
+							<div class="list-content" v-cloak>
 								<p class="title">{{item.title}}</p>
 								<p class="tips">{{item.tips}}</p>
 								<p class="time">{{item.time}}</p>
@@ -184,7 +184,7 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			var getuserInfo = getuserInfo; //通过openid获取用户信息
+//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');

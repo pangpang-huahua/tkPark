@@ -72,7 +72,7 @@
 					<tr>
 						<td class="borderBottom"><input v-model="captcha" type="" placeholder="请输入您收到的验证码" /></td>
 						<td class="borderBottom verificationCode">
-							<mt-button v-bind:disabled="disabled" size="normal" v-bind:type="buttonType" v-on:click="getCaptcha">{{captchaText}}</mt-button>
+							<mt-button style='width: 114px;' v-bind:disabled="disabled" size="normal" v-bind:type="buttonType" v-on:click="getCaptcha" v-cloak>{{captchaText}}</mt-button>
 						</td>
 
 					</tr>
@@ -105,9 +105,8 @@
 		<script src="../js/getUserInfo.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var getParam = GetQueryString;
-			var getCode = getUserInfoFun;
-//			getCode();
-			//			alert("code:"+getParam("code"));
+//			var getCode = getUserInfoFun;
+			var appId ;
 			new Vue({
 				el: '#login',
 				data() {
@@ -122,10 +121,18 @@
 						buttonType: 'primary',
 						disabled: false,
 						captchaText: '获取验证码',
-						countDownT: 60
+						countDownT: 60,
+						//判断用户是否已经登录
+						judgeIsLogin: false
 					}
 				},
 				mounted: function() {
+					//判断连接中是否有code
+					if(getParam('code') == null){
+						//1 获取网页配置信息
+						this.getUserInfo()
+					}
+					
 					this.$nextTick(function() {
 						if(getParam('phone') != '' && getParam('phone') != null) {
 							this.phone = getParam('phone');
@@ -142,18 +149,59 @@
 					}
 				},
 				watch: {
-
+					
 				},
 				methods: {
+					//获取网页配置信息
+					getWechatInfo : function () {
+						axios.get(baseUrl + '/api/wechat/get/app/info').then(function(res){
+							if(res.status == 200 && res.data.code == 200){
+//								alert('appId:' + res.data.data.appId)
+								//获取appid成功之后重定向网页地址
+								window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + res.data.data.appId + "&redirect_uri=http%3A%2F%2Fwww.pamirinfo.com%2FtkPark%2Fhtml%2Flogin.html&response_type=code&scope=snsapi_userinfo&state=0#wechat_redirect"
+							}else{
+								_this.$toast(res.data.msg)
+							}
+						}).catch(function(err){
+							
+						})
+					},
+					//获取用户信息
+					getUserInfo: function () {
+						var _this = this ;
+						axios.get(baseUrl + '/api/user/get/user/info',{
+								headers: {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									},
+									withCredentials: true
+							})
+							.then(function(res){
+								console.log(res)
+								if(res.status == 200){
+									if(res.data.code == 200){
+										_this.judgeIsLogin = true ;
+									}else if(res.data.code == 401){
+										//1 获取网页配置信息
+//										alert('未登录')
+										_this.getWechatInfo();
+									}
+									
+								}
+							})
+							.catch(function(err){
+								
+							})
+					},
 					//验证手机号
 					verifyPhoneF: function() {
 						var phone = this.phone;
+						this.verifyPhone = false ;
 						if(phone == '' || phone == null) {
 							this.$toast("请输入电话号码");
-							return;
+							return false;
 						} else if(!regTel.test(phone)) {
 							this.$toast("请输入有效的电话号码");
-							return;
+							return false;
 						} else {
 							this.agreementHref = "agreement.html?phone=" + this.phone + "&captcha=" + this.captcha
 							return this.verifyPhone = true;
@@ -181,12 +229,15 @@
 							axios.post(baseUrl + '/api/user/sms/send', params, {
 									headers: {
 										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-									}
+									},
+									withCredentials: true
 								})
 								.then(function(response) {
 									//发送成功后调用倒计时
 									if(response.status == 200 && response.data.code == 200) {
 										_this.countDown();
+									}else{
+										_this.$toast(response.data.msg);
 									}
 
 								})
@@ -224,28 +275,34 @@
 						if(this.verifyPhone) {
 							this.verifyCaptchaF();
 						}
-						if(this.verifyPhone && this.verifyCaptcha) {
-							alert("code::" + getParam("code"));
+						if(this.verifyPhone && this.verifyCaptcha && getParam("code") != null) {
+//							alert("code::" + getParam("code"));
 							var params = new URLSearchParams();
+							var _this = this ;
 							params.append('phone', this.phone)
 							params.append('verifyCode', this.captcha)
-//							params.append('code', getParam("code"));
-							params.append('code', 'jjkkkk');
-							params.append('entrance', 'ALIPAY');
+							//							params.append('code', getParam("code"));
+							params.append('code', getParam('code'));
+							params.append('entrance', 'WECHAT');
 
 							axios.post(baseUrl + '/api/user/verify', params, {
 									headers: {
 										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-									}
+									},
+									withCredentials: true
 								})
 								.then(function(res) {
-									if(res.data.code == 200){
-										window.location.href='home.html';
-									}else{
-										this.$toast(res.data.msg)
+									if(res.data.code == 200) {
+										_this.$toast('登录成功');
+										setTimeout(function(){
+											window.location.href = 'home.html';
+										},1000)
+										
+									} else {
+										_this.$toast(res.data.msg)
 									}
 								}).catch(function(err) {
-//									alert(err)
+									//									alert(err)
 								})
 						}
 					},

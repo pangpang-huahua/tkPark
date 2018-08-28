@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>月卡续费</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+		<!--引入高德地图-->
+		<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main.css?v=1.0" />
+
+		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/fontawesome.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/head.css" />
+		<link rel="stylesheet" type="text/css" href="../css/slideshow.css" />
+		<style type="text/css">
+			#app {
+				padding-bottom: 80px;
+				position: relative;
+			}
+			
+			.lang-car-rentl,
+			.lang-car-rent2 {
+				background-color: white;
+			}
+			
+			.lang-car-rent2 {
+				margin-top: 15px;
+			}
+			
+			.banner {
+				padding: 20px 30px;
+			}
+			
+			.banner img {
+				width: 100%;
+				border-radius: 10px;
+			}
+			
+			.month-car-button {
+				padding: 0 20px;
+			}
+			
+			.month-car-button ul {
+				overflow: hidden;
+				padding: 0;
+			}
+			
+			.month-car-button li {
+				list-style: none;
+				width: 47%;
+				margin-bottom: 15px;
+			}
+			
+			.floatLeft {
+				float: left;
+			}
+			
+			.floatRight {
+				float: right;
+			}
+			
+			.month-car-button div {
+				box-sizing: border-box;
+				width: 100%;
+				padding: 0 0 0 10px;
+				border-radius: 4px;
+				border: 1px solid #26a2ff;
+			}
+			
+			.month-car-button div p span {
+				color: #606266;
+				font-size: 12px;
+				text-decoration: line-through;
+			}
+			
+			.month-car-button div p:nth-of-type(1) {
+				font-size: 16px;
+			}
+			
+			.month-car-button div p:nth-of-type(2) {
+				font-size: 14px;
+			}
+			
+			.margin-style-1 {
+				margin-top: 15px;
+				margin-bottom: 5px;
+			}
+			
+			.margin-style-2 {
+				margin-bottom: 15px;
+				margin-top: 5px;
+			}
+			
+			.picker {
+				text-align: right;
+				border-top: 1px solid #DCDFE6;
+			}
+			
+			.sure {
+				margin-top: 10px;
+				margin-right: 20px;
+			}
+			
+			.iconImg {
+				width: 24px;
+			}
+			
+			.allValBox {
+				padding: 10px 20px;
+			}
+			/*iframe*/
+			
+			#showMyCarIframe {
+				position: fixed;
+				top: 0;
+				left: 0;
+				background-color: white;
+				border: none;
+			}
+			/*切换停车场*/
+			
+			.chooseParking {
+				padding: 0 10px;
+				background-color: white;
+				margin-bottom: 15px;
+			}
+			
+			.floatUlRigLef {
+				overflow: hidden;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+			}
+			
+			.chooseParking ul {}
+			
+			.floatUlRigLef li {
+				float: left;
+				line-height: 60px;
+				list-style: none;
+			}
+			
+			.chooseParking ul li {}
+			
+			.floatUlRigLef li:nth-of-type(1) {
+				width: 55%;
+			}
+			
+			.floatUlRigLef li:nth-of-type(2) {
+				width: 45%;
+				text-align: right;
+				color: #26a2ff;
+			}
+			
+			.purchaseBox {
+				padding: 10px 15px;
+				background-color: white;
+				box-shadow: 0px -3px 15px 0px #AFAFAF;
+				position: fixed;
+				bottom: 0;
+				width: 100%;
+				box-sizing: border-box;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<mt-header title="">
+				<a href="home.html" slot="left">
+					<mt-button icon="back"></mt-button>
+				</a>
+				<a href="myCar.html" slot='right'>
+					<span>我的卡</span>
+				</a>
+			</mt-header>
+			<mt-cell title="续费月卡">
+				<span style="color: green" @click="showcar=true" v-cloak>{{checkedCar}}</span>
+			</mt-cell>
+
+			<div class="lang-car-rentl">
+
+				<div class="month-car-button">
+					<p v-cloak>{{chooseMonthCar}}</p>
+					<ul>
+						<li v-for="(monthcar,index) in monthcards" :class="{floatRight:index%2==1,floatLeft:index%2!=1}">
+
+							<div v-on:click="chooseMonth(index,monthcar.price)" v-bind:class="{activeButton:currentIndex==index,normalButton:currentIndex!=index}">
+								<p class="margin-style-1" v-cloak>{{monthcar.time}}随意停</p>
+								<p class="margin-style-2" v-cloak>￥{{monthcar.price}} <span>{{monthcar.originalPrice}}</span></p>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+
+			</div>
+
+			<div class="purchaseBox">
+				<ul class="floatUlRigLef">
+					<li v-cloak>{{monthCarPrice}}</li>
+					<li>
+						<mt-button type="primary" @click="createRenewOrder">续费</mt-button>
+					</li>
+				</ul>
+
+			</div>
+
+			<!--start选择要续费的月卡-->
+			<div v-show='showcar' class="piker-cars-box">
+				<ul class="operation-ul">
+					<li @click="cancelFun">取消</li>
+					<li @click="submitFun">确定</li>
+				</ul>
+				<mt-picker value-key='name' :slots="renewCards" @change="onchangeVal"></mt-picker>
+			</div>
+			<!--end选择车辆-->
+
+			<!--<iframe v-show="showPark" id="showMyCarIframe" src="nearparkinglot.html" width="100%" height="100%"></iframe>-->
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<!--高德地图-->
+		<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=21321a7e4734f283dbb81616b7a9da96&plugin=AMap.DistrictSearch"></script>
+		<script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+		<!--微信支付-->
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData;
+			var getParam = GetQueryString;
+			var promptFun = promptBtnFun; //提示
+			var getAwardIdFun = getAwardId; //获取活动的建立计划id
+			var sessionFun = setcodeval; //添加session
+			var getCode = getCode; //通过code获取用户信息
+			var getConfigInfoFun = getConfigInfo(); //获取网页配置信息
+			//			var getuserInfo = getuserInfo; //通过openid获取用户信息
+
+			//出库信息
+			var parkingLotNames = [];
+			var parkingLotIndex = [];
+
+			//实现地图定位   start
+			var map = new AMap.Map('', {
+				resizeEnable: true
+				//				center: [116.30946, 39.937629],
+				//				zoom: 3
+			});
+			//实现地图定位   end
+
+			// $mount：vue中的生命周期   将实例#app挂载到Vue上
+			//			new Vue().$mount('#app');
+			var Main = {
+				data() {
+					return {
+						//续费订单
+						showcar: false,
+						renewCards: [{
+							flex: 1,
+							defaultIndex: 0,
+							//							values: this.allParkings,
+							values: [],
+							className: 'slot1',
+							textAlign: 'center'
+						}],
+						//						allParkings :[],//方法二中是使用
+						checkedCar: '',
+						changeCar: '',
+						chooseMonthCar: '',
+						currentIndex: 0,
+						monthcards: [],
+						monthNo: '', //选择充值几个月
+						monthCarPrice: '',
+						allMonthCardOrder: [],
+						cardOrder: ''
+					};
+				},
+				created: function() {
+					this.isHaveMonthCar();
+				},
+				computed: {
+					//方法二
+					//					renewCards:function(){
+					//						var _this = this ;
+					//						this.renewCard = [{
+					//							flex: 1,
+					//							values: _this.allParkings,
+					//							className: 'slot1',
+					//							textAlign: 'center'
+					//						}]
+					//						_this.checkedCar = _this.allParkings[0];
+					//						return this.renewCard;
+					//					}
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+
+					})
+				},
+				watch: {
+					//					方法一
+					renewCards: {
+						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
+						handler(curVal, oldVal) {
+							console.log('当前选中的值：' + curVal[0])
+							this.checkedCar = curVal[0].values[0].name;
+						},
+						deep: true
+					}
+				},
+				methods: {
+					chooseMonth: function(index, price) {
+						if(this.currentIndex != index) {
+							this.currentIndex = index;
+							this.chooseMonthCar = this.monthcards[index].time + "个月月卡";
+							this.monthNo = this.monthcards[index].time;
+
+						} else {
+							this.currentIndex = -1;
+						}
+						this.monthCarPrice = price;
+					},
+					handleConfirm: function(p) {
+						if(p == 'c') {
+							this.popupVisible = false;
+						} else if(p == 'p') {
+							this.carPortVisible = false;
+						}
+					},
+
+					//2018-8-15 TM
+					submitFun: function() {
+						this.checkedCar = this.changeCar;
+						this.showcar = false;
+					},
+					cancelFun: function() {
+						this.showcar = false;
+					},
+					//选择车辆
+					onchangeVal(picker, values) {
+						var _this = this;
+						if(_this.checkedCar != '') {
+							_this.changeCar = values[0].name;
+							_this.getGarageDetail(values[0].garageId);
+							_this.cardOrder = values[0].cardOrder;
+						} else {
+							//							_this.checkedCar = values[0].name;
+						}
+					},
+					//2018-8-16 AM
+					//通过用户的月卡列表判断当前是否有月卡
+					isHaveMonthCar: function() {
+						var _this = this;
+						axios.get(baseUrl + '/api/month/card/user/get/list', {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									for(var i = 0; i < res.data.data.content.length; i++) {
+										if(res.data.data.content[i].expired == false) {
+											//方法一
+											_this.renewCards[0].values.push({
+												name: res.data.data.content[i].parkingLotName + '——' + res.data.data.content[i].garageName,
+												garageId: res.data.data.content[i].garageId,
+												cardOrder: res.data.data.content[i].cardCode
+											})
+											//方法二
+											//											_this.allParkings.push(res.data.data.content[i].parkingLotName + '——' + res.data.data.content[i].garageName)
+											_this.allMonthCardOrder.push({
+												garageCode: res.data.data.content[i].garageCode,
+												cardCode: res.data.data.content[i].cardCode
+											})
+										}
+									}
+									_this.getGarageDetail(_this.renewCards[0].values[0].garageId);
+								}else{
+									_this.$toast(res.data.msg)
+								}
+							})
+							.catch(function(err) {
+
+							})
+					},
+					//获取车库详情
+					getGarageDetail: function(id) {
+						var _this = this;
+						axios.get(baseUrl + "/api/parkinglot/garage/get", {
+								params: {
+									id: id
+								}
+							}, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(response) {
+								//获取月卡等相关信息
+								if(response.status == 200 && response.data.code == 200) {
+									_this.monthcards = [{
+										price: response.data.data.billingMoneyByOneMonth,
+										originalPrice: '',
+										time: 1
+									}, {
+										price: parseFloat(response.data.data.billingMoneyByOneMonth) * 2,
+										originalPrice: '',
+										time: 2
+									}, {
+										price: parseFloat(response.data.data.billingMoneyByOneMonth) * 3,
+										originalPrice: '',
+										time: 3
+									}]
+									_this.monthCarPrice = response.data.data.billingMoneyByOneMonth;
+									_this.chooseMonthCar = '1个月月卡';
+									_this.monthNo = 1;
+								}else{
+									_this.$toast(response.data.msg);
+								}
+							})
+							.catch(function(error) {
+
+							})
+					},
+					//创建续费订单
+					createRenewOrder: function() {
+						var _this = this;
+						//支付流程  3 ：通过config接口注入权限验证配置
+						wx.config({
+							debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
+							timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
+							nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
+							signature: getConfigInfoFun.signature, // 必填，签名
+							jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表
+						});
+						//支付流程   4 ：通过ready接口处理成功验证
+						wx.ready(function() {
+
+							//支付流程  5 ：配置成功后调用创建支付订单的接口
+
+							var params = new URLSearchParams();
+							params.append('cardCode', _this.cardOrder);
+							params.append('addMonthNo', _this.monthNo);
+
+							axios.post(baseUrl + '/api/month/card/user/create/renew/bill', params, {
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+									},
+									withCredentials: true
+								})
+								.then(function(res) {
+									if(res.status == 200 && res.data.code == 200) {
+										_this.$toast('订单创建成功');
+										_this.payOrder(res.data.data.billCode)
+									} else {
+										_this.$toast(res.data.msg)
+									}
+								})
+								.catch(function(err) {
+
+								})
+
+						});
+						//			通过error接口处理失败验证
+						wx.error(function(res) {
+							_this.$toast(res)
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+						});
+
+					},
+					//支付流程6 ： 微信支付签名
+					payOrder: function(orderCode, payPrice) {
+
+						var _this = this;
+						$.ajax({
+							type: "post",
+							url: baseUrl + "/api/month/card/sing/month/card/bill",
+							data: {
+								billCode: orderCode, //订单号
+							},
+							xhrFields: {
+								withCredentials: true
+							},
+							success: function(data) {
+								if(data.code == 200) {
+//									alert('签名成功');
+//									alert(JSON.stringify(data));
+									//7 支付流程 ：签名成功之后调用支付接口
+									function onBridgeReady() {
+										WeixinJSBridge.invoke(
+											'getBrandWCPayRequest', {
+												"appId": data.data.appId, //公众号名称，由商户传入     
+												"timeStamp": data.data.timeStamp, //时间戳，自1970年以来的秒数     
+												"nonceStr": data.data.nonceStr, //随机串     
+												"package": data.data.prepay_id,
+												"signType": data.data.signType, //微信签名方式：     
+												"paySign": data.data.sign //微信签名 
+											},
+											function(res) {
+//												alert(JSON.stringify(res))
+												if(res.err_msg == "get_brand_wcpay_request:ok") {
+													_this.$toast("交易成功")
+													setTimeout(function() {
+														window.location.href = "home.html";
+													}, 1000)
+												}
+												if(res.err_msg == "get_brand_wcpay_request:cancel") {
+													_this.$toast("交易取消");
+													//													window.location.href = "";
+												}
+												if(res.err_msg == "get_brand_wcpay_request:fail") {
+													_this.$toast("支付失败");
+													//													window.location.href = "";
+												}
+
+											}
+										);
+									}
+									if(typeof WeixinJSBridge == "undefined") {
+										if(document.addEventListener) {
+											document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+										} else if(document.attachEvent) {
+											document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+											document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+										}
+									} else {
+										onBridgeReady();
+									}
+
+								}
+							},
+							error: function(data) {
+								promptBtnFun(data.msg)
+							}
+						});
+					}
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#app')
+		</script>
+
+	</body>
+
+</html>

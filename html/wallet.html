@@ -26,12 +26,11 @@
 				width: 100%;
 				border-radius: 8px;
 			}
-			
 		</style>
 	</head>
 
 	<body>
-		<div id="app">
+		<div id="app" v-cloak>
 			<mt-header title="我的钱包">
 				<a href="home.html" slot="left">
 					<mt-button icon="back"></mt-button>
@@ -43,28 +42,29 @@
 				</a>
 			</div>
 			<div class="walletBox">
-				<mt-cell title="塔库泊车月卡" to="langcarrentl.html" is-link value="带链接"></mt-cell>
-				<!--<a href="balance.html"></a>-->
+				<mt-cell v-if="myWallets.validCarNum==''||myWallets.validCarNum==0" title="塔库泊车月卡" to="langcarrentl.html" is-link value="购买月卡"></mt-cell>
+				<mt-cell v-else-if='myWallets.validCarNum==1' title="塔库泊车月卡" :label="myWallets.pastDue" is-link to='monthcarrenewal.html' value='续费'></mt-cell>
+				<mt-cell v-else title="塔库泊车月卡" :label="myWallets.allMonthCarNum" is-link to='monthcarrenewal.html' value='续费'></mt-cell>
 			</div>
+
 			<div class="walletBox">
-				<mt-cell title="停车余额" to="balance.html" is-link value="">{{myWallets.remainingSum}}</mt-cell>
-				<mt-cell title="我的优惠券" to="parkingcoupon.html" is-link value="">{{myWallets.tickts}}</mt-cell>
-				<mt-cell title="微信免密" to="https://wx.gtimg.com/authority_payment/renew_open.html?showwxpaytitle=1&mch_id=1236691302&appid=wx822295c9333f22d8&plan_id=94404&contract_code=159824144961531897123290jrH8feA8&request_serial=1531897123290&notify_url=https%3A%2F%2Fapp.mobike.com%2Fapi%2Fv2%2Fnoauthpay%2FreceiveNoauthProtoWx&version=1.0&sign=D2A839A04E8AC301D594AC3CC0B5E9FE&wx_rf=&timestamp=1531897123&duration_selected=&code=033fxorS0d4Bx827LIrS0h8drS0fxorw&return_app=1&mobile=15982414496&contract_display_account=15982414496&exportkey=A6%2Fg2V1aO4uzZoQA2MQYHSc%3D&pass_ticket=V3LyhfsrIy7syLUFylHlqmPiLa279%2FgdfVcX9NF3DlIVnsD76K5oMVucahF98PW6" is-link value="">
+				<mt-cell title="余额" to="balance.html" is-link value="">{{myWallets.balance}}元</mt-cell>
+				<!--<mt-cell title="我的优惠券" to="parkingcoupon.html" is-link value="">{{myWallets.tickts}}</mt-cell>-->
+				<!--<mt-cell title="微信免密" to="https://wx.gtimg.com/authority_payment/renew_open.html?showwxpaytitle=1&mch_id=1236691302&appid=wx822295c9333f22d8&plan_id=94404&contract_code=159824144961531897123290jrH8feA8&request_serial=1531897123290&notify_url=https%3A%2F%2Fapp.mobike.com%2Fapi%2Fv2%2Fnoauthpay%2FreceiveNoauthProtoWx&version=1.0&sign=D2A839A04E8AC301D594AC3CC0B5E9FE&wx_rf=&timestamp=1531897123&duration_selected=&code=033fxorS0d4Bx827LIrS0h8drS0fxorw&return_app=1&mobile=15982414496&contract_display_account=15982414496&exportkey=A6%2Fg2V1aO4uzZoQA2MQYHSc%3D&pass_ticket=V3LyhfsrIy7syLUFylHlqmPiLa279%2FgdfVcX9NF3DlIVnsD76K5oMVucahF98PW6" is-link value="">
 					<span v-if="myWallets.volantoryPayment">已开通</span>
 					<span v-if="myWallets.volantoryPayment==false">未开通</span>
-					
-				</mt-cell>
-			</div>
-			
-			
 
+				</mt-cell>-->
+			</div>
 		</div>
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 引入组件库 -->
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			var ajaxDataFun = getAjaxData;
 			var getParam = GetQueryString;
@@ -72,32 +72,113 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			var getuserInfo = getuserInfo; //通过openid获取用户信息
+//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
 			var Main = {
 				data() {
 					return {
-						myWallets:{
-							remainingSum:0,//余额
-							tickts:'无',//优惠券
-							volantoryPayment: false
+						myWallets: {
+							balance: '', //余额
+							tickts: '无', //优惠券
+							volantoryPayment: false,
+							validCarNum: 0,
+							pastDue: '',
+							allMonthCarNum: ''
 						}
 					};
 				},
 				computed: {
-
+					
+				},
+				watch:{
+					
 				},
 				mounted: function() {
+
+					this.getBalance();
+										this.isHaveMonthCar();
 					this.$nextTick(function() {
 						//加载完成执行
+
 					})
 				},
 				watch: {
 
 				},
 				methods: {
+					//获取用户余额
+					getBalance: function() {
+						var _this = this;
+						axios.get(baseUrl + '/api/balance/get/userid', {
+								params: {
+									userId: userId
+								}
+							}, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									_this.myWallets.balance = res.data.data;
+								}else{
+									_this.toast(res.data.msg);
+								}
+							})
+							.catch(function(err) {
+
+							})
+					},
+					//通过用户的月卡列表判断当前是否有月卡
+					isHaveMonthCar: function() {
+						var _this = this;
+						axios.get(baseUrl + '/api/month/card/user/get/list', {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									var validCar = [];
+									for(var i = 0; i < res.data.data.content.length; i++) {
+										
+										if(res.data.data.content[i].expired == false) {
+											console.log(i)
+											validCar.push({
+												expired: res.data.data.content[i].expired,
+												endTime: res.data.data.content[i].endDate
+											})
+										}
+									}
+									
+									setTimeout(function() {
+										if(validCar.length == 1) {
+											var nowDate = new Date();
+											var endDate = new Date(validCar[0].endTime);
+											var nowSecond = nowDate.getTime();
+											var endSecond = endDate.getTime();
+
+											var remainngDays = parseInt((endSecond - nowSecond) / 1000 / 24 / 60 / 60);
+
+											_this.myWallets.pastDue = '剩余' + remainngDays + '天'
+										}
+										if(validCar.length > 1) {
+											_this.myWallets.allMonthCarNum = '您已购买' + validCar.length + '张月卡'
+										}
+										_this.myWallets.validCarNum = validCar.length;
+									}, 0)
+								}else{
+									_this.toast(res.data.msg);
+								}
+							})
+							.catch(function(err) {
+
+							})
+					},
 					submit: function() {
 
 					}
