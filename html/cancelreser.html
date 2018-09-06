@@ -113,7 +113,7 @@
 				<ul>
 					<li class="backIconLi">
 						<!--<i class="fal fa-angle-left"></i>-->
-						<img class="backIcon"  src="../img/backIcon.png"/>
+						<img @click="goBack" class="backIcon"  src="../img/backIcon.png"/>
 					</li>
 					<li>预约车辆</li>
 					<li></li>
@@ -209,7 +209,10 @@
 
 				},
 				methods: {
-					
+					//返回
+					goBack : function(){
+						window.history.back();
+					},
 
 					//获取预约订单详情信息
 					getAppointmentIinfo: function() {

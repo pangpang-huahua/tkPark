@@ -40,7 +40,7 @@
 
 					<!--<h3 id="" style="">塔库泊车<a href="personalsetting.html"> <i class="el-icon-setting"></i></a></h3>-->
 					<div v-show="show.GoToLogin" class="loginBox">
-						<a href="login.html"><button>登&nbsp;&nbsp;录</button></a>
+						<a :href="loginUrl"><button>登&nbsp;&nbsp;录</button></a>
 					</div>
 					<div v-show="show.userInfo">
 						
@@ -62,7 +62,7 @@
 						</el-col>
 
 						<el-col :span="8">
-							<a href="nearparkinglot.html">
+							<a :href="nearparkinglotUrl">
 								<div class="grid-content bg-purple">
 									<img src="../img/home_06.png" />
 									<p>附近停车场</p>
@@ -140,18 +140,54 @@
 							GoToLogin : true,
 							userInfo : false
 						},
-						personalsetUrl : 'login.html',
-						parkingrecordUrl : 'login.html',
-						vehiclemanagementUrl : 'login.html',
-						langcarrentlUrl : 'login.html',
-						walletUrl : 'login.html',
-						userHeadImg : '../img/223A54592_0.jpg'
+						nearparkinglotUrl: "nearparkinglot.html?num="+ Math.random(),
+						personalsetUrl : 'personalsetting.html?num=' + Math.random(),
+						parkingrecordUrl : 'parkingrecord.html?num=' + Math.random(),
+						vehiclemanagementUrl : 'vehiclemanagement.html?num=' + Math.random(),
+						langcarrentlUrl : 'langcarrentl.html?num=' + Math.random(),
+						walletUrl : 'wallet.html?num=' + Math.random(),
+						loginUrl : 'login.html',
+						userHeadImg : '../img/223A54592_0.jpg',
+						appid : ''
 					};
 				},
 				mounted: function() {
+					this.getWebInfo();
 					this.getUserInfo();
 				},
+				watch:{
+					appid:{
+						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
+						handler(curVal, oldVal) {
+							if(curVal) {
+//								alert('true')
+								//获取车辆列表
+								this.loginUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + this.appid + "&redirect_uri=http%3A%2F%2Fwww.pamirinfo.com%2FtkPark%2Fhtml%2Flogin.html&response_type=code&scope=snsapi_userinfo&state=0#wechat_redirect"
+							}else{
+//								alert('false')
+							}
+						},
+						deep: true
+					}
+				},
 				methods: {
+					getWebInfo : function () {
+						var _this = this ;
+						axios.get(baseUrl + '/api/wechat/get/app/info',{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+						.then(function(res){
+							if(res.data.code == 200){
+								_this.appid = res.data.data.appId ;
+							}
+						})
+						.catch(function(err){
+							
+						})
+					},
 					//获取用户信息
 					getUserInfo: function() {
 						var _this = this ;
@@ -172,11 +208,11 @@
 								_this.show.GoToLogin = false ;
 								_this.show.userInfo = true ;
 								_this.userHeadImg = res.data.data.headimgurl ;
-								_this.personalsetUrl = 'personalsetting.html';
-								_this.parkingrecordUrl = 'parkingrecord.html';
-								_this.vehiclemanagementUrl = 'vehiclemanagement.html';
-								_this.langcarrentlUrl = 'langcarrentl.html';
-								_this.walletUrl = 'wallet.html';
+//								_this.personalsetUrl = 'personalsetting.html?num=' + Math.random();
+//								_this.parkingrecordUrl = 'parkingrecord.html?num=' + Math.random();
+//								_this.vehiclemanagementUrl = 'vehiclemanagement.html?num=' + Math.random();
+//								_this.langcarrentlUrl = 'langcarrentl.html?num=' + Math.random();
+//								_this.walletUrl = 'wallet.html?num=' + Math.random();
 							}else{
 								_this.$axios(res.data.msg)
 							}
@@ -184,7 +220,6 @@
 						.catch(function(err){
 							
 						})
-
 					},
 				}
 			}

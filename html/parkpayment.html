@@ -17,8 +17,8 @@
 	<body>
 		<div id="app" v-cloak>
 			<div id="park-payment">
-				<el-container>
-					<el-header><i class="el-icon-arrow-left float-sty-left"></i>停车缴费</el-header>
+				<el-container  style='padding:0 ;background-color: #26a2ff;height: 40px;color: white;line-height: 40px;'>
+					<el-header ><a href="home.html"><i class="el-icon-arrow-left float-sty-left"></i></a>停车缴费</el-header>
 					<el-main>
 						<el-row :gutter="20">
 							<el-col :span="7">
@@ -118,6 +118,7 @@
 			var stopTime = getStopingTime;
 			var orderid = '';
 			var getConfigInfoFun = getConfigInfo(); //获取网页配置信息
+			var multiply  = multiply ; //精确计算乘法
 			//			console.log(newStopTime)
 			//			alert('车牌号：' + GetParam('carNo'))
 			var Main = {
@@ -180,28 +181,29 @@
 					}
 				},
 				mounted: function() {
-					if(GetParam('getFrom') == 'binding') {
-						alert('binding')
-						this.getOrderListInfo = [{
-							toUrl: '/api/park/parking/list',
-							params: {
-								page: 0,
-								size: 10,
-								listOpenParkings: 'true'
-							}
-						}]
-					} else if(GetParam('getFrom') == 'search') {
-						alert('search')
-						this.getOrderListInfo = [{
-							toUrl: '/api/park/parking/search',
-							params: {
-								parkingLotId: GetParam('parklotId'),
-								carNo: GetParam('carNo')
-							}
-						}]
-					}
+					
 
 					this.$nextTick(function() {
+						if(GetParam('getFrom') == 'binding') {
+							alert('binding')
+							this.getOrderListInfo = [{
+								toUrl: '/api/park/parking/list',
+								params: {
+									page: 0,
+									size: 10,
+									listOpenParkings: 'true'
+								}
+							}]
+						} else if(GetParam('getFrom') == 'search') {
+							console.log('search')
+							this.getOrderListInfo = [{
+								toUrl: '/api/park/parking/search',
+								params: {
+									parkingLotId: GetParam('parklotId'),
+									carNo: GetParam('carNo')
+								}
+							}]
+						}
 						//加载完成执行  当有优惠券的时候使用
 						//						if(this.payorderInfo[7].allCoupon.length > 0) {
 						//							this.payMoney = this.payorderInfo[5].price - this.payorderInfo[7].allCoupon[0].price
@@ -221,6 +223,7 @@
 					},
 					//获取待缴费订单列表
 					getOrderList: function() {
+						console.log('获取订单：' + this.getOrderListInfo[0].params)
 						var _this = this;
 						axios.get(baseUrl + this.getOrderListInfo[0].toUrl, {
 								params: this.getOrderListInfo[0].params,
@@ -231,12 +234,14 @@
 							})
 							.then(function(res) {
 								if(res.status == 200 && res.data.code == 200) {
+									console.log(res.data)
 									var dataArr = [];
 									if(GetParam('getFrom') == 'binding') {
 										dataArr = res.data.data.content;
 									} else if(GetParam('getFrom') == 'search') {
 										dataArr = res.data.data;
 									}
+									
 									//									离场时间
 									var nowT = new Date();
 									var stopT = stopTime(dataArr[GetParam('arrId')].enterTime, nowT);
@@ -254,8 +259,8 @@
 										newStopTime += stopT.seconds + "秒"
 									}
 									_this.plateNum = dataArr[GetParam('arrId')].carNo;
-									_this.sumPayMoney = dataArr[GetParam('arrId')].totalFee;
-
+									_this.sumPayMoney = multiply(dataArr[GetParam('arrId')].totalFee,0.01);
+									alert(dataArr[GetParam('arrId')].totalFee)
 									orderid = dataArr[GetParam('arrId')].id
 									_this.payorderInfo = [{
 											name: '订单号',
@@ -278,8 +283,8 @@
 										},
 										{
 											name: '停车计费',
-											value: dataArr[GetParam('arrId')].totalFee + '元',
-											price: dataArr[GetParam('arrId')].totalFee
+											value: multiply(dataArr[GetParam('arrId')].totalFee,0.01) + '元',
+											price: multiply(dataArr[GetParam('arrId')].totalFee,0.01)
 										}
 										//									{
 										//										name: '停车码',
@@ -325,7 +330,7 @@
 						});
 						//支付流程   4 ：通过ready接口处理成功验证
 						wx.ready(function() {
-//							alert('配置成功')
+							alert('配置成功')
 							//支付流程  5 ：配置成功后调用创建支付订单的接口
 							//传入订单号，调用签名接口
 							axios.get(baseUrl + '/api/park/parking/sign', {
@@ -338,25 +343,31 @@
 									withCredentials: true
 								})
 								.then(function(res) {
-//									alert(JSON.stringify(res))
+									
 									if(res.status == 200 && res.data.code == 200) {
+										alert(JSON.stringify(res.data.data.appId))
+										alert(JSON.stringify(res.data.data.timeStamp))
+										alert(JSON.stringify(res.data.data.nonceStr))
+										alert(JSON.stringify(res.data.data.prepay_id))
+										alert(JSON.stringify(res.data.data.signType))
+										alert(JSON.stringify(res.data.data.sign))
 										//调用微信支付接口
 										function onBridgeReady() {
 											WeixinJSBridge.invoke(
 												'getBrandWCPayRequest', {
-													"appId": res.data.data.BillSignedDto.appId, //公众号名称，由商户传入     
-													"timeStamp": res.data.data.BillSignedDto.timeStamp, //时间戳，自1970年以来的秒数     
-													"nonceStr": res.data.data.BillSignedDto.nonceStr, //随机串     
-													"package": res.data.data.BillSignedDto.prepay_id,
-													"signType": res.data.data.BillSignedDto.signType, //微信签名方式：     
-													"paySign": res.data.data.BillSignedDto.sign //微信签名 
+													"appId": res.data.data.appId, //公众号名称，由商户传入     
+													"timeStamp": res.data.data.timeStamp, //时间戳，自1970年以来的秒数     
+													"nonceStr": res.data.data.nonceStr, //随机串     
+													"package": res.data.data.prepay_id,
+													"signType": res.data.data.signType, //微信签名方式：     
+													"paySign": res.data.data.sign //微信签名 
 												},
 												function(res) {
 													alert(JSON.stringify(res))
 													if(res.err_msg == "get_brand_wcpay_request:ok") {
 														_this.$toast("交易成功")
 														setTimeout(function() {
-															window.location.href = "home.html";
+															window.location.href = "success.html";
 														}, 1000)
 													}
 													if(res.err_msg == "get_brand_wcpay_request:cancel") {

@@ -128,7 +128,10 @@
 				},
 				mounted: function() {
 					//判断连接中是否有code
-					if(getParam('code') == null){
+					if(getParam('code')){
+						alert('code 存在：' + getParam('code'))
+					}else{
+						alert('code 不存在：')
 						//1 获取网页配置信息
 						this.getUserInfo()
 					}
@@ -156,8 +159,7 @@
 					getWechatInfo : function () {
 						axios.get(baseUrl + '/api/wechat/get/app/info').then(function(res){
 							if(res.status == 200 && res.data.code == 200){
-//								alert('appId:' + res.data.data.appId)
-								//获取appid成功之后重定向网页地址
+								alert('login获取网页配置信息')
 								window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + res.data.data.appId + "&redirect_uri=http%3A%2F%2Fwww.pamirinfo.com%2FtkPark%2Fhtml%2Flogin.html&response_type=code&scope=snsapi_userinfo&state=0#wechat_redirect"
 							}else{
 								_this.$toast(res.data.msg)
@@ -182,7 +184,7 @@
 										_this.judgeIsLogin = true ;
 									}else if(res.data.code == 401){
 										//1 获取网页配置信息
-//										alert('未登录')
+										alert('未登录')
 										_this.getWechatInfo();
 									}
 									
@@ -275,7 +277,8 @@
 						if(this.verifyPhone) {
 							this.verifyCaptchaF();
 						}
-						if(this.verifyPhone && this.verifyCaptcha && getParam("code") != null) {
+						if(this.verifyPhone && this.verifyCaptcha && getParam("code")) {
+//						if(this.verifyPhone && this.verifyCaptcha) {
 //							alert("code::" + getParam("code"));
 							var params = new URLSearchParams();
 							var _this = this ;
@@ -283,7 +286,9 @@
 							params.append('verifyCode', this.captcha)
 							//							params.append('code', getParam("code"));
 							params.append('code', getParam('code'));
+//							params.append('code', 'ufjhdhghdjgjkrek99');
 							params.append('entrance', 'WECHAT');
+//							params.append('entrance', 'ALIPAY');
 
 							axios.post(baseUrl + '/api/user/verify', params, {
 									headers: {
@@ -302,6 +307,7 @@
 										_this.$toast(res.data.msg)
 									}
 								}).catch(function(err) {
+									alert("err"+JSON.stringify(err))
 									//									alert(err)
 								})
 						}

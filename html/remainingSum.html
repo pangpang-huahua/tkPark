@@ -69,6 +69,20 @@
 				width: 24px;
 				vertical-align: middle;
 			}
+			.paymentBox{
+				border-bottom: 1px solid #EFEFEF;
+				border-top: 1px solid #EFEFEF;
+			}
+			
+			.mint-cell:last-child,.mint-cell-wrapper{
+				background-image: none;
+			}
+			.mint-radiolist-title{
+				margin: 0;
+			}
+			.mint-cell{
+				min-height: 56px;
+			}
 			
 			.paymentBox ul {
 				overflow: hidden;
@@ -379,7 +393,7 @@
 	<body>
 		<div id="app" v-cloak>
 			<mt-header title="钱包充值">
-				<a href="home.html" slot="left">
+				<a href="wallet.html" slot="left">
 					<mt-button icon="back"></mt-button>
 				</a>
 			</mt-header>
@@ -419,7 +433,7 @@
 
 			</div>
 			<div class="payBox">
-				<p class="protocol">点击冲击及表示已阅读并同意 <span onclick="check()">充值协议</span></p>
+				<p class="protocol">点击冲击及表示已阅读并同意 <span onclick="check()">《充值协议》</span></p>
 				<div @click="submitRecharge">
 					<mt-button v-if="payment==''" type="default" size='large'>去充值</mt-button>
 					<mt-button v-else type="primary" size='large'>去充值</mt-button>
@@ -527,8 +541,12 @@
 						//其他金额
 						otherMoney: '',
 						//支付金额
-						payMoney: ''
+						payMoney: '',
+						userId:''
 					};
+				},
+				created:function(){//在vue实例创建后立即执行
+					
 				},
 				computed: {
 
@@ -537,6 +555,7 @@
 					//初始化充值规则
 					this.getRechargeRuleList();
 					this.$nextTick(function() {
+						this.getUserInfo();
 						//加载完成执行
 //						console.log(configInfo)
 					})
@@ -545,6 +564,26 @@
 
 				},
 				methods: {
+					//获取用户信息
+					getUserInfo:function(){
+						console.log('get user information')
+						//获取用户信息
+						var _this = this ; 
+						axios.get(baseUrl + '/api/user/get/user/info',{
+							headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+						})
+						.then(function(res){
+							if(res.data.code == 200){
+								_this.userId = res.data.data.id ;
+							}
+						})
+						.catch(function(err){
+							
+						})
+					},
 					//获取充值规则列表
 					getRechargeRuleList: function() {
 						var _this = this;
@@ -560,6 +599,7 @@
 							})
 							.then(function(res) {
 								if(res.status == 200 && res.data.code == 200) {
+//									alert(JSON.stringify(res.data.data.content))
 									_this.rechargeRules = res.data.data.content;
 								}else{
 									_this.$toast(res.data.msg)
@@ -592,7 +632,7 @@
 							if(this.rechargeRules[this.currentIndex].rechargeMoney != "其他金额") {
 								//支付流程  3 ：通过config接口注入权限验证配置
 								wx.config({
-									debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+									debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 									appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
 									timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
 									nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
@@ -618,6 +658,7 @@
 					},
 					//支付流程  5 :创建支付订单
 					createPayOrder: function() {
+//						alert('充值金额'+this.rechargeRules[this.currentIndex].payPrice)
 						var _this = this ;
 						var params = new URLSearchParams();
 						params.append('payModes', 'WECHATPAY'); //支付方式（微信、支付宝）WECHATPAY|ALIPAY = ['WECHATPAY', 'ALIPAY']
@@ -626,7 +667,7 @@
 						params.append('rechargeMoney', this.rechargeRules[this.currentIndex].rechargeMoney); //充值金额
 						params.append('rechargeRuleId', this.rechargeRules[this.currentIndex].id); //引用的充值规则ID
 						params.append('productName', this.rechargeRules[this.currentIndex].name); //商品名称
-						params.append('userId', userId); //用户id
+						params.append('userId', this.userId); //用户id
 						axios.post(baseUrl + '/api/balance/rechargebill/addRechargeBill', params, {
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -677,7 +718,7 @@
 												if(res.err_msg == "get_brand_wcpay_request:ok") {
 													_this.$toast("交易成功");
 													setTimeout(function(){
-														window.location.href = "home.html";
+														window.location.href = "success.html";
 													},1000)
 												}
 												if(res.err_msg == "get_brand_wcpay_request:cancel") {

@@ -17,8 +17,9 @@
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
-		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
+		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
+		
 		 
 	</head>
 
@@ -28,9 +29,9 @@
 				
 				<el-container>
 
-					<el-header style='background-color: #F2BE14;'>
+					<el-header style='padding:0 ;background-color: #26a2ff;height: 40px;color: white;line-height: 40px;'>
 						<h3>
-							<i class="el-icon-arrow-left"></i>
+							<a href="home.html" style="color:white;"><i class="el-icon-arrow-left"></i></a>
 							<!--<i class="fal fa-angle-left"></i>-->
 							车辆查找
 						</h3>
@@ -87,7 +88,7 @@
 										<li class="input_pp"><span></span></li>
 										<li class="input_pp" v-if="checked"><span></span></li>
 									</ul>
-									<el-checkbox v-model="checked">新能源车牌</el-checkbox>
+									<el-checkbox class='isNew' v-model="checked">新能源车牌</el-checkbox>
 								</div>
 								<div id="jp_pro"></div>
 
@@ -100,31 +101,44 @@
 						</el-main>
 
 					</div>
-					
-					<div style="height: 15px;width:100%;background-color: #F0F0F0;"></div>
+					<div v-show='ishavecar==false' style="height: 15px;width:100%;background-color: #F0F0F0;"></div>
 					<div class="cars-list" v-for="(item,index) in vehicleToBeChargedList">
-						<a :href="item.payUrl">
+						<!--<a :href="item.payUrl">-->
 							<el-main>
 								<el-row>
 									<el-col :span="5">
 										<!--<img class="img-show-100" src="../img/1-1506131104550-L.jpg" />-->
+										<a :href="item.payUrl">
 										<img class="img-show-100" :src="item.carHeadImg" />
+										</a>
+										
 									</el-col>
 									<el-col :span="19">
 										<el-row class='' v-cloak>
 											<!--<el-col :span="9"><span class='margin-left-style font-size-sty2'>京A 56ABC</span></el-col>-->
+											<a :href="item.payUrl">
 											<el-col :span="9"><span class='margin-left-style font-size-sty2'>{{item.plateNum}}</span></el-col>
 											<!--<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">12元</span></el-col>-->
-											<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">{{item.currentConsum}}</span></el-col>
+											<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">{{item.currentConsum/100}}</span></el-col>
+											</a>
 											<el-col :span="3" class='text-align-right'>
-												<i class="el-icon-question color-style-1"></i>
+												
+												<a href="feedback.html">
+													<span>
+														<!--<a style="float: right;" href="feedback.html">-->
+														<i class="el-icon-question color-style-1"></i>
+														<!--</a>-->
+													</span>
+												</a>
 											</el-col>
 										</el-row>
+										<a :href="item.payUrl">
 										<el-row class='margin-sty'>
 											<el-col :span="24" class='font-size-1'>
 												<div class='margin-left-style font-color-sty3' v-cloak>
 													<!--入场时间：<span id="entry-time">2018-7-3 AM：9:20</span> 收费：<span id="charge-money"></span>3元/小时-->
-													入场时间：<span id="entry-time">{{item.enterTime}}</span> 收费：<span id="charge-money"></span>{{item.chargeRule}}
+													入场时间：<span id="entry-time">{{item.enterTime}}</span>
+													 <!--收费：<span id="charge-money">{{item.chargeRule}}</span>-->
 												</div>
 											</el-col>
 										</el-row>
@@ -135,10 +149,11 @@
 											</el-col>
 
 										</el-row>
+										</a>
 									</el-col>
 								</el-row>
 							</el-main>
-						</a>
+						<!--</a>-->
 					</div>
 					</el-main>
 				</el-container>
@@ -159,7 +174,7 @@
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>-->
 		<script src="../js/layer.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/index.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
@@ -179,8 +194,8 @@
 							textAlign: 'center'
 						}],
 
-						latitude: 30.539826,
-						longitude: 104.071574,
+						latitude: '',
+						longitude: '',
 						
 						parklotId : '',
 						changeParkLotId : '',
@@ -204,45 +219,34 @@
 						}],
 						value: '',
 						checked: false,
-						ulWidth: '300px',
+						ulWidth: '266px',
 //						payUrl: 'parkpayment.html',
 						//待缴费车辆列表
-						vehicleToBeChargedList: [{
-							carHeadImg: '../img/1-1506131104550-L.jpg',
-							plateNum: '京A 56ABC',
-							currentConsum: '12元',
-							enterTime: '2018-7-3 AM：9:20',
-							chargeRule: '3元/小时',
-							parkingName: '北京物美总部 2号立体车库 E19'
-						}, {
-							carHeadImg: '../img/1-1506131104550-L.jpg',
-							plateNum: '京A 56ABC',
-							currentConsum: '12元',
-							enterTime: '2018-7-3 AM：9:20',
-							chargeRule: '3元/小时',
-							parkingName: '北京物美总部 2号立体车库 E19'
-						}, {
-							carHeadImg: '../img/1-1506131104550-L.jpg',
-							plateNum: '京A 56ABC',
-							currentConsum: '12元',
-							enterTime: '2018-7-3 AM：9:20',
-							chargeRule: '3元/小时',
-							parkingName: '北京物美总部 2号立体车库 E19'
-						}]
+						vehicleToBeChargedList: [
+//							{
+//								carHeadImg: '../img/1-1506131104550-L.jpg',
+//								plateNum: '京A 56ABC',
+//								currentConsum: '12元',
+//								enterTime: '2018-7-3 AM：9:20',
+//								chargeRule: '3元/小时',
+//								parkingName: '北京物美总部 2号立体车库 E19'
+//							}
+						]
 					};
 				},
 				watch: {
 					checked: function() {
 						if(this.checked) {
-							this.ulWidth = '350px';
+							numberInput = 7 ;
+							this.ulWidth = '304px';
 						} else {
-							this.ulWidth = '300px';
+							this.ulWidth = '266px';
 						}
 					}
 				},
 				mounted: function() {
 					this.getAllCarOrder();
-					this.searchPark();
+					
 
 					this.$nextTick(function() {
 						var _this = this;
@@ -251,7 +255,7 @@
 
 						//						步骤三：通过config接口注入权限验证配置
 						wx.config({
-							debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 							appId: getConfigInfo.appId, // 必填，公众号的唯一标识
 							timestamp: getConfigInfo.timestamp, // 必填，生成签名的时间戳
 							nonceStr: getConfigInfo.nonceStr, // 必填，生成签名的随机串
@@ -265,8 +269,10 @@
 							wx.getLocation({
 								type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 								success: function(res) {
+//									alert('微信定位：' + JSON.stringify(res))
 									_this.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
 									_this.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+									_this.searchPark();
 								},
 
 							});
@@ -281,6 +287,7 @@
 				methods: {
 					//获取用户绑定的未交费的订单列表
 					getAllCarOrder: function() {
+//						alert('未交费订单')
 						var _this = this;
 						axios.get(baseUrl + '/api/park/parking/list', {
 								params: {
@@ -301,32 +308,31 @@
 										for(var i = 0 ;  i < res.data.data.content.length ; i++){
 											_this.vehicleToBeChargedList.push({
 												carHeadImg: '../img/1-1506131104550-L.jpg',
-												plateNum: res.data.data.content[0].carNo,
-												currentConsum: res.data.data.content[0].totalFee ,//当前消费
-												enterTime: res.data.data.content[0].enterTime ,
+												plateNum: res.data.data.content[i].carNo,
+												currentConsum: res.data.data.content[i].totalFee ,//当前消费
+												enterTime: res.data.data.content[i].enterTime ,
 												chargeRule: '',//每小时价格
-												parkingName: res.data.data.content[0].parkingLotName,
+												parkingName: res.data.data.content[i].parkingLotName,
 												payUrl : 'parkpayment.html?arrId=' + i +'&getFrom=binding'
 											})
 										}
 									}else{
 										_this.ishavecar = true ;
 									}
-									
-									
 								} else {
 									_this.$toast(res.data.msg)
 								}
 							})
 							.catch(function(err) {
-
+//								alert(JSON.stringify(err))
 							})
 					},
 					
 					//通过搜索获取停车场列表
 					searchPark: function() {
 						var _this = this;
-						
+//						alert('longitude:' + _this.longitude);
+//						alert('latitude:' + _this.latitude);
 						//调用搜索停车场的接口 
 						axios.get(baseUrl + '/api/parkinglot/search/nearby', {
 								params: {
@@ -343,6 +349,7 @@
 
 								if(response.status == 200) {
 									if(response.data.code == 200) {
+//										alert(JSON.stringify(response.data.data))
 										for(var i = 0; i < response.data.data.length; i++) {
 											_this.parkLots[0].values.push({
 												name: response.data.data[i].name,
@@ -388,12 +395,24 @@
 					},
 					//通过搜索获取车辆订单
 					searchAppoint: function() {
+						layer.closeAll();
 						var _this = this ;
-						var plateNum = provinceCode + busNumber ;
+						
+						if(busNumber){
+							var busNumberEnd = provinceCode + busNumber ;
+							if(this.checked) {
+								busNumberEnd = busNumberEnd.substr(0, 8);
+							} else {
+								busNumberEnd = busNumberEnd.substr(0, 7);
+							}
+						}
+						
 						axios.get(baseUrl + '/api/park/parking/search', {
 								params: {
 									parkingLotId: _this.parklotId,
-									carNo: provinceCode + busNumber
+									carNo: busNumberEnd
+//									parkingLotId: '4028e381643be53701643bea79b70000',
+//									carNo: '粤CKC236'
 								},
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -401,6 +420,7 @@
 								withCredentials: true
 							})
 							.then(function(res) {
+//								alert(JSON.stringify(res))
 								if(res.status == 200 && res.data.code == 200){
 									_this.vehicleToBeChargedList = [];
 									if(res.data.data.length > 0){
@@ -408,27 +428,27 @@
 										for(var i = 0 ; i < res.data.data.length ; i++){
 											_this.vehicleToBeChargedList.push({
 												carHeadImg: '../img/1-1506131104550-L.jpg',
-												plateNum: res.data.data[0].carNo,
-												currentConsum: res.data.data[0].totalFee ,//当前消费
-												enterTime: res.data.data[0].enterTime ,
+												plateNum: res.data.data[i].carNo,
+												currentConsum: res.data.data[i].totalFee ,//当前消费
+												enterTime: res.data.data[i].enterTime ,
 												chargeRule: '',//每小时价格
-												parkingName: res.data.data[0].parkingLotName,
-												payUrl : 'parkpayment.html?arrId=' + i + '&getFrom=search&parklotId=' + _this.parklotId + '&carNo=' + plateNum
+												parkingName: res.data.data[i].parkingLotName,
+												payUrl : 'parkpayment.html?arrId=' + i + '&getFrom=search&parklotId=' + _this.parklotId + '&carNo=' + res.data.data[i].carNo
 											})
+											
 										}
 									}else{
 										_this.ishavecar = true ;
 									}
-									
+//									alert('list '+_this.vehicleToBeChargedList)
 									
 								}else{
 									_this.$toast(res.data.msg)
 								}
 							})
 							.catch(function(err) {
-
+//								alert(err)
 							})
-						
 					}
 				}
 			}

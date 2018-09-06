@@ -125,7 +125,8 @@
 			.chooseParking {
 				padding: 0 10px;
 				background-color: white;
-				margin-bottom: 15px;
+				border-bottom: 1px solid #EFEFEF;
+				/*margin-bottom: 15px;*/
 			}
 			
 			.floatUlRigLef {
@@ -164,6 +165,12 @@
 				width: 100%;
 				box-sizing: border-box;
 			}
+			
+			.floatUlRigLef .payPriceSpan {
+				font-size: 30px;
+				margin-left: 5px;
+				/*color: red;*/
+			}
 		</style>
 	</head>
 
@@ -189,14 +196,16 @@
 			<div class="lang-car-rentl">
 
 				<div class="banner">
-					<mt-swipe :auto="4000" style='height: 150px;'>
+					<mt-swipe :auto="4000" style='height: 160px;'>
 						<mt-swipe-item v-for='(monthcar,index) in monthcards'><img :src="monthcar.bannerImg" /></mt-swipe-item>
 
 					</mt-swipe>
 				</div>
-				<div><mt-cell style='font-weight: bold;background-color: #F0F0F0;' title="请选择月卡" value=""></mt-cell></div>
+				<div>
+					<mt-cell style='font-weight: bold;background-color: #F0F0F0;' title="请选择月卡" value=""></mt-cell>
+				</div>
 				<div class="month-car-button">
-					
+
 					<p v-cloak>{{chooseMonthCar}}</p>
 					<ul>
 						<li v-for="(monthcar,index) in monthcards" :class="{floatRight:index%2==1,floatLeft:index%2!=1}">
@@ -204,8 +213,7 @@
 							<div v-on:click="chooseMonth(index,monthcar.price)" v-bind:class="{activeButton:currentIndex==index,normalButton:currentIndex!=index}">
 								<p class="margin-style-1" v-cloak>{{monthcar.time}}个月随意停</p>
 								<p class="margin-style-2" v-cloak>
-									<i class="fas fa-yen-sign"></i>
-									{{monthcar.price}} <span v-cloak>{{monthcar.originalPrice}}</span>
+									<i class="fas fa-yen-sign"></i> {{monthcar.price}} <span v-cloak>{{monthcar.originalPrice}}</span>
 								</p>
 							</div>
 						</li>
@@ -220,15 +228,14 @@
 					<mt-cell style='font-weight: bold;background-color: #F0F0F0;outline: none;border: none;' title="请选择您想要租用的车库" value=""></mt-cell>
 				</div>
 				<div>
-					<!--<mt-cell title="车辆" value="换一辆">{{defaultCar}} <img class="iconImg" src="../img/arrow_down.png" @click="popupVisible=true" /></mt-cell>
+					<mt-cell title="车辆" value="换一辆">{{defaultCar}} <img class="iconImg" src="../img/arrow_down.png" @click="popupVisible=true" /></mt-cell>
 					<mt-picker v-if="popupVisible" :slots="slots" @change="onValuesChange" :show-toolbar="true">
 						<mt-button @click="handleConfirm('c')" class="sure">确认</mt-button>
-					</mt-picker>-->
+					</mt-picker>
 					<mt-cell title="选择车库" value="换一个" v-cloak>
 						<span @click="carPortVisible=true">
 							{{defaultCarPort}} <img class="iconImg" src="../img/arrow_down.png" />
 						</span>
-						
 					</mt-cell>
 					<mt-picker v-if="carPortVisible" :slots="carports" @change="onValuesChange1" :show-toolbar="true">
 						<mt-button @click="handleConfirm('p')" class="sure">确认</mt-button>
@@ -243,9 +250,13 @@
 
 			<div class="purchaseBox">
 				<ul class="floatUlRigLef">
-					<li v-cloak>{{monthCarPrice}}</li>
+					<li v-cloak><i class="fas fa-yen-sign"></i><span class="payPriceSpan">{{monthCarPrice}}</span></li>
 					<li>
-						<mt-button type="primary" @click="createMonthCarOrder">购买</mt-button>
+						<mt-button v-if='isCar' type="primary" @click="createMonthCarOrder">购买</mt-button>
+						<a v-else :href="renewCard">
+							<mt-button type="primary">去续费</mt-button>
+						</a>
+
 					</li>
 				</ul>
 
@@ -286,10 +297,9 @@
 				//				center: [116.30946, 39.937629],
 				//				zoom: 3
 			});
-			
+
 			var multiply = multiply;
-			
-			
+
 			//实现地图定位   end
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
@@ -304,6 +314,7 @@
 						garageType: '', //车库类型
 						garageCode: '', //车库编号
 						garageName: '', //车库名称
+						parklotId: '', //停车场id
 						//月卡
 						monthNo: '', //月卡的月数
 						currentIndex: 0,
@@ -312,12 +323,20 @@
 						//默认选中第一张月卡
 						monthCarPrice: '',
 						//车辆
-						//						slots: [],
+						slots: [{
+							flex: 1,
+							values: [],
+							className: 'slot1',
+							textAlign: 'center'
+						}],
 						defaultCar: '',
 
 						popupVisible: false,
 						//车库
-						carports: [],
+						carports: [{
+							values: ['请选择']
+						}],
+						carportId: '', //车库id
 						//						carports: [{
 						//							values: ['立体车库', '平面车库'],
 						//						}],
@@ -326,63 +345,183 @@
 						//选中的信息
 						//						chooseInfo: '',
 						//展示可选的停车场
-						showPark: false
+						showPark: false,
+						//不存在月卡时就可以购买
+						isCar: true,
+						renewCard: 'monthcarrenewal.html'
 					};
 				},
-				computed: {
+				created: function() {
+					var _this = this;
+					this.getUserInfo(); //获取用户信息
+					//判断是否已经选择了停车场
+					if(getParam('parkingId')) {
+						//调用车库列表函数，传入停车场id
+						_this.getParkinglotList(getParam('parkingId'))
+						_this.choosedParking = decodeURI(getParam('parkingName'));
+						_this.parklotId = getParam('parkingId')
+					} else {
+						wx.config({
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
+							timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
+							nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
+							signature: getConfigInfoFun.signature, // 必填，签名
+							jsApiList: ["getLocation"] // 必填，需要使用的JS接口列表
+						});
+						//微信定位通过ready接口处理成功验证
+						wx.ready(function() {
+							wx.getLocation({
+								type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+								success: function(res) {
+									var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+									var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+									var speed = res.speed; // 速度，以米/每秒计
+									var accuracy = res.accuracy; // 位置精度
+									//获取停车场列表
+									_this.getNearPark(res.latitude, res.longitude)
+								},
+								fail: function(err) {
+									_this.$toast(err)
+								}
+							});
+						});
+						//			通过error接口处理失败验证
+						wx.error(function(res) {
+							_this.$toast(res)
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+						});
 
+					}
+				},
+				computed: {
+					
 				},
 				mounted: function() {
 					this.$nextTick(function() {
-						//获取车辆
-						//						this.getUserCars()
-						var _this = this;
-						//判断是否已经选择了停车场
-						if(getParam('parkingId')) {
-							//调用车库列表函数，传入停车场id
-							_this.getParkinglotList(getParam('parkingId'))
-							_this.choosedParking = decodeURI(getParam('parkingName'))
-						} else {
-							wx.config({
-								debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-								appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
-								timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
-								nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
-								signature: getConfigInfoFun.signature, // 必填，签名
-								jsApiList: ["getLocation"] // 必填，需要使用的JS接口列表
-							});
-							//微信定位通过ready接口处理成功验证
-							wx.ready(function() {
-								wx.getLocation({
-									type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-									success: function(res) {
-										var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-										var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-										var speed = res.speed; // 速度，以米/每秒计
-										var accuracy = res.accuracy; // 位置精度
-										//获取停车场列表
-										_this.getNearPark(res.latitude, res.longitude)
-									},
-									fail: function(err) {
-										_this.$toast(err)
-									}
-								});
-							});
-							//			通过error接口处理失败验证
-							wx.error(function(res) {
-								_this.$toast(res)
-								// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-							});
-						}
-
+						
 					})
 				},
 				watch: {
 
 				},
 				methods: {
+					//验证该停车场是否已有月卡购买
+					isTheParklotCar: function() {
+						//						alert('get cars')
+						var _this = this;
+						var params = new URLSearchParams();
+						//						params.append('carNo',this.defaultCar) ;//车牌号
+						//						params.append('parkingLotId',this.parklotId) ;//停车场id
+						params.append('carNo', '川AUIOP9'); //车牌号			
+						params.append('parkingLotId', 'Q785GC3ASVLMAMHWIABGWP5DG4A00001'); //停车场id
+						axios.post(baseUrl + '/api/month/card/park/find/pli', params, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								//								alert('res::'+JSON.stringify(res))
+								if(res.data.code == 400) {
+									_this.$toast(res.data.msg)
+								}
+							})
+							.catch(function(err) {
+								//								alert('err::'+JSON.stringify(err))
+							})
+					},
+					//验证该车库是否已有月卡购买
+					isTheCarportCar: function() {
+						var _this = this;
+						$.ajax({
+							type:"post",
+							url:baseUrl + '/api/month/card/park/find/gi',
+							data:{
+								carNo: this.defaultCar ,
+								garageId: this.carportId
+							},
+							async:true,
+							success:function(data){
+								alert(JSON.stringify(data))
+								if(data.code == 400){//code==400表示没有月卡
+									_this.isCar = true ;
+								}else if(data.code == 200){ //code == 200 表示有月卡
+									_this.isCar = false ;
+								}
+							},
+							error:function(err){
+								
+							}
+						});
+					},
+					//获取用户信息
+					getUserInfo: function() {
+						var _this = this;
+						axios.get(baseUrl + '/api/user/get/user/info', {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								if(res.data.code == 200) {
+									_this.userId = res.data.data.id;
+									_this.getCarList();
+								}
+							})
+							.catch(function(err) {
+
+							})
+					},
+					//获取车辆列表
+					getCarList: function() {
+						var _this = this;
+						axios.get(baseUrl + "/api/car/list", {
+								params: {
+									userId: _this.userId
+								}
+							}, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									if(res.data.data.content.length>0){
+										_this.defaultCar = res.data.data.content[0].carNo;
+										for(var i = 0; i < res.data.data.content.length; i++) {
+											if(res.data.data.content[i].isBind) {
+												_this.slots[0].values.push(res.data.data.content[i].carNo);
+	
+											}
+										}
+										if(_this.slots[0].values.length == 1) {
+											//验证该停车场是否已购买月卡    暂时先不考虑这个
+	//										_this.isTheParklotCar();
+										}
+									}else{
+										//若果用户还没有月卡  提示用户先去车辆管理页面添加车辆
+										this.$messagebox.confirm('您当前账户上还没有任何车辆，请先去添加车辆').then(action => {
+											window.location.href = 'addcar.html'
+											
+										});
+									}
+									
+
+								} else {
+									_this.$toast(res.data.msg)
+								}
+							})
+							.catch(function(err) {
+
+							})
+					},
 					chooseMonth: function(index, price) {
+						//						alert(price)
 						if(this.currentIndex != index) {
+							//							alert(this.monthcards[index].time)
 							this.currentIndex = index;
 							this.chooseMonthCar = this.monthcards[index].time + "个月月卡"
 							this.monthNo = this.monthcards[index].time
@@ -395,7 +534,7 @@
 					//改变车辆
 					onValuesChange(picker, values) {
 						this.defaultCar = values[0];
-
+						//						this.isTheParklotCar();
 						//						this.chooseInfo = this.defaultCar + "|" + this.chooseMonthCar + "|" + this.choosedParking + "<br/>" + this.defaultCarPort
 					},
 					//改变车库
@@ -403,13 +542,16 @@
 						this.defaultCarPort = values[0];
 						//调用车库详情
 						this.getParkinglotDetail(parkingLotIndex[parkingLotNames.indexOf(picker.getSlotValue(0))])
+						this.carportId = parkingLotIndex[parkingLotNames.indexOf(picker.getSlotValue(0))];
 						//						this.chooseInfo = this.defaultCar + "|" + this.chooseMonthCar + "|" + this.choosedParking + "<br/>" + this.defaultCarPort
 					},
 					handleConfirm: function(p) {
 						if(p == 'c') {
 							this.popupVisible = false;
-						} else if(p == 'p') {
+						} else if(p == 'p') { //确认选择车库后
 							this.carPortVisible = false;
+							//开始判断该车库该车是否购买了月卡     是：按钮显示去续费    否：按钮显示购买
+							this.isTheCarportCar();
 						}
 					},
 					//切换停车场
@@ -419,53 +561,60 @@
 					//购买月卡
 					createMonthCarOrder: function() {
 						var _this = this;
-						//各种判断之后
-						if(this.garageCode == '' || this.garageName == 'undefined') {
-							this.$toast('请选择车库')
-						} else {
-							//支付流程  3 ：通过config接口注入权限验证配置
-							wx.config({
-								debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-								appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
-								timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
-								nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
-								signature: getConfigInfoFun.signature, // 必填，签名
-								jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表
-							});
-							//支付流程   4 ：通过ready接口处理成功验证
-							wx.ready(function() {
-								//支付流程  5 ：配置成功后调用创建支付订单的接口
-								var params = new URLSearchParams();
-								params.append('monthNo', _this.monthNo); //月卡的月数
-								params.append('garageId', _this.garageCode); //车库编号
-								axios.post(baseUrl + '/api/month/card/user/create/month/card/bill', params, {
-										headers: {
-											'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-										},
-										withCredentials: true
-									})
-									.then(function(response) {
-										alert(JSON.stringify(response))
-										if(response.status == 200) {
-											if(response.data.code == 200) {
-												_this.payOrder(response.data.data.billCode);
+						//判断是否已经选择车辆
+						if(this.defaultCar){
+							//判断是否已经选择车库
+							if(this.garageCode == '' || this.garageName == 'undefined' || this.defaultCarPort == '请选择') {
+								this.$toast('请选择车库')
+							} else {
+								//支付流程  3 ：通过config接口注入权限验证配置
+								wx.config({
+									debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+									appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
+									timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
+									nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
+									signature: getConfigInfoFun.signature, // 必填，签名
+									jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表
+								});
+								//支付流程   4 ：通过ready接口处理成功验证
+								wx.ready(function() {
+	
+									//支付流程  5 ：配置成功后调用创建支付订单的接口
+									var params = new URLSearchParams();
+									params.append('monthNo', _this.monthNo); //月卡的月数
+									params.append('garageId', _this.garageCode); //车库编号
+									params.append('carNo', _this.defaultCar); //车牌号
+									axios.post(baseUrl + '/api/month/card/user/create/month/card/bill', params, {
+											headers: {
+												'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+											},
+											withCredentials: true
+										})
+										.then(function(response) {
+											//										alert(JSON.stringify(response))
+											if(response.status == 200) {
+												if(response.data.code == 200) {
+													_this.payOrder(response.data.data.billCode);
+												} else {
+													_this.$toast(response.data.msg);
+												}
 											} else {
-												_this.$toast(response.data.msg);
+	
 											}
-										} else {
-
-										}
-
-									})
-									.catch(function(error) {
-
-									});
-							});
-							//			通过error接口处理失败验证
-							wx.error(function(res) {
-								// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-							});
-
+	
+										})
+										.catch(function(error) {
+	
+										});
+								});
+								//			通过error接口处理失败验证
+								wx.error(function(res) {
+									// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+								});
+	
+							}
+						}else{
+							this.$toast('请选择车辆')
 						}
 
 					},
@@ -498,7 +647,7 @@
 												if(res.err_msg == "get_brand_wcpay_request:ok") {
 													_this.$toast("交易成功")
 													setTimeout(function() {
-														window.location.href = "home.html";
+														window.location.href = "success.html";
 													}, 1000)
 												}
 												if(res.err_msg == "get_brand_wcpay_request:cancel") {
@@ -521,10 +670,12 @@
 									} else {
 										onBridgeReady();
 									}
+								} else {
+									_this.$toast(data.msg);
 								}
 							},
 							error: function(data) {
-								promptBtnFun(data.msg)
+								//								promptBtnFun(data.msg)
 							}
 						});
 					},
@@ -548,7 +699,9 @@
 									if(response.data.code == 200) {
 										_this.choosedParking = response.data.data[0].name;
 										_this.parkingLotCode = response.data.data[0].code;
-										_this.getParkinglotList(response.data.data[0].id)
+										_this.getParkinglotList(response.data.data[0].id);
+										_this.parklotId = response.data.data[0].id;
+
 									} else {
 										_this.$toast(response.data.msg)
 									}
@@ -591,7 +744,7 @@
 					},
 					//获取车库列表
 					getParkinglotList: function(id) {
-						alert('停车场id：' + id);
+						//						alert('停车场id：' + id);
 						var _this = this;
 						axios.get(baseUrl + '/api/parkinglot/garage/list', {
 								params: {
@@ -605,18 +758,24 @@
 							})
 							.then(function(response) {
 								if(response.status == 200 && response.data.code == 200) {
+									_this.defaultCarPort = '请选择';
+									//									_this.defaultCarPort = response.data.data.content[0].name
 									parkingLotNames = [];
 									parkingLotIndex = [];
 									for(var i = 0; i < response.data.data.content.length; i++) {
 										if(response.data.data.content[i].isRentable == true) {
+											_this.carports[0].values.push(response.data.data.content[i].name)
 											parkingLotNames.push(response.data.data.content[i].name);
 											parkingLotIndex.push(response.data.data.content[i].id);
 										}
 									}
-									_this.carports = [{
-										values: parkingLotNames
-									}]
-									_this.defaultCarPort = response.data.data.content[0].name
+									//									_this.carports = [{
+									//										values: parkingLotNames
+									//									}]
+									//									_this.carports[0].values.push(
+									//										parkingLotNames
+									//									)
+
 									//默认获取第一个车库的详情
 									_this.getParkinglotDetail(parkingLotIndex[0])
 								} else {
@@ -650,21 +809,21 @@
 									_this.garageName = response.data.data.name;
 									_this.monthcards = [{
 										bannerImg: '../img/1.jpg',
-										price: multiply(response.data.data.billingMoneyByOneMonth,0.01),
+										price: multiply(response.data.data.billingMoneyByOneMonth, 0.01),
 										originalPrice: '',
 										time: 1
 									}, {
 										bannerImg: '../img/2.jpg',
-										price: multiply(response.data.data.billingMoneyByOneMonth*2,0.01) ,
+										price: multiply(response.data.data.billingMoneyByOneMonth * 2, 0.01),
 										originalPrice: '',
 										time: 2
 									}, {
 										bannerImg: '../img/3.jpg',
-										price: multiply(response.data.data.billingMoneyByOneMonth*3,0.01),
+										price: multiply(response.data.data.billingMoneyByOneMonth * 3, 0.01),
 										originalPrice: '',
 										time: 3
 									}]
-									_this.monthCarPrice = multiply(response.data.data.billingMoneyByOneMonth,0.01);
+									_this.monthCarPrice = multiply(response.data.data.billingMoneyByOneMonth, 0.01);
 									_this.chooseMonthCar = '1个月月卡';
 									_this.monthNo = '1';
 									_this.garageCode = response.data.data.id
@@ -684,5 +843,11 @@
 		</script>
 
 	</body>
+
+	<!--流程
+			1、如果只有一辆车、只有一个停车场直接检验是否有月卡    
+			2、如果只有一辆车多个车库就选了停车场再判断是否有月卡
+			3、如果有多辆车多个车库就选了车和车库再判断
+		-->
 
 </html>

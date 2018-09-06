@@ -18,13 +18,23 @@
 		<style type="text/css">
 			.walletBox {
 				background-color: white;
-				padding: 15px 20px;
-				margin-bottom: 10px;
+				padding: 0 15px;
+				/*margin-bottom: 10px;*/
 			}
-			
+			.walletBox1{
+				padding: 15px;
+			}
 			.walletBox .bannerImg {
 				width: 100%;
 				border-radius: 8px;
+			}
+			
+			.mint-cell{
+				border: none;
+				/*border-bottom: 1px solid #EFEFEF;*/
+			}
+			.mint-cell-wrapper{
+				background-image: none;
 			}
 		</style>
 	</head>
@@ -36,7 +46,7 @@
 					<mt-button icon="back"></mt-button>
 				</a>
 			</mt-header>
-			<div class="walletBox">
+			<div class="walletBox walletBox1">
 				<a href="langcarrentl.html">
 					<img class="bannerImg" src="../img/1.jpg" alt="" />
 				</a>
@@ -72,6 +82,7 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
+			var multiply = multiply ;//精确计算乘法
 //			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
@@ -85,7 +96,8 @@
 							volantoryPayment: false,
 							validCarNum: 0,
 							pastDue: '',
-							allMonthCarNum: ''
+							allMonthCarNum: '',
+							userId:''
 						}
 					};
 				},
@@ -93,27 +105,72 @@
 					
 				},
 				watch:{
-					
+//					userId: {
+//						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
+//						handler(curVal, oldVal) {
+//							alert('watch userid  ' + curVal)
+//							alert('watch userid  ' + oldVal)
+////							if(curVal) {
+////								//加载车辆列表
+////								this.getBalance();
+////							}
+//						},
+//						deep: true
+//					}
 				},
 				mounted: function() {
 
-					this.getBalance();
-										this.isHaveMonthCar();
+//					this.getBalance();
+					this.isHaveMonthCar();
 					this.$nextTick(function() {
 						//加载完成执行
+						this.getUserInfo();
 
 					})
 				},
-				watch: {
-
-				},
+//				watch: {
+//					userId: {
+//						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
+//						handler(curVal, oldVal) {
+//							if(curVal) {
+//								//加载车辆列表
+//								this.getBalance();
+//							}
+//						},
+//						deep: true
+//					}
+//				},
 				methods: {
+					//获取用户信息
+					getUserInfo:function(){
+						console.log('get user information')
+						//获取用户信息
+						var _this = this ; 
+						axios.get(baseUrl + '/api/user/get/user/info',{
+							headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+						})
+						.then(function(res){
+							if(res.data.code == 200){
+//								alert('userid ' + res.data.data.id)
+								_this.userId = res.data.data.id ;
+								_this.getBalance();
+							}
+						})
+						.catch(function(err){
+							
+						})
+					},
 					//获取用户余额
 					getBalance: function() {
+//						alert('get 余额')
+//						alert('userid ' + this.userId)
 						var _this = this;
 						axios.get(baseUrl + '/api/balance/get/userid', {
 								params: {
-									userId: userId
+									userId: _this.userId
 								}
 							}, {
 								headers: {
@@ -123,7 +180,7 @@
 							})
 							.then(function(res) {
 								if(res.status == 200 && res.data.code == 200) {
-									_this.myWallets.balance = res.data.data;
+									_this.myWallets.balance = multiply(res.data.data,0.01);
 								}else{
 									_this.toast(res.data.msg);
 								}

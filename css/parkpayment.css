@@ -109,3 +109,7 @@ body{
 .margin-left-sty{
 	margin-left: 5px;
 }
+
+#find_car_cont h3 a i,#find_car_cont h3{
+	line-height: 40px;
+}

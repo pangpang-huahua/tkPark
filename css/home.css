@@ -29,7 +29,7 @@ html,body{
 #home_contanier #home_container_top #userNickName{
 	margin: 0;
 	line-height: 50px;
-	font-size: 16px;
+	font-size: 20px;
 }
 
 #home_contanier #home_contanier_content{
@@ -80,4 +80,5 @@ html,body{
 .headerBox img{
 	width: 24px;
 	height: 24px;
+	margin-top: 15px;
 }

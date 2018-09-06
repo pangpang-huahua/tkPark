@@ -8,7 +8,9 @@ var keyNums = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
 	"A", "S", "D", "F", "G", "H", "J", "K", "L",
 	"关闭", "Z", "X", "C", "V", "B", "N", "M", "Del");
 var next = 0;
-
+var numberInput = 6;
+//判断是不是从新能源车切换到非能源车的
+var isNewEnergyAutomobile = false ;
 //新增
 //车牌号
 var busNumber,provinceCode;
@@ -42,7 +44,7 @@ function addKeyProvince(provinceIds) {
 	addHtml += '<span onclick="chooseProvince(this);">' + provinces[provinceIds] + '</span>';
 	addHtml += '</li>';
 	$(".input_pro span").text(provinces[0]);
-	provinceCode = $(".input_pro span").text();
+	$(".input_pro").addClass("hasPro");
 	return addHtml;
 }
 
@@ -52,52 +54,109 @@ function chooseProvince(obj) {
 	$(".input_pro").addClass("hasPro");
 	$(".input_pp").find("span").text("");
 	$(".ppHas").removeClass("ppHas");
-	next = 0;
 	provinceCode = $(".input_pro span").text();
+	next = 0;
 	showKeybord();
 }
 
-//点击软键盘键入车牌
+//点击软键盘键入车牌 /清除车牌
 function choosekey(obj, jj) {
 	if(jj == 29) {
 		layer.closeAll();
-	} else if(jj == 37) {
-		if($(".ppHas").length == 0) {
+	} else if(jj == 37) {//删除输入的车牌
+//		alert('删除')
+//		console.log($(".ppHas").length)
+		if($(".ppHas").length == 0) {//class=ppHas 这个是每一个显示车牌的小方块的div除了省份
 			$(".hasPro").find("span").text("");
 			$(".hasPro").removeClass("hasPro");
+			provinceCode = '';
 			showProvince();
 			next = 0;
 		}
 		$(".ppHas:last").find("span").text("");
 		$(".ppHas:last").removeClass("ppHas");
+		busNumber = $(".ppHas").find('span').text();
+		console.log('移除后busNumber：' + busNumber);
 		next = next - 1;
 		if(next < 1) {
 			next = 0;
 		}
+		console.log('delete next:' + next)  
+		
+		
+		
 	} else {
-		if(next > 6) {
-			return
-		}
-		for(var i = 0; i < $(".input_pp").length; i++) {
-			if(next == 0 & jj < 10 & $(".input_pp:eq(" + next + ")").hasClass("input_zim")) {
-				layer.open({
-					content: '车牌第二位为字母',
-					skin: 'msg',
-					time: 1
-				});
+		if(numberInput == 6){
+			alert('非能源车')
+			if(isNewEnergyAutomobile == true){
+				alert('减减')
+				isNewEnergyAutomobile = false ;
+				//如果用户先点击新能源车输入完成突然想要换成非能源车   由于新能源车比非能源车多一位所以此时的next必须要减一
+				next -= 1;
+			}
+			if(next > 5) {
 				return
+			}else{
+				for(var i = 0; i < $(".input_pp").length; i++) {
+					if(next == 0 & jj < 10 & $(".input_pp:eq(" + next + ")").hasClass("input_zim")) {
+						layer.open({
+							content: '车牌第二位为字母',
+							skin: 'msg',
+							time: 1
+						});
+						return
+					}
+					$(".input_pp:eq(" + next + ")").find("span").text($(obj).text());
+					$(".input_pp:eq(" + next + ")").addClass("ppHas");
+					busNumber = $(".ppHas").find('span').text();
+					console.log('添加时busNumber：' + busNumber);
+					next = next + 1;
+					if(next > 5) {
+						next = 6;
+					}
+					getpai();
+					return
+				}
 			}
-			$(".input_pp:eq(" + next + ")").find("span").text($(obj).text());
-			$(".input_pp:eq(" + next + ")").addClass("ppHas");
-			next = next + 1;
+		}else{
+			alert('能源车')
+			if(isNewEnergyAutomobile == false){
+				isNewEnergyAutomobile = true ;
+				
+			}
+			console.log('新能源车：添加')
+			console.log('numberInput:' + numberInput)
 			if(next > 6) {
-				next = 7;
+				return
+			}else{
+				for(var i = 0; i < $(".input_pp").length; i++) {
+					if(next == 0 & jj < 10 & $(".input_pp:eq(" + next + ")").hasClass("input_zim")) {
+						layer.open({
+							content: '车牌第二位为字母',
+							skin: 'msg',
+							time: 1
+						});
+						return
+					}else{
+						console.log('add next:' + next)
+						$(".input_pp:eq(" + next + ")").find("span").text($(obj).text());
+						$(".input_pp:eq(" + next + ")").addClass("ppHas");
+						next = next + 1;
+						if(next > 6) {
+							next = 7;
+						}
+						getpai();
+						busNumber = $(".input_pp").find('span').text();
+						console.log("busNumber:"+busNumber)
+						console.log("busNumberlength:"+busNumber.length)
+						return
+					}
+					
+				}
 			}
-			getpai();
-			busNumber = $(".input_pp").find('span').text();
-			console.log(busNumber)
-			return
 		}
+		
+		
 	}
 }
 

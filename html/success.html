@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>支付成功页面</title>
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+		<style type="text/css">
+			#successpaybox{
+				margin: 0 auto;
+				text-align: center;
+				padding-top: 30px;
+			}
+			.successpicon{
+				max-width: 80px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="successpaybox">
+			<img class="successpicon" src="../img/successp.png"/>
+			<p>支付成功</p>
+			
+			<a href="home.html">
+				<mt-button type="default">返回首页</mt-button>
+			</a>
+			
+		</div>
+		
+		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		
+		<!--微信支付-->
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var Main = {
+				data() {
+					return {
+						
+					};
+				},
+				created: function() {
+					
+				},
+				computed: {
+					
+				},
+				mounted: function() {
+					
+				},
+				watch: {
+					
+				},
+				methods: {
+					
+					
+				}
+			}
+			var Ctor = Vue.extend(Main)
+			new Ctor().$mount('#successpaybox')
+			
+		</script>
+	</body>
+</html>

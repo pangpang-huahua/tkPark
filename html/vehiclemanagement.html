@@ -11,9 +11,13 @@
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
 		<style type="text/css">
+			html,body{
+				background-color: #F0F0F0;
+			}
 			.el-main {
 				line-height: 40px;
 				overflow: hidden;
+				background-color: transparent;
 			}
 			
 			.el-row {
@@ -127,14 +131,17 @@
 			.platenumbers {
 				margin-left: 10px;
 			}
+			#find_car_cont h3 i,#find_car_cont h3{
+	line-height: 40px;
+}
 		</style>
 	</head>
 
 	<body>
 		<div id="app" v-cloak>
 			<el-container>
-				<el-header id="find_car_cont" style='background-color: #F2BE14;height: auto;'>
-					<h3><i class="el-icon-arrow-left"></i>车辆管理</h3>
+				<el-header id="find_car_cont" style='padding:0 ;background-color: #26a2ff;height: 40px;color: white;line-height: 40px;'>
+					<h3><i @click="goBack" class="el-icon-arrow-left"></i>车辆管理</h3>
 
 				</el-header>
 				<el-main>
@@ -159,11 +166,11 @@
 
 													</el-row>
 												</el-col>
-												<el-col :span="12" class='text-align-right'>
+												<!--<el-col :span="12" class='text-align-right'>
 													<span class="autoplayspan">自动支付</span>
 													<el-switch v-model="item.autopayment" active-color="#13ce66" inactive-color="#ff4949">
 													</el-switch>
-												</el-col>
+												</el-col>-->
 
 											</el-row>
 
@@ -193,8 +200,9 @@
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		
 		<script src="../dist/vehiclemanagement.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			var ajaxDataFun = getAjaxData;
@@ -202,9 +210,11 @@
 			var promptFun = promptBtnFun; //提示
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
+			var getuserinfo = getUserInfo ;//获取用户信息
 //			var getCode = getCode; //通过code获取用户信息
 //			var getuserInfo = getuserInfo; //通过openid获取用户信息
-
+//			getuserinfo()
+			
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
 			var Main = {
@@ -215,20 +225,70 @@
 						endX: 0,
 						value1: true,
 						value2: true,
-						allVehicles: []
+						allVehicles: [],
+						userId: ''
 					};
+				},
+				beforeCreate: function () {
+					//获取用户信息
+					var _this = this ; 
+					axios.get(baseUrl + '/api/user/get/user/info',{
+						headers: {
+								'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+							},
+							withCredentials: true
+					})
+					.then(function(res){
+						if(res.data.code == 200){
+							_this.userId = res.data.data.id ;
+							console.log(_this.userId)
+						}
+					})
+					.catch(function(err){
+						
+					})
+				},
+				watch:{
+					userId: {
+						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
+						handler(curVal, oldVal) {
+							if(curVal) {
+								//加载车辆列表
+								this.getAllCars();
+							}
+						},
+						deep: true
+					}
 				},
 				mounted: function() {
 					this.$nextTick(function() {
 						//加载完成执行
 						this.allrecords = allrecords;
-						//加载车辆列表
-						this.getAllCars();
-						//						console.log(allrecords)
-
 					})
 				},
 				methods: {
+					//获取用户信息
+//					getUserInfo:function(){
+//						var _this = this ; 
+//						axios.get(baseUrl + '/api/user/get/user/info',{
+//							headers: {
+//									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+//								},
+//								withCredentials: true
+//						})
+//						.then(function(res){
+//							if(res.data.code == 200){
+//								_this.userId = res.data.data.id ;
+//							}
+//						})
+//						.catch(function(err){
+//							
+//						})
+//					},
+					//返回
+					goBack : function () {
+						window.history.back();
+					},
 					//跳转
 					skip() {
 						if(this.checkSlide()) {
@@ -294,9 +354,10 @@
 					//获取车辆列表
 					getAllCars: function() {
 						var _this = this;
+						console.log(_this.userId)
 						axios.get(baseUrl + '/api/car/list', {
 								params: {
-									userId: userId
+									userId: _this.userId
 								}
 							},{
 								headers: {
@@ -333,7 +394,7 @@
 						var _this = this;
 						var params = new URLSearchParams();
 						params.append('carNo', carnumber);
-						params.append('userId', userId);
+						params.append('userId', this.userId);
 						axios.post(baseUrl + '/api/car/unbind', params,{
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

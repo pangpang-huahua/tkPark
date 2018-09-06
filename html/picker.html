@@ -11,6 +11,8 @@
 	<body>
 		<div id="app">
 			<mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+			
+			
 		</div>
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 引入组件库 -->
@@ -45,6 +47,12 @@
 							textAlign: 'left'
 						}]
 					};
+				},
+				mounted:function(){
+					this.$messagebox.confirm('确定执行此操作?').then(action => {
+						window.location.href = 'addcar.html'
+						alert('好了')
+					});
 				}
 			}
 			var Ctor = Vue.extend(Main)

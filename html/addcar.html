@@ -88,20 +88,27 @@
 			.tiptextp {
 				padding: 15px 0 10px 0;
 			}
+			.mint-cell{
+				border: none;
+				/*border-bottom: 1px solid #EFEFEF;*/
+			}
 			.mint-cell-wrapper{
-	outline: none;
-	border: none;
-	text-decoration: none;
-}
+				outline: none;
+				border: none;
+				text-decoration: none;
+			}
+			.mint-cell:last-child,.mint-cell-wrapper{
+				background-image: none;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="app">
 			<mt-header title="添加车辆">
-				< a href="f=" home.html " sl" slot="left">
+				<a href="home.html " slot="left">
 					<mt-button icon="back"></mt-button>
-				</ a>
+				</a>
 			</mt-header>
 
 			<!--<el-container>
@@ -156,7 +163,7 @@
 					return {
 						value: [],
 						checked: false,
-						ulWidth: '300px',
+						ulWidth: '266px',
 						busNumber: '',
 						options: [{
 							label: '新能源车牌',
@@ -176,11 +183,13 @@
 						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
 						handler(curVal, oldVal) {
 							if(curVal.length > 0) {
+								numberInput = 7 ;
 								this.checked = true;
-								this.ulWidth = '350px';
+								this.ulWidth = '304px';
 							} else {
+								numberInput = 6 ;
 								this.checked = false;
-								this.ulWidth = '300px';
+								this.ulWidth = '266px';
 							}
 						},
 						deep: true
@@ -238,69 +247,37 @@
 								} else {
 									_this.$toast(data.msg);
 								}
-
 							},
 							error: function(err) {
 								console.log(err)
 							}
 						});
-						//						var params = new URLSearchParams();
-						//						var busNumberEnd = provinceCode + busNumber;
-						//						if(this.checked) {
-						//							params.append('carNoType', 'GREEN');
-						//							busNumberEnd = busNumberEnd.substr(0, 8);
-						//						} else {
-						//							params.append('carNoType', 'BLUE');
-						//							busNumberEnd = busNumberEnd.substr(0, 7);
-						//						}
-						//						params.append('carNo', busNumberEnd);
-						//						params.append('carType', 'SMALL_CAR');
-						//						params.append('brand', '');
-						//						params.append('model', '');
-						//						params.append('color', '');
-						//						params.append('userId', userId);
-						//						params.append('isBind', true);
-						//						axios.post(baseUrl + "/api/car/bind", params, {
-						//								headers: {
-						//									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-						//								},
-						//								withCredentials: true
-						//							})
-						//							.then(function(response) {
-						//								alert('then')
-						//								alert(JSON.stringify(response))
-						//								if(response.status == 200) {
-						//									if(response.data.code == 200) {
-						//										_this.$toast('添加成功');
-						//										setTimeout(_this.gotoHome(), 1500)
-						//									} else {
-						//										_this.$toast(response.data.msg);
-						//									}
-						//								}
-						//							})
-						//							.catch(function(error) {
-						////								alert('err')
-						////								alert(JSON.stringify(error))
-						//							})
 					},
 					submitAddCar: function() {
-
 						this.busNumber = provinceCode + busNumber;
-						if(this.checked) {
-							if(this.busNumber.length == 8) {
-								this.addCar()
+						console.log(busNumber)
+						if(busNumber){
+//							alert('is true')
+//							alert('busNumber'+busNumber)
+							if(this.checked) {
+								if(busNumber.length >= 7) {
+									this.addCar()
+								} else {
+									//提示“请输入完整的车牌”
+									this.$toast('请输入完整的车牌')
+								}
 							} else {
-								//提示“请输入完整的车牌”
-								this.$toast('请输入完整的车牌')
+								if(busNumber.length >= 6) {
+									this.addCar()
+								} else {
+									//提示“请输入完整的车牌”
+									this.$toast('请输入完整的车牌')
+								}
 							}
-						} else {
-							if(this.busNumber.length == 7) {
-								this.addCar()
-							} else {
-								//提示“请输入完整的车牌”
-								this.$toast('请输入完整的车牌')
-							}
-						}
+						}else{
+//							alert('is false')
+							this.$toast('请输入完整的车牌')
+						}	
 					},
 					//跳转回到home页面
 					gotoHome: function() {
@@ -311,7 +288,11 @@
 			var Ctor = Vue.extend(Main)
 			new Ctor().$mount('#app')
 		</script>
-
+			
+			
+			<!--变成新能源车子之后输入了    
+				输入了再切换回非新能源车就会出现最后一位删除了确不能输入的问题
+			-->
 	</body>
 
 </html>

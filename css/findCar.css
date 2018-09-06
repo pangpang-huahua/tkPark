@@ -56,4 +56,10 @@
 	padding: 0;
 }
 
+.isNew{
+	margin-top: 8px;
+}
 
+#find_car_cont h3 i,#find_car_cont h3{
+	line-height: 40px;
+}

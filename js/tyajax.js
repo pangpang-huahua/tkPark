@@ -13,7 +13,7 @@
 	var configinfoObj = {};
 	
 	
-	var userId = '297e0bc464f875300164f87c83bd0001'
+	var userId = ''
 	
 	//验证手机号码，身份证
 	var regTel = /^1[3|4|5|6|7|8|9][0-9]{9}$/; //电话号码的正则验证
@@ -60,39 +60,26 @@
 
 	
 	
-	//通过code获取用户信息
-	function getCode () {
-		dataP = {
-			code:paraFun("code")
-		}
-		var codeUserInfo = getAjaxData("get",dataP,"/api/weixin/user/web/get/info")
-		if(codeUserInfo.code==200){
-			//调用openid获取用户信息的方法
-			getuserInfo(codeUserInfo.data.weiXinUser.openid);
-		}else{
-			promptBtn(codeUserInfo.msg)
-		}
-
+	//获取用户信息
+	function getUserInfo () {
+		console.log('get user information')
+		$.ajax({
+			type:"get",
+			url:baseUrl + "/api/user/get/user/info",
+			async:true,
+			success:function(data){
+				if(data.code == 200){
+					userId = data.data.id
+				}else{
+					console.log(data.code)
+				}
+			},
+			error:function(err){
+				
+			}
+		});
 	}
 	
-	//通过openid获取用户信息
-	function getuserInfo (x) {
-		dataP = {
-			openid:x
-		}
-		var openidUserInfo = getAjaxData("get",dataP,"/api/user/get/user/info")
-		if(openidUserInfo.code==200){
-			//将openid加入到session中
-			setcodeval("useropenid",openidUserInfo.data.openid);
-			setcodeval("userid",openidUserInfo.data.id);
-			setcodeval('userTel',openidUserInfo.data.phone);
-		}else if(openidUserInfo.code==401){
-			window.location.href = 'login.html'
-		}else{
-			promptBtnFun(openidUserInfo.msg)
-		}
-		
-	}
 	
 	
 	// 通过活动id和flag获取奖励计划id
@@ -164,4 +151,4 @@
 			sessionStorage.setItem(name,val);
 		}
 	}
-
+	

@@ -9,8 +9,7 @@
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<!--引入高德地图-->
 		<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main.css?v=1.0" />
-
-		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/fontawesome.css" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
@@ -24,6 +23,9 @@
 			.lang-car-rentl,
 			.lang-car-rent2 {
 				background-color: white;
+			}
+			.lang-car-rentl{
+				/*border-top: 1px solid #EFEFEF;*/
 			}
 			
 			.lang-car-rent2 {
@@ -164,12 +166,25 @@
 				width: 100%;
 				box-sizing: border-box;
 			}
+			
+			.mint-cell{
+				border: none;
+				border-bottom: 1px solid #EFEFEF;
+			}
+			.mint-cell-wrapper{
+				background-image: none;
+			}
+			.floatUlRigLef .payPriceSpan {
+				font-size: 30px;
+				margin-left: 5px;
+				/*color: red;*/
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="app">
-			<mt-header title="">
+			<mt-header title="月卡续费">
 				<a href="home.html" slot="left">
 					<mt-button icon="back"></mt-button>
 				</a>
@@ -180,6 +195,9 @@
 			<mt-cell title="续费月卡">
 				<span style="color: green" @click="showcar=true" v-cloak>{{checkedCar}}</span>
 			</mt-cell>
+			<mt-cell title="到期时间">
+				<span style="color: green" @click="showcar=true" v-cloak>{{endDate}}</span>
+			</mt-cell>
 
 			<div class="lang-car-rentl">
 
@@ -187,7 +205,6 @@
 					<p v-cloak>{{chooseMonthCar}}</p>
 					<ul>
 						<li v-for="(monthcar,index) in monthcards" :class="{floatRight:index%2==1,floatLeft:index%2!=1}">
-
 							<div v-on:click="chooseMonth(index,monthcar.price)" v-bind:class="{activeButton:currentIndex==index,normalButton:currentIndex!=index}">
 								<p class="margin-style-1" v-cloak>{{monthcar.time}}随意停</p>
 								<p class="margin-style-2" v-cloak>￥{{monthcar.price}} <span>{{monthcar.originalPrice}}</span></p>
@@ -201,7 +218,7 @@
 
 			<div class="purchaseBox">
 				<ul class="floatUlRigLef">
-					<li v-cloak>{{monthCarPrice}}</li>
+					<li v-cloak><i class="fas fa-yen-sign"></i><span class="payPriceSpan">{{monthCarPrice}}</span></li>
 					<li>
 						<mt-button type="primary" @click="createRenewOrder">续费</mt-button>
 					</li>
@@ -242,6 +259,7 @@
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
 			var getConfigInfoFun = getConfigInfo(); //获取网页配置信息
+			var multiply = multiply;
 			//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			//出库信息
@@ -280,7 +298,9 @@
 						monthNo: '', //选择充值几个月
 						monthCarPrice: '',
 						allMonthCardOrder: [],
-						cardOrder: ''
+						cardOrder: '',
+						endDate: '',
+						changeEndDate: ''
 					};
 				},
 				created: function() {
@@ -312,6 +332,7 @@
 						handler(curVal, oldVal) {
 							console.log('当前选中的值：' + curVal[0])
 							this.checkedCar = curVal[0].values[0].name;
+							this.endDate = curVal[0].values[0].endDate ;
 						},
 						deep: true
 					}
@@ -339,6 +360,7 @@
 					//2018-8-15 TM
 					submitFun: function() {
 						this.checkedCar = this.changeCar;
+						this.endDate = this.changeEndDate;
 						this.showcar = false;
 					},
 					cancelFun: function() {
@@ -351,6 +373,7 @@
 							_this.changeCar = values[0].name;
 							_this.getGarageDetail(values[0].garageId);
 							_this.cardOrder = values[0].cardOrder;
+							_this.changeEndDate = values[0].endDate;
 						} else {
 							//							_this.checkedCar = values[0].name;
 						}
@@ -367,13 +390,16 @@
 							})
 							.then(function(res) {
 								if(res.status == 200 && res.data.code == 200) {
+									alert(JSON.stringify(res.data))
 									for(var i = 0; i < res.data.data.content.length; i++) {
 										if(res.data.data.content[i].expired == false) {
 											//方法一
 											_this.renewCards[0].values.push({
-												name: res.data.data.content[i].parkingLotName + '——' + res.data.data.content[i].garageName,
+//												name: res.data.data.content[i].parkingLotName + '——' + res.data.data.content[i].garageName  + '——' + res.data.data.content[i].carNo,
+												name: res.data.data.content[i].garageName  + '——' + res.data.data.content[i].carNo,
 												garageId: res.data.data.content[i].garageId,
-												cardOrder: res.data.data.content[i].cardCode
+												cardOrder: res.data.data.content[i].cardCode,
+												endDate: res.data.data.content[i].endDate
 											})
 											//方法二
 											//											_this.allParkings.push(res.data.data.content[i].parkingLotName + '——' + res.data.data.content[i].garageName)
@@ -409,19 +435,19 @@
 								//获取月卡等相关信息
 								if(response.status == 200 && response.data.code == 200) {
 									_this.monthcards = [{
-										price: response.data.data.billingMoneyByOneMonth,
+										price: multiply(response.data.data.billingMoneyByOneMonth,0.01),
 										originalPrice: '',
 										time: 1
 									}, {
-										price: parseFloat(response.data.data.billingMoneyByOneMonth) * 2,
+										price: multiply(response.data.data.billingMoneyByOneMonth * 2,0.01),
 										originalPrice: '',
 										time: 2
 									}, {
-										price: parseFloat(response.data.data.billingMoneyByOneMonth) * 3,
+										price: multiply(response.data.data.billingMoneyByOneMonth * 3,0.01),
 										originalPrice: '',
 										time: 3
 									}]
-									_this.monthCarPrice = response.data.data.billingMoneyByOneMonth;
+									_this.monthCarPrice = multiply(response.data.data.billingMoneyByOneMonth,0.01);
 									_this.chooseMonthCar = '1个月月卡';
 									_this.monthNo = 1;
 								}else{
@@ -437,7 +463,7 @@
 						var _this = this;
 						//支付流程  3 ：通过config接口注入权限验证配置
 						wx.config({
-							debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 							appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
 							timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
 							nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
@@ -512,7 +538,7 @@
 												if(res.err_msg == "get_brand_wcpay_request:ok") {
 													_this.$toast("交易成功")
 													setTimeout(function() {
-														window.location.href = "home.html";
+														window.location.href = "success.html";
 													}, 1000)
 												}
 												if(res.err_msg == "get_brand_wcpay_request:cancel") {

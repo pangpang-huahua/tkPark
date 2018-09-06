@@ -16,7 +16,7 @@
 
 .ul_input{ padding:20px;width:350px; margin:0 auto; }
 .ul_input li{ float:left; width:14%; padding:2px;text-align:center; }
-.ul_input li span{ display:block; background-color:#fff; border:1px solid #ccc; border-radius:4px; width:40px; margin:0 auto; height:40px; line-height:40px; }
+.ul_input li span{ display:block; background-color:#fff; border:1px solid #ccc; border-radius:4px; min-width:36px; margin:0 auto; height:40px; line-height:40px; }
 
 
 

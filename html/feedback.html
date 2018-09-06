@@ -16,17 +16,31 @@
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
 		<link rel="stylesheet" type="text/css" href="../css/slideshow.css" />
 		<style type="text/css">
-			.feedbackBox h3,.feedbackBox p{
+			.feedbackBox h3,
+			.feedbackBox p {
 				text-align: center;
 			}
-			.feedbackBox p{
+			
+			.feedbackBox p {
 				color: red;
 			}
-			.operationBox{
+			
+			.operationBox {
 				padding: 30px 20px;
 			}
-			.operationBox button:nth-of-type(2){
+			
+			.operationBox button:nth-of-type(2) {
 				margin-top: 15px;
+			}
+			/*.mint-cell-wrapper{
+				border-top: 1px solid red;
+				
+				border-bottom: 1px solid red;
+			}*/
+			.mint-cell-value{
+				border-top: 1px solid #EFEFEF;
+				
+				border-bottom: 1px solid #EFEFEF;
 			}
 		</style>
 	</head>
@@ -34,21 +48,19 @@
 	<body>
 		<div id="app" class="feedbackBox">
 			<mt-header title="问题反馈">
-				<a href="home.html" slot="left">
+				<a href="findCar.html" slot="left">
 					<mt-button icon="back"></mt-button>
 				</a>
 			</mt-header>
-			<h3>选择你要反馈的问题</h3>
-			<mt-radio
-  align="right"
-  v-model="value"
-  :options="options">
-</mt-radio>
-<p>如果您的车辆还未驶离停车场请勿操作</p>
-<div class="operationBox">
-	<mt-button type="primary" size='large' @click='submit'>提交</mt-button>
-	<mt-button type="default" size='large'>返回</mt-button>
-</div>
+			<h3>填写你要反馈的问题</h3>
+			<!--<mt-radio align="right" v-model="value" :options="options"></mt-radio>-->
+			<mt-field placeholder="故障反馈" type="textarea" rows="4" v-model="introduction"></mt-field>
+			
+			<p>如果您的车辆还未驶离停车场请勿操作</p>
+			<div class="operationBox">
+				<mt-button type="primary" size='large' @click='submit'>提交</mt-button>
+				<mt-button type="default" size='large' @click='goBack'>返回</mt-button>
+			</div>
 		</div>
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
@@ -56,6 +68,7 @@
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script type="text/javascript">
 			var ajaxDataFun = getAjaxData;
 			var getParam = GetQueryString;
@@ -63,7 +76,7 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-//			var getuserInfo = getuserInfo; //通过openid获取用户信息
+			//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
@@ -71,17 +84,19 @@
 				data() {
 					return {
 						value: '',
-						options:[{
-								label:'我已经驶离停车场',
-								value:'1'
-							},{
-								label:'这条记录不是我的',
-								value:'2'
-							}]
+						options: [{
+							label: '我已经驶离停车场',
+							value: '1'
+						}, {
+							label: '这条记录不是我的',
+							value: '2'
+						}],
+						//故障反馈的内容
+						introduction: ''
 					};
 				},
-				computed:{
-					
+				computed: {
+
 				},
 				mounted: function() {
 					this.$nextTick(function() {
@@ -89,13 +104,42 @@
 					})
 				},
 				watch: {
-					
 
 				},
 				methods: {
-					submit:function(){
-						//通过this.value获取选中的对象
-						console.log(this.value)
+					submit: function() {
+						console.log(this.introduction)
+						var _this = this ;
+						if(this.introduction){
+							//通过this.value获取选中的对象
+							var params = new URLSearchParams();
+							params.append('type','DEVICE_ERROR');
+							params.append('content',this.introduction);
+							axios.post(baseUrl + '/api/park/report/add',params,{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res){
+								if(res.data.code == 200){
+									_this.$toast('故障申报成功')
+									
+								}else{
+									_this.$toast(res.data)
+								}
+							})
+							.catch(function(err){
+								console.log(err)
+							})
+						}else{
+							this.$toast('请填写你遇到的故障问题')
+						}
+						
+					},
+					//返回
+					goBack:function(){
+						window.history.back();
 					}
 				}
 			}

@@ -44,7 +44,7 @@
 	<body>
 		<div id="app">
 			<mt-header title="充值">
-				<a href="home.html" slot="left">
+				<a href="wallet.html" slot="left">
 					<mt-button icon="back"></mt-button>
 				</a>
 			</mt-header>
@@ -73,6 +73,7 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
+			var multiplyFun = multiply ;
 //			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
@@ -80,28 +81,59 @@
 			var Main = {
 				data() {
 					return {
-						balance: ''
+						balance: '',
+						userId:''
 					};
 				},
 				computed: {
 
 				},
 				mounted: function() {
-					this.getBalance();
+//					this.getBalance();
 					this.$nextTick(function() {
 						//加载完成执行
+						this.getUserInfo();
 					})
 				},
 				watch: {
-
+					userId: {
+						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
+						handler(curVal, oldVal) {
+							if(curVal) {
+								//加载车辆列表
+								this.getBalance();
+							}
+						},
+						deep: true
+					}
 				},
 				methods: {
+					//获取用户信息
+					getUserInfo:function(){
+						console.log('get user information')
+						//获取用户信息
+						var _this = this ; 
+						axios.get(baseUrl + '/api/user/get/user/info',{
+							headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+						})
+						.then(function(res){
+							if(res.data.code == 200){
+								_this.userId = res.data.data.id ;
+							}
+						})
+						.catch(function(err){
+							
+						})
+					},
 					//获取用户余额
 					getBalance: function() {
 						var _this = this;
 						axios.get(baseUrl + '/api/balance/get/userid', {
 								params: {
-									userId: userId
+									userId: _this.userId
 								}
 							}, {
 								headers: {
@@ -111,7 +143,12 @@
 							})
 							.then(function(res) {
 								if(res.status == 200 && res.data.code == 200) {
-									_this.balance = res.data.data;
+									if(res.data.data){
+										_this.balance = multiplyFun(res.data.data,0.01);
+									}else{
+										_this.balance = 0 ;
+									}
+									
 									console.log(res.data.data)
 								}else{
 									_this.$toast(res.data.msg)
