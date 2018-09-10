@@ -1,0 +1,91 @@
+body,
+html {
+	background-color: white;
+}
+
+ul,
+li {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	line-height: 60px;
+	font-size: 16px;
+}
+
+.el-col {
+	border-radius: 0;
+}
+
+.border-right-sty {
+	border-right: 1px solid #EBEBEB;
+	text
+}
+
+.border-bottom-sty {
+	border-bottom: 1px solid #EBEBEB;
+}
+
+.box-left-sty {
+	margin-right: 10px;
+	text-align: right;
+}
+
+.box-right-sty {
+	margin-left: 10px;
+}
+
+.el-input__inner {
+	border: 0;
+}
+
+.appoinment-btn-box {
+	width: 90%;
+	margin: 20px auto;
+}
+
+.appoinment-btn-box button {
+	width: 100%;
+}
+
+.el-icon-location {
+	margin-left: 10px;
+	color: #409EFF;
+}
+
+/*选择器*/
+.piker-cars-box {
+	text-align: center;
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	background-color: white;
+	box-shadow: 0px 0px 15px #838383;
+}
+
+.piker-cars-box .operation-ul {
+	overflow: hidden;
+	border-bottom: #EAEAEA solid 1px;
+}
+
+.piker-cars-box .operation-ul li {
+	list-style: none;
+	float: left;
+	width: 50%;
+	text-align: center;
+	line-height: 32px;
+	color: #4EB3FF;
+}
+
+.confirm-appointment-box {
+	padding: 15px;
+}
+
+.cell-box-cancel {
+	padding: 0 10px;
+}
+
+.cell-box-cancel img {
+	width: 24px;
+	margin-left: 8px;
+}

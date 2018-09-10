@@ -1,0 +1,134 @@
+html,
+body {
+	background-color: white;
+}
+
+#myCarContent {}
+
+.grid-car-content {
+	border-bottom: 1px solid #E5E7E9;
+	padding: 15px;
+}
+
+.grid-car-content ul {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+}
+
+.grid-car-content ul li {
+	list-style: none;
+	line-height: 100%;
+	float: left;
+}
+
+.grid-car-content ul li:nth-of-type(1) {
+	width: 55%;
+	font-size: 0;
+}
+
+.grid-car-content ul li:nth-of-type(2) {
+	width: 45%;
+	padding-left: 12px;
+	box-sizing: border-box;
+}
+
+.grid-car-content ul li:nth-of-type(2) p:nth-of-type(1) {
+	font-size: 18px;
+}
+
+.grid-car-content ul li:nth-of-type(2) p:nth-of-type(2) {
+	color: #A3A5AA;
+}
+
+.grid-car-content ul li img {
+	width: 100%;
+}
+
+.car-item-content {
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.infoBox {
+	position: relative;
+	font-size: 12px;
+}
+
+.car-item-content .paddingBox1 {
+	line-height: 30px;
+	background-color: #EDEDED;
+	color: #101010;
+	padding: 0 8px;
+	font-size: 14px;
+}
+
+.car-item-content .paddingBox {
+	line-height: 20px;
+	color: white;
+	padding: 0 8px;
+}
+
+.original-price {
+	font-size: 10px;
+	color: #C9CBD2;
+	text-decoration: line-through;
+	margin-left: 8px;
+}
+
+.mint-button--small {
+	height: 26px;
+	line-height: 26px;
+}
+
+.expiry_date {
+	color: #6A6A6A;
+}
+
+.infoBox ul,
+.infoBox li {
+	list-style: none;
+}
+
+.infoBox ul {
+	overflow: hidden;
+	width: 100%;
+}
+
+.grid-car-content .infoBox li {
+	line-height: 20px;
+	color: white;
+	width: auto;
+}
+
+.grid-car-content .infoBox ul li:nth-of-type(1) {
+	font-size: 14px !important;
+	float: left;
+}
+
+.grid-car-content .infoBox ul li:nth-of-type(2) {
+	float: right;
+	text-align: right;
+}
+
+.parklotBox,
+.monthCarBox {
+	width: 100%;
+	position: absolute;
+	color: white;
+	left: 0;
+}
+
+.parklotBox {
+	padding-bottom: 8px;
+	bottom: 0;
+}
+
+.monthCarBox {
+	top: 0;
+	padding-top: 8px;
+}
+
+.carcolor {
+	color: #DCDCDC !important;
+}

@@ -6,49 +6,7 @@
 		<title>修改电话号码</title>
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
-		<style type="text/css">
-			#modifyPhone {
-				padding: 0 15px;
-				background-color: white;
-			}
-			.loginTab {
-				width: 100%;
-			}
-			.loginTab td {
-				background-color: white;
-			}
-			
-			.borderBottom {
-				border-bottom: 1px solid #E8E7E7;
-				border-bottom: 1px solid #F1F1F1;
-			}
-			
-			.loginTab input {
-				line-height: 48px;
-				width: 100%;
-				outline: none;
-				border: none;
-				background-color: transparent;
-			}
-			
-			.verificationCode {
-				text-align: right;
-			}
-			
-			.userDeal {
-				font-size: 12px;
-				text-align: center;
-				color: #757575;
-			}
-			
-			.userDeal span {
-				color: #26a2ff;
-			}
-			
-			.nextBotton {
-				padding: 15px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/modifyphone.css"/>
 	</head>
 	<body>
 		<div id="modifyPhone">
@@ -86,14 +44,12 @@
 		
 		<script type="text/javascript">
 			
-//			import Axios from 'axios'
 			var ajaxDataFun = getAjaxData;
 			var getParam = GetQueryString;
 			var promptFun = promptBtnFun; //提示
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
@@ -158,10 +114,11 @@
 					//获取验证码
 					getCaptcha: function() {
 						this.verifyPhoneF();
+						var _this = this ;
 						console.log('发送')
 						if(this.verifyPhone) {
 							axios.post(baseUrl + '/api/user/sms/send', {
-								phone: this.phone
+								phone: _this.phone
 							},{
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -169,7 +126,7 @@
 								withCredentials: true
 							}).then(function(response) {
 								//发送成功后调用倒计时
-								this.countDown();
+								_this.countDown();
 							}).catch(function(error) {
 								console.log(error)
 							});
@@ -200,14 +157,15 @@
 					},
 					//修改电话号码
 					modifyPhoneF: function() {
+						var _this = this ;
 						this.verifyPhoneF();
 						if(this.verifyPhone) {
 							this.verifyCaptchaF();
 						}
 						if(this.verifyPhone && this.verifyCaptcha) {
 							axios.post(baseUrl + '/api/user/phone/edit', {
-								phone: this.phone,
-								verifyCode: this.captcha
+								phone: _this.phone,
+								verifyCode: _this.captcha
 							},{
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

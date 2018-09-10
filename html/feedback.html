@@ -5,7 +5,6 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>问题反馈</title>
-		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<!-- 引入样式 -->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 
@@ -15,34 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
 		<link rel="stylesheet" type="text/css" href="../css/slideshow.css" />
-		<style type="text/css">
-			.feedbackBox h3,
-			.feedbackBox p {
-				text-align: center;
-			}
-			
-			.feedbackBox p {
-				color: red;
-			}
-			
-			.operationBox {
-				padding: 30px 20px;
-			}
-			
-			.operationBox button:nth-of-type(2) {
-				margin-top: 15px;
-			}
-			/*.mint-cell-wrapper{
-				border-top: 1px solid red;
-				
-				border-bottom: 1px solid red;
-			}*/
-			.mint-cell-value{
-				border-top: 1px solid #EFEFEF;
-				
-				border-bottom: 1px solid #EFEFEF;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/feedback.css"/>
 	</head>
 
 	<body>
@@ -53,7 +25,9 @@
 				</a>
 			</mt-header>
 			<h3>填写你要反馈的问题</h3>
+			<!--按照選項-->
 			<!--<mt-radio align="right" v-model="value" :options="options"></mt-radio>-->
+			<!--手動填寫-->
 			<mt-field placeholder="故障反馈" type="textarea" rows="4" v-model="introduction"></mt-field>
 			
 			<p>如果您的车辆还未驶离停车场请勿操作</p>
@@ -76,7 +50,6 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
@@ -124,7 +97,6 @@
 							.then(function(res){
 								if(res.data.code == 200){
 									_this.$toast('故障申报成功')
-									
 								}else{
 									_this.$toast(res.data)
 								}
@@ -135,7 +107,6 @@
 						}else{
 							this.$toast('请填写你遇到的故障问题')
 						}
-						
 					},
 					//返回
 					goBack:function(){

@@ -1,0 +1,21 @@
+.walletBox {
+	background-color: white;
+	padding: 0 15px;
+}
+
+.walletBox1 {
+	padding: 15px;
+}
+
+.walletBox .bannerImg {
+	width: 100%;
+	border-radius: 8px;
+}
+
+.mint-cell {
+	border: none;
+}
+
+.mint-cell-wrapper {
+	background-image: none;
+}

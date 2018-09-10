@@ -34,7 +34,6 @@ body{
 }
 .park-payment-box ul{
 	overflow: hidden;
-	/*border-bottom: 1px solid red;*/
 }
 .park-payment-box ul li{
 	float: left;

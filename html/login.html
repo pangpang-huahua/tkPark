@@ -7,62 +7,13 @@
 		<title>塔库泊车</title>
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
-		<style type="text/css">
-			.loginBanner {
-				width: 100%;
-			}
-			
-			#login .userInfo {
-				padding: 0 15px;
-				background-color: white;
-			}
-			
-			.loginTab {
-				width: 100%;
-			}
-			
-			.loginTab td {
-				background-color: white;
-			}
-			
-			.borderBottom {
-				border-bottom: 1px solid #E8E7E7;
-				border-bottom: 1px solid #F1F1F1;
-			}
-			
-			.loginTab input {
-				line-height: 48px;
-				width: 100%;
-				outline: none;
-				border: none;
-				background-color: transparent;
-			}
-			
-			.verificationCode {
-				text-align: right;
-			}
-			
-			.userDeal {
-				font-size: 12px;
-				text-align: center;
-				color: #757575;
-			}
-			
-			.userDeal span {
-				color: #26a2ff;
-			}
-			
-			.nextBotton {
-				padding: 15px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/login.css"/>
 	</head>
 
 	<body>
 		<div id="login">
 			<img class="loginBanner" src="../img/3.jpg" />
 			<div class="userInfo">
-				<!--<form>-->
 				<table class="loginTab" border="0" cellspacing="0" cellpadding="0">
 					<tr>
 						<td class="borderBottom" colspan="2">
@@ -91,7 +42,6 @@
 					</tr>
 
 				</table>
-				<!--</form>-->
 			</div>
 		</div>
 
@@ -105,7 +55,6 @@
 		<script src="../js/getUserInfo.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var getParam = GetQueryString;
-//			var getCode = getUserInfoFun;
 			var appId ;
 			new Vue({
 				el: '#login',
@@ -129,9 +78,9 @@
 				mounted: function() {
 					//判断连接中是否有code
 					if(getParam('code')){
-						alert('code 存在：' + getParam('code'))
+//						alert('code 存在：' + getParam('code'))
 					}else{
-						alert('code 不存在：')
+//						alert('code 不存在：')
 						//1 获取网页配置信息
 						this.getUserInfo()
 					}
@@ -159,7 +108,7 @@
 					getWechatInfo : function () {
 						axios.get(baseUrl + '/api/wechat/get/app/info').then(function(res){
 							if(res.status == 200 && res.data.code == 200){
-								alert('login获取网页配置信息')
+//								alert('login获取网页配置信息')
 								window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + res.data.data.appId + "&redirect_uri=http%3A%2F%2Fwww.pamirinfo.com%2FtkPark%2Fhtml%2Flogin.html&response_type=code&scope=snsapi_userinfo&state=0#wechat_redirect"
 							}else{
 								_this.$toast(res.data.msg)
@@ -184,7 +133,7 @@
 										_this.judgeIsLogin = true ;
 									}else if(res.data.code == 401){
 										//1 获取网页配置信息
-										alert('未登录')
+//										alert('未登录')
 										_this.getWechatInfo();
 									}
 									
@@ -307,7 +256,7 @@
 										_this.$toast(res.data.msg)
 									}
 								}).catch(function(err) {
-									alert("err"+JSON.stringify(err))
+//									alert("err"+JSON.stringify(err))
 									//									alert(err)
 								})
 						}

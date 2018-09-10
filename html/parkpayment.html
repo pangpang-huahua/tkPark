@@ -185,7 +185,7 @@
 
 					this.$nextTick(function() {
 						if(GetParam('getFrom') == 'binding') {
-							alert('binding')
+//							alert('binding')
 							this.getOrderListInfo = [{
 								toUrl: '/api/park/parking/list',
 								params: {
@@ -260,7 +260,7 @@
 									}
 									_this.plateNum = dataArr[GetParam('arrId')].carNo;
 									_this.sumPayMoney = multiply(dataArr[GetParam('arrId')].totalFee,0.01);
-									alert(dataArr[GetParam('arrId')].totalFee)
+//									alert(dataArr[GetParam('arrId')].totalFee)
 									orderid = dataArr[GetParam('arrId')].id
 									_this.payorderInfo = [{
 											name: '订单号',
@@ -317,11 +317,11 @@
 					},
 					//提交缴费订单
 					payMoneyFun: function() {
-						alert(orderid)
+//						alert(orderid)
 						var _this = this;
 						//支付流程  3 ：通过config接口注入权限验证配置
 						wx.config({
-							debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 							appId: getConfigInfoFun.appId, // 必填，公众号的唯一标识
 							timestamp: getConfigInfoFun.timestamp, // 必填，生成签名的时间戳
 							nonceStr: getConfigInfoFun.nonceStr, // 必填，生成签名的随机串
@@ -330,7 +330,7 @@
 						});
 						//支付流程   4 ：通过ready接口处理成功验证
 						wx.ready(function() {
-							alert('配置成功')
+//							alert('配置成功')
 							//支付流程  5 ：配置成功后调用创建支付订单的接口
 							//传入订单号，调用签名接口
 							axios.get(baseUrl + '/api/park/parking/sign', {
@@ -345,12 +345,12 @@
 								.then(function(res) {
 									
 									if(res.status == 200 && res.data.code == 200) {
-										alert(JSON.stringify(res.data.data.appId))
-										alert(JSON.stringify(res.data.data.timeStamp))
-										alert(JSON.stringify(res.data.data.nonceStr))
-										alert(JSON.stringify(res.data.data.prepay_id))
-										alert(JSON.stringify(res.data.data.signType))
-										alert(JSON.stringify(res.data.data.sign))
+//										alert(JSON.stringify(res.data.data.appId))
+//										alert(JSON.stringify(res.data.data.timeStamp))
+//										alert(JSON.stringify(res.data.data.nonceStr))
+//										alert(JSON.stringify(res.data.data.prepay_id))
+//										alert(JSON.stringify(res.data.data.signType))
+//										alert(JSON.stringify(res.data.data.sign))
 										//调用微信支付接口
 										function onBridgeReady() {
 											WeixinJSBridge.invoke(
@@ -363,7 +363,7 @@
 													"paySign": res.data.data.sign //微信签名 
 												},
 												function(res) {
-													alert(JSON.stringify(res))
+//													alert(JSON.stringify(res))
 													if(res.err_msg == "get_brand_wcpay_request:ok") {
 														_this.$toast("交易成功")
 														setTimeout(function() {

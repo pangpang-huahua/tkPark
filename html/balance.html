@@ -5,40 +5,12 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>充值</title>
-		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<!-- 引入样式 -->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 
 		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.1.0-web/css/all.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
-		<style type="text/css">
-			html,
-			body {
-				background-color: white;
-			}
-			
-			.remainingSumBox {
-				padding: 50px 20px 0;
-				/*padding-top: 50px;*/
-				text-align: center;
-				margin: 0 auto;
-			}
-			
-			.mint-button--primary {
-				background-color: #343D4A;
-			}
-			
-			.balanceP {
-				font-size: 12px;
-				margin: 0;
-			}
-			
-			.balancePMoney {
-				font-size: 30px;
-				margin: 10px 0;
-				margin-bottom: 30px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/balance.css"/>
 	</head>
 
 	<body>
@@ -74,7 +46,6 @@
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
 			var multiplyFun = multiply ;
-//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');

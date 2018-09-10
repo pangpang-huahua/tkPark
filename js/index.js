@@ -87,9 +87,9 @@ function choosekey(obj, jj) {
 		
 	} else {
 		if(numberInput == 6){
-			alert('非能源车')
+//			alert('非能源车')
 			if(isNewEnergyAutomobile == true){
-				alert('减减')
+//				alert('减减')
 				isNewEnergyAutomobile = false ;
 				//如果用户先点击新能源车输入完成突然想要换成非能源车   由于新能源车比非能源车多一位所以此时的next必须要减一
 				next -= 1;
@@ -119,7 +119,7 @@ function choosekey(obj, jj) {
 				}
 			}
 		}else{
-			alert('能源车')
+//			alert('能源车')
 			if(isNewEnergyAutomobile == false){
 				isNewEnergyAutomobile = true ;
 				

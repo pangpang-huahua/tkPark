@@ -19,8 +19,6 @@
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
 		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
-		
-		 
 	</head>
 
 	<body>
@@ -32,49 +30,19 @@
 					<el-header style='padding:0 ;background-color: #26a2ff;height: 40px;color: white;line-height: 40px;'>
 						<h3>
 							<a href="home.html" style="color:white;"><i class="el-icon-arrow-left"></i></a>
-							<!--<i class="fal fa-angle-left"></i>-->
 							车辆查找
 						</h3>
 					</el-header>
 					<div id="find_car_cont_cont">
-						<!--<mt-header title="车辆查找">
-							<router-link to="/" slot="left">
-								<mt-button icon="back"></mt-button>
-							</router-link>
-
-						</mt-header>-->
-
 						<el-main>
-
 							<div>
 								<mt-cell :title="checkedParklot">
 									<div @click="showParklot=true">
 										切换停车场<img class="iconImg" src="../img/arrow_down.png">
 									</div>
-									<!--<span style="color: green" ></span>-->
 								</mt-cell>
 
 							</div>
-							<!--<el-row>
-								<el-col :span="12">
-									<div class="grid-content">北京物美停车场总部</div>
-								</el-col>
-								<el-col :span="12">
-									<div class="grid-content text-align-right">切换<i class="el-icon-caret-right"></i></div>
-								</el-col>
-							</el-row>-->
-							<!--<el-row>
-								<el-col :span="24">
-									<div class="grid-content ">
-										入场时间
-										<el-select v-model="value" placeholder="请选择">
-											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-											</el-option>
-										</el-select>
-									</div>
-								</el-col>
-
-							</el-row>-->
 							<div id="license-plate-number" style="overflow: hidden;">
 								<p>请输入真是有效的车牌号查询</p>
 								<div class="car_input">
@@ -103,11 +71,9 @@
 					</div>
 					<div v-show='ishavecar==false' style="height: 15px;width:100%;background-color: #F0F0F0;"></div>
 					<div class="cars-list" v-for="(item,index) in vehicleToBeChargedList">
-						<!--<a :href="item.payUrl">-->
 							<el-main>
 								<el-row>
 									<el-col :span="5">
-										<!--<img class="img-show-100" src="../img/1-1506131104550-L.jpg" />-->
 										<a :href="item.payUrl">
 										<img class="img-show-100" :src="item.carHeadImg" />
 										</a>
@@ -115,19 +81,15 @@
 									</el-col>
 									<el-col :span="19">
 										<el-row class='' v-cloak>
-											<!--<el-col :span="9"><span class='margin-left-style font-size-sty2'>京A 56ABC</span></el-col>-->
 											<a :href="item.payUrl">
 											<el-col :span="9"><span class='margin-left-style font-size-sty2'>{{item.plateNum}}</span></el-col>
-											<!--<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">12元</span></el-col>-->
 											<el-col :span="12">当前消费：<span id="Monetary" class="subject-color-sty1">{{item.currentConsum/100}}</span></el-col>
 											</a>
 											<el-col :span="3" class='text-align-right'>
 												
 												<a href="feedback.html">
 													<span>
-														<!--<a style="float: right;" href="feedback.html">-->
 														<i class="el-icon-question color-style-1"></i>
-														<!--</a>-->
 													</span>
 												</a>
 											</el-col>
@@ -136,16 +98,13 @@
 										<el-row class='margin-sty'>
 											<el-col :span="24" class='font-size-1'>
 												<div class='margin-left-style font-color-sty3' v-cloak>
-													<!--入场时间：<span id="entry-time">2018-7-3 AM：9:20</span> 收费：<span id="charge-money"></span>3元/小时-->
 													入场时间：<span id="entry-time">{{item.enterTime}}</span>
-													 <!--收费：<span id="charge-money">{{item.chargeRule}}</span>-->
 												</div>
 											</el-col>
 										</el-row>
 										<el-row>
 											<el-col :span="24">
-												<!--<div class='margin-left-style font-size-sty3'>停车场：北京物美总部 2号立体车库 E19</div>-->
-												<div class='margin-left-style font-size-sty3' v-cloak>停车场：{{item.parkingName}}</div>
+												<div class='margin-left-style font-size-sty3 showOnlyOneLine' v-cloak>停车场：{{item.parkingName}}</div>
 											</el-col>
 
 										</el-row>
@@ -174,13 +133,10 @@
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script src="../js/interceptor.js" type="text/javascript" charset="utf-8"></script>-->
 		<script src="../js/layer.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/index.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			var getConfigInfo = getConfigInfo();
-
-			//			var latitude , longitude ;
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue().$mount('#app');
 			var Main = {
@@ -193,20 +149,15 @@
 							className: 'slot1',
 							textAlign: 'center'
 						}],
-
 						latitude: '',
 						longitude: '',
-						
 						parklotId : '',
 						changeParkLotId : '',
-						
 						ishavecar : false,
-						
 						//显示停车场
 						showParklot: false,
 						checkedParklot: '请选择',
 						changeParkLot: '',
-
 						options: [{
 							value: '选项1',
 							label: '1小时内'
@@ -220,7 +171,6 @@
 						value: '',
 						checked: false,
 						ulWidth: '266px',
-//						payUrl: 'parkpayment.html',
 						//待缴费车辆列表
 						vehicleToBeChargedList: [
 //							{
@@ -240,19 +190,17 @@
 							numberInput = 7 ;
 							this.ulWidth = '304px';
 						} else {
+							numberInput = 6 ;
 							this.ulWidth = '266px';
 						}
 					}
 				},
 				mounted: function() {
 					this.getAllCarOrder();
-					
-
 					this.$nextTick(function() {
 						var _this = this;
-						console.log(getConfigInfo);
+//						console.log(getConfigInfo);
 						//获取用户的地理位置信息
-
 						//						步骤三：通过config接口注入权限验证配置
 						wx.config({
 							debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -411,8 +359,6 @@
 								params: {
 									parkingLotId: _this.parklotId,
 									carNo: busNumberEnd
-//									parkingLotId: '4028e381643be53701643bea79b70000',
-//									carNo: '粤CKC236'
 								},
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

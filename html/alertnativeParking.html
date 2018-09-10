@@ -5,118 +5,23 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>停车场</title>
-		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
-		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/fontawesome.css" />-->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 
 		<!--引入高德地图-->
-		<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main.css?v=1.0" />
-		<!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">-->
-		<!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">-->
+		<!--<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main.css?v=1.0" />-->
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
-		<style type="text/css">
-			.el-main {
-				text-align: left;
-			}
-			
-			.staticbutton,
-			.hotbotton {
-				border-radius: 3px;
-				background-color: white;
-				outline: none;
-				margin-right: 5px;
-			}
-			
-			.staticbutton {
-				border: 1px solid #1CA81B;
-				color: #1CA81B;
-			}
-			
-			.hotbotton {
-				border: 1px solid red;
-				color: red;
-			}
-			
-			.el-button {
-				padding: 5px 8px;
-			}
-			
-			.el-button.is-round {
-				padding: 6px 8px;
-			}
-			
-			.margin-top-sty1 {
-				margin-top: 5px;
-			}
-			
-			.searchBox {
-				line-height: 0;
-				margin-bottom: 10px;
-			}
-			
-			.el-autocomplete {
-				width: 100%;
-			}
-			/*新增*/
-			
-			#chooseI {
-				color: #D9D9D9;
-				font-size: 20px;
-			}
-			
-			.activeI i {
-				color: #26A2FF;
-				font-size: 20px;
-			}
-			
-			.normalI i {
-				color: #D9D9D9;
-				font-size: 20px;
-			}
-			
-			.cars-list {
-				padding: 10px 15px;
-				background-color: white;
-				border-bottom: 1px solid #ECECEC;
-				display: -webkit-flex;
-				display: flex;
-				flex-direction: row;
-				flex-wrap: nowrap;
-				justify-content: space-between;
-				align-items: center;
-				align-content: flex-start;
-			}
-			
-			.grid-left-box {
-				width: 80%;
-			}
-			
-			.grid-right-box {
-				width: 20%;
-			}
-			
-			.p-style-1 {
-				margin: 0;
-				padding: 0;
-			}
-			
-			.mint-search {
-				height: 100%;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/alertnativeParking.css" />
 	</head>
 
 	<body>
 		<div id="app">
 			<mt-header title="停车场">
-				<!--<a href="home.html" slot="left">-->
-					<mt-button @click='goBack' slot="left" icon="back"></mt-button>
-				<!--</a>-->
+				<mt-button @click='goBack' slot="left" icon="back"></mt-button>
 			</mt-header>
 
 			<div>
@@ -126,7 +31,7 @@
 			<div>
 				<div class="cars-list" v-for="(item,index) in nearParks">
 					<div class="grid-left-box">
-						<p class='margin-left-style font-size-sty2 p-style-1' v-cloak>{{item.name}}</p>
+						<p class='margin-left-style font-size-sty2 p-style-1 showOnlyOneLine' v-cloak>{{item.name}}</p>
 
 						<div class='font-size-1 margin-sty'>
 							<button v-for="(itemtrait,index) in item.trait" v-bind:class="{ hotbotton: itemtrait.hot,  staticbutton: itemtrait.hot==false }" v-cloak>{{itemtrait.value}}</button>
@@ -146,8 +51,8 @@
 
 						<div class='margin-top-sty1'>
 							<span v-bind:class="{activeI: index==currentIndex,normalI:index!=currentIndex}">
-													<i class="fas fa-check-circle" @click="chooseParking(index)"></i>	
-													</span>
+								<i class="fas fa-check-circle" @click="chooseParking(index)"></i>	
+							</span>
 						</div>
 					</div>
 				</div>
@@ -156,12 +61,11 @@
 		</div>
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 
 		<!--高德地图-->
-		<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=21321a7e4734f283dbb81616b7a9da96&plugin=AMap.DistrictSearch"></script>
-		<script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+		<!--<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=21321a7e4734f283dbb81616b7a9da96&plugin=AMap.DistrictSearch"></script>
+		<script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>-->
 
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -175,9 +79,6 @@
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
 			var getConfigInfoFun = getConfigInfo(); //获取网页配置信息
-//			var getuserInfo = getuserInfo; //通过openid获取用户信息
-
-
 
 			var Main = {
 				data() {
@@ -190,7 +91,7 @@
 						staticClass: 'staticbutton',
 						activeClass: 'hotbotton',
 						nearParks: [],
-						
+
 						state4: '',
 						timeout: null,
 						//搜索
@@ -203,9 +104,9 @@
 					var _this = this;
 					this.$nextTick(function() {
 						//加载完成执行
-		
+
 					})
-					
+
 					//配置微信信息
 					wx.config({
 						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -217,11 +118,11 @@
 					});
 					//微信定位通过ready接口处理成功验证
 					wx.ready(function() {
-//						alert('获取地理信息配置成功')
+						//						alert('获取地理信息配置成功')
 						wx.getLocation({
 							type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-							success: function (res) {
-//								alert(JSON.stringify(res))
+							success: function(res) {
+								//								alert(JSON.stringify(res))
 								var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
 								var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 								var speed = res.speed; // 速度，以米/每秒计
@@ -229,23 +130,23 @@
 								_this.currentLongt = res.longitude;
 								_this.currentLat = res.latitude;
 								//获取停车场列表
-								_this.getNearPark(res.latitude,res.longitude)
+								_this.getNearPark(res.latitude, res.longitude)
 							},
-							fail: function (err) {
+							fail: function(err) {
 								_this.$toast(JSON.stringify(err))
 							}
 						});
-						
+
 					});
 					//			通过error接口处理失败验证
 					wx.error(function(res) {
-//						alert(JSON.stringify(res))
+						//						alert(JSON.stringify(res))
 						// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
 					});
 				},
 				methods: {
 					//返回
-					goBack: function () {
+					goBack: function() {
 						window.history.back();
 					},
 					//选择一个停车场
@@ -255,43 +156,43 @@
 						window.location.href = encodeURI("langcarrentl.html?parkingId=" + this.nearParks[index].parkingId + "&parkingName=" + this.nearParks[index].name);
 					},
 					//首次通过经纬度获取附近停车场
-					getNearPark: function (lat,lgt) {
-//						alert(lat,lgt)
-						var _this = this ;
+					getNearPark: function(lat, lgt) {
+						//						alert(lat,lgt)
+						var _this = this;
 						//调用搜索停车场的接口 
-							axios.get(baseUrl + '/api/parkinglot/search/nearby', {
-									params: {
-										longitude: lgt,
-										latitude: lat,
-										distance: 20000
-									},
-									headers: {
-										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-									},
-									withCredentials: true
-								})
-								.then(function(response) {
-//									alert(JSON.stringify(response))
-									if(response.status == 200) {
-										if(response.data.code == 200) {
-											for(var i = 0; i < response.data.data.length; i++) {
-												var p1 = [_this.currentLongt, _this.currentLat];
-												var p2 = [response.data.data[i].longitude, response.data.data[i].latitude]
-												var dis = AMap.GeometryUtil.distance(p1, p2);
-												_this.getParkinglotList(response.data.data[i].freeTime,response.data.data[i].name, response.data.data[i].id, response.data.data[i].longitude, response.data.data[i].latitude, dis)
-											}
-										} else {
-											_this.$toast(response.data.msg)
-											//提示出错原因
+						axios.get(baseUrl + '/api/parkinglot/search/nearby', {
+								params: {
+									longitude: lgt,
+									latitude: lat,
+									distance: 20000
+								},
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(response) {
+								//									alert(JSON.stringify(response))
+								if(response.status == 200) {
+									if(response.data.code == 200) {
+										for(var i = 0; i < response.data.data.length; i++) {
+											var p1 = [_this.currentLongt, _this.currentLat];
+											var p2 = [response.data.data[i].longitude, response.data.data[i].latitude]
+											var dis = AMap.GeometryUtil.distance(p1, p2);
+											_this.getParkinglotList(response.data.data[i].freeTime, response.data.data[i].name, response.data.data[i].id, response.data.data[i].longitude, response.data.data[i].latitude, dis)
 										}
-
 									} else {
-
+										_this.$toast(response.data.msg)
+										//提示出错原因
 									}
-								})
-								.catch(function(error) {
-//									alert(error);
-								});
+
+								} else {
+
+								}
+							})
+							.catch(function(error) {
+								//									alert(error);
+							});
 					},
 					//通过搜索获取停车场列表
 					searchPark: function(e) {
@@ -318,10 +219,10 @@
 									if(response.status == 200) {
 										if(response.data.code == 200) {
 											for(var i = 0; i < response.data.data.length; i++) {
-												var p1=[_this.currentLongt,_this.currentLat];
+												var p1 = [_this.currentLongt, _this.currentLat];
 												var p2 = [response.data.data[i].longitude, response.data.data[i].latitude]
 												var dis = AMap.GeometryUtil.distance(p1, p2);
-												_this.getParkinglotList(response.data.data[i].freeTime,response.data.data[i].name, response.data.data[i].id, response.data.data[i].longitude, response.data.data[i].latitude,dis)
+												_this.getParkinglotList(response.data.data[i].freeTime, response.data.data[i].name, response.data.data[i].id, response.data.data[i].longitude, response.data.data[i].latitude, dis)
 											}
 										} else {
 											_this.$toast(response.data.msg)
@@ -329,35 +230,35 @@
 										}
 
 									} else {
-										
+
 									}
 								})
 								.catch(function(error) {
-//									alert(error);
+									//									alert(error);
 								});
 
 						}
 
 					},
 					//获取车库列表
-					getParkinglotList: function(freet,name, id, longt, lat,dis) {
-						var showDis ;
-						if(dis/1000>1){
-							showDis = (dis/1000).toFixed(2) + 'km';
-						}else if(dis<100){
-							showDis = '目的地在100m内'
-						}else{
-							showDis = parseInt(dis/1000) + 'm';
+					getParkinglotList: function(freet, name, id, longt, lat, dis) {
+						var showDis;
+						if(dis / 1000 > 1) {
+							showDis = (dis / 1000).toFixed(2) + 'km';
+						} else if(dis < 100) {
+							showDis = '100m内'
+						} else {
+							showDis = parseInt(dis / 1000) + 'm';
 						}
 						var _this = this;
 						$.ajax({
-							type:"get",
-							url:baseUrl + '/api/parkinglot/garage/list',
-							async:false,//是否异步
-							data:{
+							type: "get",
+							url: baseUrl + '/api/parkinglot/garage/list',
+							async: false, //是否异步
+							data: {
 								parkingLotId: id
 							},
-							success:function(data){
+							success: function(data) {
 								if(data.code == 200) {
 									if(data.data.content.length > 0) {
 
@@ -412,7 +313,7 @@
 													parkingLotTypeE = '其他';
 												}
 											} 
-										}, 1)
+										}, 0)
 										setTimeout(function() {
 											_this.nearParks.push({
 												parkingId: id,
@@ -436,16 +337,16 @@
 													price: 12
 												}
 											})
-										}, 2)
-									}else{
+										}, 0)
+									} else {
 										_this.$toast('附近没有可选停车场')
 									}
-								}else{
+								} else {
 									_this.$toast(data.msg)
 								}
 							},
-							error:function(err){
-								
+							error: function(err) {
+
 							}
 						});
 					}

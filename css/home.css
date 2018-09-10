@@ -38,19 +38,22 @@ html,body{
 
 .grid-content{
 	line-height: 0;
-	padding: 16px;
 	background-color: white;
 	
 }
-.grid-content img{
+.grid-content div{
+	padding: 16px;
+	padding-bottom: 0;
+}
+.grid-content div img{
 	width: 100%;
 }
 .grid-content p{
 	text-align: center;
 	font-size: 14px;
 	margin: 0;
-	padding: 0;
-	margin-top: 15px;
+	padding: 15px 0;
+
 }
 
 
@@ -63,7 +66,6 @@ html,body{
 }
 
 .loginBox{
-	/*outline: 1px solid red;*/
 	padding: 65px 0;
 }
 .loginBox button{

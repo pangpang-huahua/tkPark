@@ -8,386 +8,9 @@
 		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<!-- 引入样式 -->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
-
-		<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.1.0-web/css/all.css" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
-		<style type="text/css">
-			html,
-			body {
-				background-color: white;
-				position: relative;
-			}
-			
-			.remainingSumBox {
-				padding: 0 20px;
-				margin: 0 auto;
-				box-sizing: border-box;
-			}
-			
-			.month-car-button ul {
-				overflow: hidden;
-				padding: 0;
-			}
-			
-			.month-car-button li {
-				list-style: none;
-				width: 47%;
-				margin-bottom: 15px;
-			}
-			
-			.floatLeft {
-				float: left;
-			}
-			
-			.floatRight {
-				float: right;
-			}
-			
-			.month-car-button div {
-				box-sizing: border-box;
-				width: 100%;
-				padding: 20px 10px;
-				padding: 15px 0;
-				text-align: center;
-				border-radius: 4px;
-			}
-			
-			.month-car-button div p {
-				margin: 0;
-			}
-			
-			.normalButton {
-				background-color: #F2F2F2;
-			}
-			
-			.activeButton {
-				background-color: #26a2ff;
-				color: white;
-			}
-			
-			.paymentImg {
-				width: 24px;
-				vertical-align: middle;
-			}
-			.paymentBox{
-				border-bottom: 1px solid #EFEFEF;
-				border-top: 1px solid #EFEFEF;
-			}
-			
-			.mint-cell:last-child,.mint-cell-wrapper{
-				background-image: none;
-			}
-			.mint-radiolist-title{
-				margin: 0;
-			}
-			.mint-cell{
-				min-height: 56px;
-			}
-			
-			.paymentBox ul {
-				overflow: hidden;
-				padding: 0;
-				margin: 0;
-			}
-			
-			.paymentBox li {
-				list-style: none;
-				float: left;
-				line-height: 56px;
-			}
-			
-			.paymentBox li:nth-of-type(1) {
-				width: 8%;
-			}
-			
-			.paymentBox li:nth-of-type(2) {
-				width: 92%;
-			}
-			/*修改*/
-			
-			.mint-cell-wrapper {
-				padding: 0;
-			}
-			
-			.payBox {
-				width: 100%;
-				padding: 15px 20px;
-				box-sizing: border-box;
-				position: fixed;
-				bottom: 0;
-			}
-			
-			.protocol {
-				text-align: center;
-			}
-			
-			.protocol span {
-				color: red;
-			}
-			/*遮罩层*/
-			
-			.popBox {
-				width: 100%;
-				height: 100%;
-				position: fixed;
-				top: 0;
-				left: 0;
-				background-color: rgba(0, 0, 0, 0.7);
-			}
-			/*数字键盘开始*/
-			
-			.clearfix:after {
-				content: "\200B";
-				display: block;
-				height: 0;
-				clear: both;
-			}
-			
-			.clearfix {
-				*zoom: 1;
-			}
-			/*IE/7/6*/
-			
-			#div1 {
-				/*text-align: center;*/
-			}
-			/*.shuru div::-webkit-scrollbar {
-				width: 0;
-				height: 0;
-				-webkit-transition: 1s;
-			}
-			
-			.shuru div::-webkit-scrollbar-thumb {
-				background-color: #a7afb4;
-				background-clip: padding-box;
-				min-height: 28px;
-			}
-			
-			.shuru div::-webkit-scrollbar-thumb:hover {
-				background-color: #525252;
-				background-clip: padding-box;
-				min-height: 28px;
-			}
-			
-			.shuru div::-webkit-scrollbar-track-piece {
-				background-color: #ccd0d2;
-			}
-			
-			.shuru div {
-				border: none;
-				width: 100%;
-				height: 50px;
-				font-size: 25px;
-				line-height: 50px;
-				
-				text-indent: 30px;
-				outline: none;
-				white-space: pre;
-				overflow-x: scroll;
-			}*/
-			
-			.shuru input::-webkit-scrollbar {
-				width: 0;
-				height: 0;
-				-webkit-transition: 1s;
-			}
-			
-			.shuru input::-webkit-scrollbar-thumb {
-				background-color: #a7afb4;
-				background-clip: padding-box;
-				min-height: 28px;
-			}
-			
-			.shuru input::-webkit-scrollbar-thumb:hover {
-				background-color: #525252;
-				background-clip: padding-box;
-				min-height: 28px;
-			}
-			
-			.shuru input::-webkit-scrollbar-track-piece {
-				background-color: #ccd0d2;
-			}
-			
-			.shuru input {
-				border: none;
-				width: 100%;
-				height: 50px;
-				font-size: 25px;
-				line-height: 50px;
-				text-indent: 30px;
-				outline: none;
-				white-space: pre;
-				overflow-x: scroll;
-			}
-			
-			.wrap {
-				position: relative;
-				margin: auto;
-				max-width: 640px;
-				min-width: 320px;
-				width: 100%;
-				height: 100%;
-				background: #F0EFF5;
-				overflow: hidden;
-			}
-			
-			.layer-content {
-				/*position: absolute;
-				left: 50%;*/
-				bottom: -200px;
-				width: 100%;
-				max-width: 640px;
-				height: auto;
-				/*z-index: 12;*/
-				/*-webkit-transform: translateX(-50%);
-				transform: translateX(-50%);*/
-				background-color: white;
-				/*修改*/
-				position: fixed;
-				bottom: 0;
-				z-index: 101;
-				display: none;
-			}
-			/* 输入表单 */
-			
-			.edit_cash {
-				display: block;
-				margin-top: 15px;
-				padding: 15px;
-				margin: 0 auto;
-				width: 90%;
-				border: 1px solid #CFCFCF;
-				border-radius: 10px;
-				background-color: #fff;
-			}
-			
-			.edit_cash p {
-				font-size: 14px;
-				color: #8D8D8F;
-			}
-			
-			.shuru {
-				position: relative;
-				margin-bottom: 10px;
-				padding: 0 20px;
-				border-bottom: 1px solid #CFCFCF;
-			}
-			
-			.shuru span {
-				position: absolute;
-				top: 5px;
-				font-size: 25px;
-			}
-			
-			.submit {
-				display: block;
-				margin: 0 auto 10px;
-				width: 90%;
-				height: 40px;
-				font-size: 16px;
-				color: #fff;
-				/*background: #80D983;*/
-				background-color: #8D8D8F;
-				border: 0px;
-				border-radius: 3px;
-				/**/
-			}
-			
-			.active {
-				background: #80D983;
-			}
-			/* 键盘 */
-			
-			.form_edit {
-				width: 100%;
-				background: #D1D4DD;
-			}
-			
-			.form_edit>div {
-				margin-bottom: 2px;
-				margin-right: 0.5%;
-				float: left;
-				width: 33%;
-				height: 45px;
-				text-align: center;
-				color: #333;
-				line-height: 45px;
-				font-size: 18px;
-				font-weight: 600;
-				background-color: #fff;
-				border-radius: 5px;
-			}
-			
-			.form_edit>div:nth-child(3n) {
-				margin-right: 0;
-			}
-			
-			.form_edit>div:last-child {
-				background-color: #DEE1E9;
-			}
-			/*其他金额*/
-			
-			.otherMoney {
-				/*padding: 0 20px;*/
-			}
-			
-			.otherMoneyHead {
-				border-bottom: 1px solid #DCDFE6;
-			}
-			
-			.otherMoneyHead ul {
-				overflow: hidden;
-				width: 100%;
-				margin: 0;
-			}
-			
-			.otherMoneyHead li {
-				list-style: none;
-				line-height: 60px;
-				width: 33%;
-				float: left;
-				text-align: center;
-				font-size: 12px;
-			}
-			
-			.otherMoneyHead .fontsize1 {
-				font-size: 18px;
-			}
-			/*数字键盘结束*/
-			/*用户协议*/
-			
-			.userAgumentBbox {
-				display: none;
-				width: 100%;
-				min-height: 100%;
-				/*height: auto;*/
-				background-color: white;
-				position: fixed;
-				position: absolute;
-				top: 0;
-				left: 0;
-				padding: 15px;
-				box-sizing: border-box;
-				z-index: 300;
-			}
-			
-			.userAgumentBbox h3 {
-				text-align: center;
-			}
-			
-			.userAgumentBbox p {
-				text-indent: 28px;
-				font-size: 14px;
-			}
-			
-			.closeImg {
-				width: 24px;
-				height: 24px;
-				float: right;
-				top: 15px;
-				right: 15px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/remainingsum.css"/>
 	</head>
 
 	<body>
@@ -484,12 +107,52 @@
 			<!--用户协议-->
 			<div class="userAgumentBbox">
 				<h3>
-				充值协议
-				<img class="closeImg" src="../img/close.png"/>
-			</h3>
-				<p>
-					爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次， 爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，爱就一个字，我只说一次，
-				</p>
+					充值协议
+					<i class="far fa-times-circle close-btn"></i>
+				</h3>
+				<div>
+					<p class="font-size-12">1.尊敬的用户，为保障您的合法权益，请您在充值之前仔细阅读、理解并接受本规则；如果您是未成年人，请在监护人的陪同和帮助下阅读本规则所有条款。当您在服务页面点击“去充值”按钮后，即视为您已阅读、理解本规则，并同意按本规则的规定参与充值、充值返利及类似性质的活动和／或使用账户余额。</p>
+
+					<p class="font-size-12">2.本规则作为《塔库泊车平台服务协议》和《塔库泊车单车服务协议》（以下统称“服务协议”）不可分割的一部分，与服务协议具有同等效力，且除非另有说明本规则的用语和定义与服务协议相同。本规则同服务协议同时生效，且为您和我们之间具有法律意义的文件，您和我们将同时受到本规则条款的约束。</p>
+					
+					<p class="font-size-12">3.您明确同意，我们有权根据法律法规和政策的变化和/或运营需要，不时对本规则进行修订并在服务页面内予以公布，该等修订由此即享有公示效力，无需另行单独通知您；若您在该等修订公布后继续使用本服务，则表示您已充分阅读、理解并接受经该等修订后的本规则的全部内容，也将遵循该等内容使用本服务；若您不同意该等经修订后的本规则的任何内容，您即应选择放弃充值同时停止使用本服务。</p>
+					
+					<p class="font-size-16 color-black font-weight">1.   定义</p>
+					
+					<p class="font-size-14 text-indent">1.1 充值本金，指您通过相关的服务页面向您的注册帐号实际支付的金额。</p>
+					
+					<p class="font-size-14 text-indent">1.2 账户余额，指您的注册帐号中显示的金额，包括1）充值本金，及2）返利金额，即就您参与的“充值返利”或其他类似性质的活动我们赠予您的金额。</p>
+					
+					<p class="font-size-16 color-black font-weight">2.   充值返利及或其他类似性质的活动规则：</p>
+					
+					<p class="font-size-14 text-indent">我们会通过具体的服务页面（包括充值页面及／或具体活动页面）公布不同数额的充值本金可享受的返利金额，例如，充值100元返利50元，则当您充值人民币100元时账户可得金额为人民币150元。</p>
+					
+					<p class="font-size-16 color-black font-weight">3.   账户余额的使用规则</p>
+					
+					<p class="font-size-14 text-indent"></p>3.1 账户余额仅可用于支付车辆租金的相关费用，且充值本金将会被优先使用。</p>
+					
+					<p class="font-size-14 text-indent">3.2 账户余额不可转移或转赠。</p>
+					
+					<p class="font-size-14 text-indent">3.3 账户余额的有效期为自充值之日起至使用完毕为止。</p>
+					
+					<p class="font-size-14 text-indent">3.4 充值本金中未使用部分，可申请退款，返利金额部分不可申请退款。</p>
+					
+					
+					<p class="font-size-14 text-indent">3.5 返利金额在如下情形下将会失效，或被我们收回或取消：</p>
+					
+					<p class="font-size-14 text-indent-2">(1) 您主动注销您的注册账号；</p>
+					
+					<p class="font-size-14 text-indent-2">(2) 您选择退回未使用的充值本金；</p>
+					
+					<p class="font-size-14 text-indent-2">(3) 您利用或者我们有合理怀疑您利用您的注册帐号从事作弊行为以获取不正当经济利益的情形；</p>
+					
+					<p class="font-size-14 text-indent-2">(4) 因您违反服务协议、相关说明或规则导致您的注册账号被冻结或关闭；</p>
+					
+					<p class="font-size-14 text-indent-2">(5) 其它根据服务协议、相关说明或规则导致我们无法向您提供服务的情形。</p>
+					
+					<p class="font-size-14 text-indent">3.6 发票：您可根据服务页面的提示和指引联系我们的客服人员以申请相关的发票；发票的金额为您充值本金的金额，返利金额部分不能开具发票。</p>
+
+				</div>
 
 			</div>
 
@@ -810,7 +473,7 @@
 			function check() {
 				$(".userAgumentBbox").fadeIn();
 			}
-			$(".closeImg").click(function() {
+			$(".close-btn").click(function() {
 				$(".userAgumentBbox").fadeOut();
 			})
 		</script>

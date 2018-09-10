@@ -1,0 +1,86 @@
+.el-main {
+	line-height: 40px;
+}
+
+.el-row {
+	margin-bottom: 0;
+	text-align: left;
+}
+
+.color-style-1 {
+	color: #67C23A;
+}
+
+.color-style-2 {
+	color: #409EFF;
+}
+
+.color-style-3 {
+	color: #E6A23C;
+}
+
+.grid-content {
+	padding: 10px;
+	background-color: white;
+}
+
+.car-box-left {
+	height: 40px;
+	width: 40px;
+	border-radius: 40px;
+	border: 1px solid #EBEBEB;
+	text-align: center;
+	overflow: hidden;
+}
+
+.text-align-right {
+	text-align: right;
+}
+
+.add-car-box button {
+	width: 80%;
+	border: 1px dashed #409EFF;
+	border-radius: 20px;
+	height: 30px;
+	background-color: transparent;
+	color: #409EFF;
+}
+
+#find_car_cont h3 {
+	text-align: center;
+}
+
+p {
+	text-align: center;
+}
+
+.el-checkbox {
+	float: right;
+}
+
+.addbtnbox {
+	text-align: center;
+}
+
+.mint-cell {
+	background-color: transparent;
+}
+
+.tiptextp {
+	padding: 15px 0 10px 0;
+}
+
+.mint-cell {
+	border: none;
+}
+
+.mint-cell-wrapper {
+	outline: none;
+	border: none;
+	text-decoration: none;
+}
+
+.mint-cell:last-child,
+.mint-cell-wrapper {
+	background-image: none;
+}

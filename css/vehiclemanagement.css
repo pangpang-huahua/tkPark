@@ -1,0 +1,128 @@
+html,
+body {
+	background-color: #F0F0F0;
+}
+
+.el-main {
+	line-height: 40px;
+	overflow: hidden;
+	background-color: transparent;
+}
+
+.el-row {
+	margin-bottom: 0;
+	text-align: left;
+}
+
+.color-style-1 {
+	color: #67C23A;
+}
+
+.color-style-2 {
+	color: #409EFF;
+}
+
+.color-style-3 {
+	color: #E6A23C;
+}
+
+.grid-content {
+	padding: 10px;
+	background-color: white;
+}
+
+.car-box-left {
+	height: 40px;
+	width: 40px;
+	border-radius: 40px;
+	border: 1px solid #EBEBEB;
+	text-align: center;
+	overflow: hidden;
+}
+
+.text-align-right {
+	text-align: right;
+}
+
+.add-car-box button {
+	width: 80%;
+	border: 1px dashed #409EFF;
+	border-radius: 20px;
+	height: 30px;
+	background-color: transparent;
+	color: #409EFF;
+}
+
+
+/*滑動*/
+
+.list-item {
+	position: relative;
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s;
+}
+
+.list-item[data-type="0"] {
+	transform: translate3d(0, 0, 0);
+}
+
+.list-item[data-type="1"] {
+	transform: translate3d(-80px, 0, 0);
+}
+
+.list-item:after {
+	content: " ";
+	position: absolute;
+	left: 20px;
+	bottom: 0;
+	right: 0;
+	height: 1px;
+	border-bottom: 1px solid #ccc;
+	color: #ccc;
+	-webkit-transform-origin: 0 100%;
+	transform-origin: 0 100%;
+	-webkit-transform: scaleY(0.5);
+	transform: scaleY(0.5);
+	z-index: 2;
+}
+
+.list-box {
+	overflow: hidden;
+}
+
+.list-item .delete {
+	width: 80px;
+	height: 62px;
+	background: #ff4949;
+	font-size: 17px;
+	color: #fff;
+	text-align: center;
+	line-height: 62px;
+	position: absolute;
+	top: 0;
+	right: -80px;
+}
+
+.el-row {}
+
+li {
+	list-style: none;
+}
+
+ul {
+	padding: 0;
+	overflow: hidden;
+}
+
+.autoplayspan {
+	color: #262626;
+}
+
+.platenumbers {
+	margin-left: 10px;
+}
+
+#find_car_cont h3 i,
+#find_car_cont h3 {
+	line-height: 40px;
+}

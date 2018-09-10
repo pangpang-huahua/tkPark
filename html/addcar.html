@@ -5,102 +5,16 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>添加车辆</title>
-		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<!-- 引入样式 -->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 		<link rel="stylesheet" type="text/css" href="../css/keybord.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
-		<style type="text/css">
-			.el-main {
-				line-height: 40px;
-			}
-			
-			.el-row {
-				margin-bottom: 0;
-				text-align: left;
-			}
-			
-			.color-style-1 {
-				color: #67C23A;
-			}
-			
-			.color-style-2 {
-				color: #409EFF;
-			}
-			
-			.color-style-3 {
-				color: #E6A23C;
-			}
-			
-			.grid-content {
-				padding: 10px;
-				background-color: white;
-			}
-			
-			.car-box-left {
-				height: 40px;
-				width: 40px;
-				border-radius: 40px;
-				border: 1px solid #EBEBEB;
-				text-align: center;
-				overflow: hidden;
-			}
-			
-			.text-align-right {
-				text-align: right;
-			}
-			
-			.add-car-box button {
-				width: 80%;
-				border: 1px dashed #409EFF;
-				border-radius: 20px;
-				height: 30px;
-				background-color: transparent;
-				color: #409EFF;
-			}
-			
-			#find_car_cont h3 {
-				text-align: center;
-			}
-			
-			p {
-				text-align: center;
-			}
-			
-			.el-checkbox {
-				float: right;
-			}
-			
-			.addbtnbox {
-				text-align: center;
-			}
-			
-			.mint-cell {
-				background-color: transparent;
-			}
-			
-			.tiptextp {
-				padding: 15px 0 10px 0;
-			}
-			.mint-cell{
-				border: none;
-				/*border-bottom: 1px solid #EFEFEF;*/
-			}
-			.mint-cell-wrapper{
-				outline: none;
-				border: none;
-				text-decoration: none;
-			}
-			.mint-cell:last-child,.mint-cell-wrapper{
-				background-image: none;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/addcar.css" />
 	</head>
 
 	<body>
@@ -111,13 +25,9 @@
 				</a>
 			</mt-header>
 
-			<!--<el-container>
-			
-				<el-main>-->
 			<p class="tiptextp">请绑定真实有效的车牌号</p>
 			<div class="car_input">
 				<ul class="clearfix ul_input" v-bind:style="{width:ulWidth}">
-					<!--<ul class="clearfix ul_input">-->
 					<li class="input_pro"><span></span></li>
 					<li class="input_pp input_zim"><span></span></li>
 					<li class="input_pp"><span></span></li>
@@ -138,7 +48,6 @@
 		</div>
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 		<!-- 引入组件库 -->
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -154,7 +63,6 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			// $mount：vue中的生命周期   将实例#app挂载到Vue上
 			//			new Vue()
@@ -183,11 +91,11 @@
 						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
 						handler(curVal, oldVal) {
 							if(curVal.length > 0) {
-								numberInput = 7 ;
+								numberInput = 7;
 								this.checked = true;
 								this.ulWidth = '304px';
 							} else {
-								numberInput = 6 ;
+								numberInput = 6;
 								this.checked = false;
 								this.ulWidth = '266px';
 							}
@@ -198,7 +106,7 @@
 				methods: {
 					//获取用户信息
 					getUserInfo: function() {
-						var _this = this ;
+						var _this = this;
 						axios.get(baseUrl + '/api/user/get/user/info', {
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -206,8 +114,8 @@
 								withCredentials: true
 							})
 							.then(function(res) {
-								if(res.data.code == 200){
-									_this.userid = res.data.data.id ;
+								if(res.data.code == 200) {
+									_this.userid = res.data.data.id;
 								}
 							})
 							.catch(function(err) {
@@ -256,9 +164,9 @@
 					submitAddCar: function() {
 						this.busNumber = provinceCode + busNumber;
 						console.log(busNumber)
-						if(busNumber){
-//							alert('is true')
-//							alert('busNumber'+busNumber)
+						if(busNumber) {
+							//							alert('is true')
+							//							alert('busNumber'+busNumber)
 							if(this.checked) {
 								if(busNumber.length >= 7) {
 									this.addCar()
@@ -274,10 +182,10 @@
 									this.$toast('请输入完整的车牌')
 								}
 							}
-						}else{
-//							alert('is false')
+						} else {
+							//							alert('is false')
 							this.$toast('请输入完整的车牌')
-						}	
+						}
 					},
 					//跳转回到home页面
 					gotoHome: function() {
@@ -288,11 +196,7 @@
 			var Ctor = Vue.extend(Main)
 			new Ctor().$mount('#app')
 		</script>
-			
-			
-			<!--变成新能源车子之后输入了    
-				输入了再切换回非新能源车就会出现最后一位删除了确不能输入的问题
-			-->
+
 	</body>
 
 </html>

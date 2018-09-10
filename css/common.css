@@ -1,5 +1,5 @@
-
-html,body{
+html,
+body {
 	padding: 0;
 	margin: 0;
 	list-style: none;
@@ -11,60 +11,70 @@ html,body{
 	color: #101010;
 	font-family: "微软雅黑";
 }
-a{
+
+a {
 	text-decoration: none;
 	color: #101010;
 }
-h3,h4{
+
+h3,
+h4 {
 	padding: 0;
 	margin: 0;
-	/*line-height: 0;*/
 }
 
-.margin-left-style{
+.margin-left-style {
 	margin-left: 5px;
 }
 
-.text-align-right{
+.text-align-right {
 	text-align: center;
-	
 }
-.bg-color-y{
+
+.bg-color-y {
 	background-color: rgb(242, 190, 20);
 }
-.color-style-1{
+
+.color-style-1 {
 	color: rgb(242, 190, 20);
 	font-size: 16px;
 	color: #101010;
-	/*color: red;*/
 }
-.color-sty-2{
+
+.color-sty-2 {
 	color: #F2C944;
 	font-size: 14px;
 }
-.font-color-sty3{
+
+.font-color-sty3 {
 	color: #777676;
 	font-size: 12px;
 }
 
+
 /*字体*/
-.font-size-1{
+
+.font-size-1 {
 	font-size: 12px;
 }
-.font-size-sty2{
+
+.font-size-sty2 {
 	font-size: 16px;
 	font-weight: bold;
 }
-.font-size-sty3{
+
+.font-size-sty3 {
 	font-size: 14px;
 }
-.font-size-4{
+
+.font-size-4 {
 	font-size: 16px;
 }
 
 
 /*背景色*/
-.subject-color-sty1{
+
+.subject-color-sty1 {
 	background-color: #F2BE14;
 	font-weight: bold;
 	padding: 2px 3px;
@@ -73,99 +83,166 @@ h3,h4{
 
 
 /*生效的按钮*/
+
 .normalButton {
-				background-color: white;
-				color: ;
-			}
-			.activeButton {
-				background-color: #26a2ff;
-				color: white;
-			}
-			.unactiveButton{
-				background-color: #B8BABE;
-				color: white;
-			}
+	background-color: white;
+	color: ;
+}
+
+.activeButton {
+	background-color: #26a2ff;
+	color: white;
+}
+
+.unactiveButton {
+	background-color: #B8BABE;
+	color: white;
+}
 
 
 /*头部*/
-			.headerBox{
-				padding: 0 15px;
-				background-color: #26a2ff;
-			}
-			.headerBox ul{
-				overflow: hidden;
-				margin: 0;
-				padding: 0;
-				color: white;
-			}
-			.headerBox ul li{
-				list-style: none;
-				float: left;
-				line-height: 40px;
-				height: 40px;
-			}
-			.headerBox ul li:nth-of-type(1),.headerBox ul li:nth-of-type(3){
-				width: 25%;
-				
-			}
-			.headerBox ul li:nth-of-type(2){
-				width: 50%;
-				text-align: center;
-			}
-			.headerBox ul li:nth-of-type(3){
-				text-align: right;
-				line-height: 60px;
-			}
+
+.headerBox {
+	padding: 0 15px;
+	background-color: #26a2ff;
+}
+
+.headerBox ul {
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	color: white;
+}
+
+.headerBox ul li {
+	list-style: none;
+	float: left;
+	line-height: 40px;
+	height: 40px;
+}
+
+.headerBox ul li:nth-of-type(1),
+.headerBox ul li:nth-of-type(3) {
+	width: 25%;
+}
+
+.headerBox ul li:nth-of-type(2) {
+	width: 50%;
+	text-align: center;
+}
+
+.headerBox ul li:nth-of-type(3) {
+	text-align: right;
+	line-height: 60px;
+}
+
 
 /*选择器*/
-			
-			.piker-cars-box {
-				text-align: center;
-				width: 100%;
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				background-color: white;
-				box-shadow: 0px 0px 15px #838383;
-			}
-			
-			.piker-cars-box .operation-ul {
-				overflow: hidden;
-				border-bottom: #EAEAEA solid 1px;
-			}
-			
-			.piker-cars-box .operation-ul li {
-				list-style: none;
-				float: left;
-				width: 50%;
-				text-align: center;
-				line-height: 32px;
-				color: #4EB3FF;
-			}
-			
+
+.piker-cars-box {
+	text-align: center;
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	background-color: white;
+	box-shadow: 0px 0px 15px #838383;
+}
+
+.piker-cars-box .operation-ul {
+	overflow: hidden;
+	border-bottom: #EAEAEA solid 1px;
+}
+
+.piker-cars-box .operation-ul li {
+	list-style: none;
+	float: left;
+	width: 50%;
+	text-align: center;
+	line-height: 32px;
+	color: #4EB3FF;
+}
+
 .iconImg {
-				width: 24px;
-			}
+	width: 24px;
+}
 
 [v-cloak] {
-            display: none;
-        }
-        
-.backIconLi{
-				font-size: 0;
-			}
-			.backIcon{
-				width: 24px;
-				vertical-align: middle;
-			}
-			
-.margintopdiv{
+	display: none;
+}
+
+.backIconLi {
+	font-size: 0;
+}
+
+.backIcon {
+	width: 24px;
+	vertical-align: middle;
+}
+
+.margintopdiv {
 	height: 40px;
 	background-color: red;
 }
 
-.payPriceSpan{
+.payPriceSpan {
 	font-size: 20px;
 	margin-left: 5px;
 }
 
+
+/*协议样式 start*/
+
+.font-size-12 {
+	font-size: 12px;
+}
+
+.font-size-14 {
+	font-size: 14px;
+}
+
+.font-size-16 {
+	font-size: 16px;
+}
+
+.font-size-18 {
+	font-size: 18px;
+}
+
+.font-weight {
+	font-weight: bold;
+}
+
+.color-black {
+	color: #333333;
+}
+
+.text-indent {
+	text-indent: 28px;
+}
+
+.text-indent-2 {
+	text-indent: 42px;
+}
+
+.close-btn {
+	color: #26A2FF;
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	font-size: 22px;
+}
+
+
+/*协议样式 end*/
+
+
+/*超过一行显示省略号*/
+
+.showOnlyOneLine {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+}

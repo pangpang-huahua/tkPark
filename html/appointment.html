@@ -5,142 +5,35 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>预约停车场</title>
-		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
-		<style type="text/css">
-			body,
-			html {
-				background-color: white;
-			}
-			
-			ul,
-			li {
-				padding: 0;
-				margin: 0;
-				list-style: none;
-				line-height: 40px;
-				font-size: 16px;
-			}
-			
-			.el-col {
-				border-radius: 0;
-			}
-			
-			.border-right-sty {
-				border-right: 1px solid #EBEBEB;
-				text
-			}
-			
-			.border-bottom-sty {
-				border-bottom: 1px solid #EBEBEB;
-			}
-			
-			.box-left-sty {
-				margin-right: 10px;
-				text-align: right;
-			}
-			
-			.box-right-sty {
-				margin-left: 10px;
-				/*text-align: right;*/
-			}
-			
-			.el-input__inner {
-				border: 0;
-			}
-			
-			.appoinment-btn-box {
-				width: 90%;
-				margin: 20px auto;
-			}
-			
-			.appoinment-btn-box button {
-				width: 100%;
-			}
-			
-			.el-icon-location {
-				margin-left: 10px;
-				color: #409EFF;
-			}
-			/*选择器*/
-			
-			/*.piker-cars-box {
-				text-align: center;
-				width: 100%;
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				background-color: white;
-				box-shadow: 0px 0px 15px #838383;
-			}
-			
-			.piker-cars-box .operation-ul {
-				overflow: hidden;
-				border-bottom: #EAEAEA solid 1px;
-			}
-			
-			.piker-cars-box .operation-ul li {
-				list-style: none;
-				float: left;
-				width: 50%;
-				text-align: center;
-				line-height: 32px;
-				color: #4EB3FF;
-			}*/
-			
-			.confirm-appointment-box{
-				padding: 15px;
-			}
-			
-			.cell-box-cancel{
-				padding: 0 10px;
-			}
-			
-			.cell-box-cancel img{
-				width: 24px;
-				margin-left: 8px;
-			}
-			
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/appointment.css" />
 	</head>
 
 	<body>
 		<div id="app">
-			<div class="headerBox">
-				<ul>
-					<li class="backIconLi">
-						<!--<i class="fal fa-angle-left"></i>-->
-						<img @click="goBack" class="backIcon"  src="../img/backIcon.png"/>
-					</li>
-					<li>预约车辆</li>
-					<li></li>
-				</ul>
-
-			</div>
+			<mt-header title="预约车辆">
+				<mt-button @click='goBack' icon="back" slot="left"></mt-button>
+			</mt-header>
 			<div>
 				<div v-cloak>
 					<mt-cell class='cell-box-cancel' title="停车场">
 						<!--<span style="color: green">{{parkingName}}</span>-->
 						<a :href="link"><span style="color: green">{{parkingName}}<img src="../img/navigation.png"/></span></a>
 					</mt-cell>
-					<mt-cell class='cell-box-cancel' title="车库" >
+					<mt-cell class='cell-box-cancel' title="车库">
 						<span style="color: green">{{carportName}}</span>
 					</mt-cell>
-					<!--<div>-->
-						<mt-cell class='cell-box-cancel' title="预约车辆">
-							<span style="color: green" @click="showcarsF">{{checkedCar}}</span>
-						</mt-cell>
-
-					<!--</div>-->
+					<mt-cell class='cell-box-cancel' title="预约车辆">
+						<span style="color: green" @click="showcarsF">{{checkedCar}}</span>
+					</mt-cell>
 
 					<mt-cell class='cell-box-cancel' title="入场时间">
 						<span style="color: green" @click="showtimeF">{{checkedTime}}</span>
-
 					</mt-cell>
 					<mt-cell class='cell-box-cancel' title="预计停留时间">
 						<span style="color: green" @click="showStopTimeF">{{stoppingTime}}</span>
@@ -149,7 +42,7 @@
 					<div class="confirm-appointment-box">
 						<mt-button type="primary" size='large' @click='createApointment'>确认预约</mt-button>
 					</div>
-					
+
 				</div>
 				<div>
 				</div>
@@ -183,7 +76,6 @@
 		</div>
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -196,7 +88,6 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			var Main = {
 				data() {
@@ -208,11 +99,11 @@
 						//车辆
 						slots: [{
 							flex: 1,
-							values: ['川HKKK00','川HKKK01','川HKKK02'],
+							values: ['川HKKK00', '川HKKK01', '川HKKK02'],
 							className: 'slot1',
 							textAlign: 'center'
 						}],
-						allcar:['请选择'],
+						allcar: ['请选择'],
 						showCars: false,
 						checkedCar: '',
 						changeCar: '',
@@ -235,25 +126,25 @@
 							className: 'slot3',
 							textAlign: 'left'
 						}],
-//						预计停留时间
+						//						预计停留时间
 						showStoppingTime: false,
 						stoppingTime: '',
 						changeStopTime: '',
-						stoppingTimeVals:[{
+						stoppingTimeVals: [{
 							flex: 1,
-							values: ['1小时','2小时','3小时'],
+							values: ['1小时', '2小时', '3小时'],
 							className: 'slot1',
 							textAlign: 'center'
 						}],
 						//停车场
 						parkingName: '',
 						userId: ''
-						
+
 					}
 				},
-				computed:{
-					carSlots:function(){
-						var _this = this ;
+				computed: {
+					carSlots: function() {
+						var _this = this;
 						this.slots = [{
 							flex: 1,
 							values: _this.allcar,
@@ -264,57 +155,57 @@
 					}
 
 				},
-				created:function(){
-					
+				created: function() {
+
 				},
-				watch:{
+				watch: {
 					userId: {
 						//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
 						handler(curVal, oldVal) {
 							if(curVal) {
-//								alert('true')
+								//								alert('true')
 								//获取车辆列表
 								this.getCarList();
-							}else{
-//								alert('false')
+							} else {
+								//								alert('false')
 							}
 						},
 						deep: true
 					}
 				},
-				mounted:function(){
-					var _this = this ;
+				mounted: function() {
+					var _this = this;
 					this.getUserInfo();
 					this.$nextTick(function() {
 						_this.getCarport();
-						
+
 					})
-					
+
 				},
 				methods: {
 					//返回
-					goBack : function () {
+					goBack: function() {
 						window.history.back();
 					},
 					//获取用户信息
-					getUserInfo:function(){
+					getUserInfo: function() {
 						console.log('get user information')
 						//获取用户信息
-						var _this = this ; 
-						axios.get(baseUrl + '/api/user/get/user/info',{
-							headers: {
+						var _this = this;
+						axios.get(baseUrl + '/api/user/get/user/info', {
+								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 								},
 								withCredentials: true
-						})
-						.then(function(res){
-							if(res.data.code == 200){
-								_this.userId = res.data.data.id ;
-							}
-						})
-						.catch(function(err){
-							
-						})
+							})
+							.then(function(res) {
+								if(res.data.code == 200) {
+									_this.userId = res.data.data.id;
+								}
+							})
+							.catch(function(err) {
+
+							})
 					},
 					//选择车辆
 					onchangeVal(picker, values) {
@@ -329,7 +220,7 @@
 						this.showCars = true;
 					},
 					submitFun: function() {
-						if(this.changeCar){
+						if(this.changeCar) {
 							this.checkedCar = this.changeCar;
 						}
 						this.showCars = false;
@@ -338,19 +229,19 @@
 						this.showCars = false;
 					},
 					//选择时间
-					changeGetTime: function(picker, values){
+					changeGetTime: function(picker, values) {
 						var _this = this;
 						if(_this.checkedTime == '') {
-							_this.checkedTime = values[0]+':' + values[1];
+							_this.checkedTime = values[0] + ':' + values[1];
 						} else {
-							_this.changeTime = values[0]+':' + values[1];
+							_this.changeTime = values[0] + ':' + values[1];
 						}
 					},
-					showtimeF: function(){
+					showtimeF: function() {
 						this.showTime = true;
 					},
 					submitFunt: function() {
-						if(this.changeTime){
+						if(this.changeTime) {
 							this.checkedTime = this.changeTime;
 						}
 						this.showTime = false;
@@ -359,7 +250,7 @@
 						this.showTime = false;
 					},
 					//预计停留时间
-					changeStopTimeF: function(picker, values){
+					changeStopTimeF: function(picker, values) {
 						var _this = this;
 						if(_this.stoppingTime == '') {
 							_this.stoppingTime = values[0]
@@ -367,11 +258,11 @@
 							_this.changeStopTime = values[0]
 						}
 					},
-					showStopTimeF: function(){
+					showStopTimeF: function() {
 						this.showStoppingTime = true;
 					},
 					submitFunStopt: function() {
-						if(this.changeStopTime){
+						if(this.changeStopTime) {
 							this.stoppingTime = this.changeStopTime;
 						}
 						this.showStoppingTime = false;
@@ -380,131 +271,131 @@
 						this.showStoppingTime = false;
 					},
 					//获取车辆列表
-					getCarList: function(){
-						var _this = this ;
-						axios.get(baseUrl + "/api/car/list",{
-							params:{
-								userId:_this.userId
-							}
-						},{
-								headers: {
-									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-								},
-								withCredentials: true
-							})
-						.then(function(res){
-							if(res.status == 200 && res.data.code == 200){
-								for(var i = 0 ; i < res.data.data.content.length; i++){
-									if(res.data.data.content[i].isBind){
-										_this.allcar.push(res.data.data.content[i].carNo)
-									}
-								}
-							}else{
-								_this.$toast(res.data.msg)
-							}
-						})
-						.catch(function(err){
-							
-						})
-					},
-					
-					//获取停车产详情
-					getParking: function (id) {
+					getCarList: function() {
 						var _this = this;
-						axios.get(baseUrl + '/api/parkinglot/get',{
-							params:{
-								id: id
-							}
-						},{
+						axios.get(baseUrl + "/api/car/list", {
+								params: {
+									userId: _this.userId
+								}
+							}, {
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 								},
 								withCredentials: true
 							})
-						.then(function(res){
-							if(res.status == 200 && res.data.code == 200){
-								_this.parkingName = res.data.data.name;
-								
-							}else{
-								_this.$toast(res.data.msg);
-							}
-						})
-						.catch(function(err){
-							
-						})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									for(var i = 0; i < res.data.data.content.length; i++) {
+										if(res.data.data.content[i].isBind) {
+											_this.allcar.push(res.data.data.content[i].carNo)
+										}
+									}
+								} else {
+									_this.$toast(res.data.msg)
+								}
+							})
+							.catch(function(err) {
+
+							})
+					},
+
+					//获取停车产详情
+					getParking: function(id) {
+						var _this = this;
+						axios.get(baseUrl + '/api/parkinglot/get', {
+								params: {
+									id: id
+								}
+							}, {
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+								},
+								withCredentials: true
+							})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									_this.parkingName = res.data.data.name;
+
+								} else {
+									_this.$toast(res.data.msg);
+								}
+							})
+							.catch(function(err) {
+
+							})
 					},
 					//获取车库详情
-					getCarport: function () {
+					getCarport: function() {
 						var _this = this;
-						axios.get(baseUrl + '/api/parkinglot/garage/get',{
-							params:{
-								id: getParam('carportId')
-							}
-						},{
+						axios.get(baseUrl + '/api/parkinglot/garage/get', {
+								params: {
+									id: getParam('carportId')
+								}
+							}, {
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 								},
 								withCredentials: true
 							})
-						.then(function(res){
-							if(res.status == 200 && res.data.code == 200){
-								_this.getParking(res.data.data.parkingLotId)
-								_this.carportName = res.data.data.name;
-								_this.carportId = res.data.data.id;
-							}else{
-								_this.$toast(res.data.msg)
-							}
-						})
-						.catch(function(err){
-							
-						})
+							.then(function(res) {
+								if(res.status == 200 && res.data.code == 200) {
+									_this.getParking(res.data.data.parkingLotId)
+									_this.carportName = res.data.data.name;
+									_this.carportId = res.data.data.id;
+								} else {
+									_this.$toast(res.data.msg)
+								}
+							})
+							.catch(function(err) {
+
+							})
 					},
 					//创建预约
-					createApointment: function(){
+					createApointment: function() {
 						console.log(this.checkedTime)
-						var _this = this ;
-						if(this.checkedCar != '' && this.checkedCar != '请选择'){
+						var _this = this;
+						if(this.checkedCar != '' && this.checkedCar != '请选择') {
 							//判断选中的时间是否在当前时间之后
 							var dateN = new Date();
-							var nowMonth = dateN.getMonth()+1;
-							var nowTime = new Date() ;
+							var nowMonth = dateN.getMonth() + 1;
+							var nowTime = new Date();
 							var checkedEntryTime = this.checkedTime;
-							
-							var entryTime = new Date(dateN.getFullYear() + '-' + nowMonth  + '-' + dateN.getDate() + '-' + checkedEntryTime);
-							
-							if(entryTime>nowTime){
+
+							var entryTime = new Date(dateN.getFullYear() + '-' + nowMonth + '-' + dateN.getDate() + '-' + checkedEntryTime);
+
+							if(entryTime > nowTime) {
 								var params = new URLSearchParams();
-								params.append('carNo',this.checkedCar);//车牌号
-								params.append('garageId',this.carportId);//车库ID
-								params.append('enterTime',entryTime);//入场时间
-								axios.post(baseUrl + '/api/park/booking/add',params,{
-									headers: {
-										'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-									},
-									withCredentials: true
-								})
-								.then(function(res){
-									alert(JSON.stringify(res))
-									if(res.status == 200 && res.data.code == 200){
-										_this.$toast('预约成功,2秒后跳转到预约列表')
-										setTimeout(function(){
-											window.location.href = 'parkingrecord.html'
-										},2000)
-									}else{
-										_this.$toast(res.data.msg)
-									}
-								})
-								.catch(function(err){
-//									alert(JSON.stringify(err))
-								})
-							}else{
+								params.append('carNo', this.checkedCar); //车牌号
+								params.append('garageId', this.carportId); //车库ID
+								params.append('enterTime', entryTime); //入场时间
+								axios.post(baseUrl + '/api/park/booking/add', params, {
+										headers: {
+											'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+										},
+										withCredentials: true
+									})
+									.then(function(res) {
+										//									alert(JSON.stringify(res))
+										if(res.status == 200 && res.data.code == 200) {
+											_this.$toast('预约成功,2秒后跳转到预约列表')
+											setTimeout(function() {
+												window.location.href = 'parkingrecord.html'
+											}, 2000)
+										} else {
+											_this.$toast(res.data.msg)
+										}
+									})
+									.catch(function(err) {
+										//									alert(JSON.stringify(err))
+									})
+							} else {
 								_this.$toast('入场时间必须大于当前时间')
 							}
-							
-						}else{
+
+						} else {
 							_this.$toast('请选择一辆车')
 						}
-						
+
 					}
 				}
 			}

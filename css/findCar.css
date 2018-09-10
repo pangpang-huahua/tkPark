@@ -1,65 +1,67 @@
-
-.el-main{
+.el-main {
 	line-height: 10px;
 }
-.el-row{
+
+.el-row {
 	margin-bottom: 0;
 }
 
-.el-checkbox{
-				float: right;
-			}
-.cars-list .el-main{
-	/*padding: 10px 0;*/
+.el-checkbox {
+	float: right;
+}
+
+.cars-list .el-main {
 	border-bottom: 1px solid #ECECEC;
 	background-color: white;
 }
 
-#find_car_cont_cont .el-main{
+#find_car_cont_cont .el-main {
 	text-align: left;
-	background-color:white;
+	background-color: white;
 }
 
-.text-align-right{
+.text-align-right {
 	text-align: right;
 	margin-top: -6px;
 }
 
-#license-plate-number{
+#license-plate-number {
 	margin-top: 20px;
 }
 
-.img-show-100{
+.img-show-100 {
 	width: 100%;
 }
 
-.margin-sty{
+.margin-sty {
 	margin-top: 15px;
 	margin-bottom: 10px;
 }
 
-#license-plate-number p{
+#license-plate-number p {
 	margin-bottom: 10px;
 	padding-top: 10px;
 }
-.tipsP{
+
+.tipsP {
 	text-align: center;
 	color: #409EFF;
 	line-height: 100px;
 }
 
-.el-col{
+.el-col {
 	text-align: left;
 }
 
-.mint-cell-wrapper{
+.mint-cell-wrapper {
 	padding: 0;
 }
 
-.isNew{
+.isNew {
 	margin-top: 8px;
 }
 
-#find_car_cont h3 i,#find_car_cont h3{
+#find_car_cont h3 i,
+#find_car_cont h3 {
 	line-height: 40px;
 }

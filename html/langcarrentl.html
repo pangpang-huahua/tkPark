@@ -10,168 +10,12 @@
 		<!--引入高德地图-->
 		<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main.css?v=1.0" />
 
-		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/fontawesome.css" />-->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
 		<link rel="stylesheet" type="text/css" href="../css/slideshow.css" />
-		<style type="text/css">
-			#app {
-				padding-bottom: 80px;
-				position: relative;
-			}
-			
-			.lang-car-rentl,
-			.lang-car-rent2 {
-				background-color: white;
-			}
-			
-			.lang-car-rent2 {
-				margin-top: 15px;
-			}
-			
-			.banner {
-				padding: 20px 30px;
-			}
-			
-			.banner img {
-				width: 100%;
-				border-radius: 10px;
-			}
-			
-			.month-car-button {
-				padding: 0 20px;
-			}
-			
-			.month-car-button ul {
-				overflow: hidden;
-				padding: 0;
-			}
-			
-			.month-car-button li {
-				list-style: none;
-				width: 47%;
-				margin-bottom: 15px;
-			}
-			
-			.floatLeft {
-				float: left;
-			}
-			
-			.floatRight {
-				float: right;
-			}
-			
-			.month-car-button div {
-				box-sizing: border-box;
-				width: 100%;
-				padding: 0 0 0 10px;
-				border-radius: 4px;
-				border: 1px solid #26a2ff;
-			}
-			
-			.month-car-button div p span {
-				color: #606266;
-				font-size: 12px;
-				text-decoration: line-through;
-			}
-			
-			.month-car-button div p:nth-of-type(1) {
-				font-size: 16px;
-			}
-			
-			.month-car-button div p:nth-of-type(2) {
-				font-size: 14px;
-			}
-			
-			.margin-style-1 {
-				margin-top: 15px;
-				margin-bottom: 5px;
-			}
-			
-			.margin-style-2 {
-				margin-bottom: 15px;
-				margin-top: 5px;
-			}
-			
-			.picker {
-				text-align: right;
-				border-top: 1px solid #DCDFE6;
-			}
-			
-			.sure {
-				margin-top: 10px;
-				margin-right: 20px;
-			}
-			/*.iconImg {
-				width: 24px;
-			}*/
-			
-			.allValBox {
-				padding: 10px 20px;
-			}
-			/*iframe*/
-			
-			#showMyCarIframe {
-				position: fixed;
-				top: 0;
-				left: 0;
-				background-color: white;
-				border: none;
-			}
-			/*切换停车场*/
-			
-			.chooseParking {
-				padding: 0 10px;
-				background-color: white;
-				border-bottom: 1px solid #EFEFEF;
-				/*margin-bottom: 15px;*/
-			}
-			
-			.floatUlRigLef {
-				overflow: hidden;
-				margin: 0;
-				padding: 0;
-				width: 100%;
-			}
-			
-			.chooseParking ul {}
-			
-			.floatUlRigLef li {
-				float: left;
-				line-height: 60px;
-				list-style: none;
-			}
-			
-			.chooseParking ul li {}
-			
-			.floatUlRigLef li:nth-of-type(1) {
-				width: 55%;
-			}
-			
-			.floatUlRigLef li:nth-of-type(2) {
-				width: 45%;
-				text-align: right;
-				color: #26a2ff;
-			}
-			
-			.purchaseBox {
-				padding: 10px 15px;
-				background-color: white;
-				box-shadow: 0px -3px 15px 0px #AFAFAF;
-				position: fixed;
-				bottom: 0;
-				width: 100%;
-				box-sizing: border-box;
-			}
-			
-			.floatUlRigLef .payPriceSpan {
-				font-size: 30px;
-				margin-left: 5px;
-				/*color: red;*/
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/langcarrent.css"/>
 	</head>
 
 	<body>
@@ -191,13 +35,15 @@
 						<a href="alertnativeParking.html">切换</a>
 					</li>
 				</ul>
-				<!--<mt-cell title="北京物美总部停车场" value="切换" @click="changePark"></mt-cell>-->
 			</div>
 			<div class="lang-car-rentl">
 
 				<div class="banner">
-					<mt-swipe :auto="4000" style='height: 160px;'>
-						<mt-swipe-item v-for='(monthcar,index) in monthcards'><img :src="monthcar.bannerImg" /></mt-swipe-item>
+					<mt-swipe :auto="4000" style='height: 220px;'>
+						<!--<mt-swipe-item v-for='(monthcar,index) in monthcards'>-->
+						<mt-swipe-item>
+							<img src="../img/langCarBanner.png" />
+						</mt-swipe-item>
 
 					</mt-swipe>
 				</div>
@@ -227,7 +73,7 @@
 					<!--<h3>请选择您想要租用的车库</h3>-->
 					<mt-cell style='font-weight: bold;background-color: #F0F0F0;outline: none;border: none;' title="请选择您想要租用的车库" value=""></mt-cell>
 				</div>
-				<div>
+				<div v-cloak>
 					<mt-cell title="车辆" value="换一辆">{{defaultCar}} <img class="iconImg" src="../img/arrow_down.png" @click="popupVisible=true" /></mt-cell>
 					<mt-picker v-if="popupVisible" :slots="slots" @change="onValuesChange" :show-toolbar="true">
 						<mt-button @click="handleConfirm('c')" class="sure">确认</mt-button>
@@ -262,7 +108,6 @@
 
 			</div>
 
-			<!--<iframe v-show="showPark" id="showMyCarIframe" src="nearparkinglot.html" width="100%" height="100%"></iframe>-->
 		</div>
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
@@ -292,11 +137,11 @@
 			var parkingLotIndex = [];
 
 			//实现地图定位   start
-			var map = new AMap.Map('', {
-				resizeEnable: true
-				//				center: [116.30946, 39.937629],
-				//				zoom: 3
-			});
+//			var map = new AMap.Map('', {
+//				resizeEnable: true
+//				//				center: [116.30946, 39.937629],
+//				//				zoom: 3
+//			});
 
 			var multiply = multiply;
 
@@ -411,10 +256,10 @@
 						//						alert('get cars')
 						var _this = this;
 						var params = new URLSearchParams();
-						//						params.append('carNo',this.defaultCar) ;//车牌号
-						//						params.append('parkingLotId',this.parklotId) ;//停车场id
-						params.append('carNo', '川AUIOP9'); //车牌号			
-						params.append('parkingLotId', 'Q785GC3ASVLMAMHWIABGWP5DG4A00001'); //停车场id
+												params.append('carNo',this.defaultCar) ;//车牌号
+												params.append('parkingLotId',this.parklotId) ;//停车场id
+//						params.append('carNo', '川AUIOP9'); //车牌号			
+//						params.append('parkingLotId', 'Q785GC3ASVLMAMHWIABGWP5DG4A00001'); //停车场id
 						axios.post(baseUrl + '/api/month/card/park/find/pli', params, {
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -443,7 +288,7 @@
 							},
 							async:true,
 							success:function(data){
-								alert(JSON.stringify(data))
+//								alert(JSON.stringify(data))
 								if(data.code == 400){//code==400表示没有月卡
 									_this.isCar = true ;
 								}else if(data.code == 200){ //code == 200 表示有月卡
@@ -546,8 +391,12 @@
 						//						this.chooseInfo = this.defaultCar + "|" + this.chooseMonthCar + "|" + this.choosedParking + "<br/>" + this.defaultCarPort
 					},
 					handleConfirm: function(p) {
-						if(p == 'c') {
+						if(p == 'c') {//车辆
 							this.popupVisible = false;
+							if(this.carportId){
+								//开始判断该车库该车是否购买了月卡     是：按钮显示去续费    否：按钮显示购买
+								this.isTheCarportCar();
+							}
 						} else if(p == 'p') { //确认选择车库后
 							this.carPortVisible = false;
 							//开始判断该车库该车是否购买了月卡     是：按钮显示去续费    否：按钮显示购买

@@ -13,120 +13,8 @@
 
 		<!--<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />-->
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
-		<style type="text/css">
-			html,body{
-				background-color: white;
-			}
-			#myCarContent {}
-			.grid-car-content{
-				border-bottom: 1px solid #E5E7E9;
-				padding: 15px;
-			}
-			.grid-car-content ul{
-				overflow: hidden;
-				padding: 0;
-				margin: 0;
-			}
-			.grid-car-content ul li{
-				list-style: none;
-				line-height: 100%;
-				float: left;
-			}
-			.grid-car-content ul li:nth-of-type(1){
-				width: 55%;
-				font-size: 0;
-			}
-			.grid-car-content ul li:nth-of-type(2){
-				width: 45%;
-				padding-left: 12px;
-				box-sizing: border-box;
-			}
-			.grid-car-content ul li:nth-of-type(2) p:nth-of-type(1){
-				font-size: 18px;
-			}
-			.grid-car-content ul li:nth-of-type(2) p:nth-of-type(2){
-				color: #A3A5AA;
-			}
-			.grid-car-content ul li img{
-				width: 100%;
-				/*border-radius: 10px;*/
-			}
-			.car-item-content{
-				border-radius: 10px;
-				overflow: hidden;
-			}
-			.infoBox{
-				position: relative;
-				font-size: 12px;
-			}
-			.car-item-content .paddingBox1{
-				line-height: 30px;
-				background-color: #EDEDED;
-				color: #101010;
-				padding: 0 15px;
-				font-size: 14px;
-			}
-			.car-item-content .paddingBox{
-				line-height: 20px;
-				color: white;
-				padding: 0 15px;
-				
-			}
-			.original-price{
-				font-size: 10px;
-				color: #C9CBD2;
-				text-decoration: line-through;
-				margin-left: 8px;
-			}
-			.mint-button--small{
-				height: 26px;
-				line-height: 26px;
-			}
-			.expiry_date{
-				color: #6A6A6A;
-			}
-			
-			.infoBox ul,.infoBox li{
-				list-style: none;
-			}
-			.infoBox ul{
-				overflow: hidden;
-				width: 100%;
-			}
-			.grid-car-content .infoBox li{
-				line-height: 20px;
-				color: white;
-				
-				width: auto;
-			}
-			.grid-car-content .infoBox ul li:nth-of-type(1){
-				font-size: 14px !important;
-				float: left;
-			}
-			.grid-car-content .infoBox ul li:nth-of-type(2){
-				float: right;
-				text-align: right;
-			}
-			.parklotBox,.monthCarBox{
-				width: 100%;
-				position: absolute;
-				color: white;
-				left: 0;
-				
-			}
-			.parklotBox{
-				padding-bottom: 8px;
-				bottom: 0;
-			}
-			.monthCarBox{
-				top: 0;
-				padding-top: 8px;
-			}
-			.carcolor{
-				color: #DCDCDC !important;
-				/*color: red;*/
-			}
-		</style>
+		<link rel="stylesheet" href="../css/mycar.css" />
+		
 	</head>
 
 	<body>
@@ -145,19 +33,20 @@
 								<div class="monthCarBox">
 									<div class="paddingBox">
 										<ul>
-											<li>塔库泊车 ·月卡</li>
-											<li v-cloak>{{car.carNo}}</li>
+											<li class="showOnlyOneLine">塔库泊车 ·月卡</li>
+											<li v-cloak class="showOnlyOneLine">{{car.carNo}}</li>
 										</ul>
 									</div>
-									<div class="paddingBox carcolor" v-cloak>
+									<div class="paddingBox carcolor showOnlyOneLine" v-cloak>
 										有效期：{{car.validDate}}
 									</div>
 								</div>
 								<div class="parklotBox">
-									<div class="paddingBox carcolor" v-cloak>停车场：{{car.parkName}}</div>
-									<div class="paddingBox carcolor" v-cloak>车库：{{car.garageName}}</div>
+									<div class="paddingBox carcolor showOnlyOneLine" v-cloak>停车场：{{car.parkName}}</div>
+									<div class="paddingBox carcolor showOnlyOneLine" v-cloak>车库：{{car.garageName}}</div>
 								</div>
-								<img src="../img/3_02.png"/>
+								<img v-if='car.effect == false' src="../img/3_02.png"/>
+								<img v-else src="../img/3_02_1.png"/>
 							</div>
 							
 							<!--<div>5元<span class="original-price">8元</span></div>-->
@@ -170,8 +59,8 @@
 					</li>
 					<li>
 						<div>
-							<p>塔库停车·月卡</p>
-							<p style="font-size: 14px;" v-cloak>{{car.parkingName}}</p>
+							<p class="showOnlyOneLine">塔库停车·月卡</p>
+							<p style="font-size: 14px;" v-cloak class="showOnlyOneLine">{{car.parkingName}}</p>
 							<mt-button size='small'  v-if='car.effect == false' v-bind:class="{activeButton:car.effect==false,unactiveButton:car.effect==true}" type="primary">
 								生效中
 								
@@ -243,15 +132,19 @@
 						})
 						.then(function(res){
 							if(res.status == 200 && res.data.code == 200){
-								alert(JSON.stringify(res.data))
-								var nowDate = new Date() ;
+								var createDate,endDate,createSecond,endSecond ;
+//								alert(JSON.stringify(res.data))
 								if(res.data.data.content.length > 0){
 									for(var i=0 ; i < res.data.data.content.length ; i++){
+										createDate = new Date(res.data.data.content[i].createDate);
+										endDate = new Date(res.data.data.content[i].endDate);
+										createSecond = createDate.getTime();
+										endSecond = endDate.getTime();
 										_this.cars.push({
 											parkName : res.data.data.content[i].parkingLotName,//停车场的名称
 											garageName : res.data.data.content[i].garageName,//停车场的名称
 											carNo : res.data.data.content[i].carNo,//停车场的名称
-											validDate : parseInt(floatSub(res.data.data.content[i].endDate,res.data.data.content[i].createDate) / 1000 / 24 / 60 / 60),
+											validDate : parseInt(floatSub(endSecond,createSecond) / 1000 / 24 / 60 / 60),
 											validity: res.data.data.content[i].monthNo + '个月',
 	//										originalPrice: 400,
 											price: multiply(res.data.data.content[i].price,0.01),

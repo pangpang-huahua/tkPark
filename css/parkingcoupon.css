@@ -1,0 +1,100 @@
+.el-main {
+	line-height: 10px;
+	background: none;
+}
+
+.coupon-box {
+	padding: 10px 15px;
+}
+
+.coupon-content {
+	margin-bottom: 15px;
+}
+
+.coupon-box-cell {
+	width: 100%;
+	height: 109px;
+	background-color: yellow;
+	background-image: url(../img/优惠券_03.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.coupon-box-cell ul {
+	padding: 0;
+}
+
+.coupon-box-cell li {
+	float: left;
+	list-style: none;
+	height: 109px;
+}
+
+.coupon-box-cell li:nth-of-type(1) {
+	width: 25%;
+	text-align: center;
+}
+
+.margin-style-2 {
+	margin: 0;
+	margin-top: 20px;
+	line-height: 30px;
+}
+
+.margin-style-3 {
+	margin: 0;
+	line-height: 30px;
+}
+
+.coupon-box-cell li:nth-of-type(2) {
+	box-sizing: border-box;
+	padding-left: 10px;
+	width: 75%;
+	position: relative;
+}
+
+.p-style-1 {
+	line-height: 20px;
+	margin: 0;
+	margin-top: 18px;
+	font-size: 16px;
+}
+
+.p-style-2 {
+	line-height: 20px;
+	margin: 0;
+	margin-top: 8px;
+	font-size: 12px;
+	color: #606266;
+}
+
+.p-style-2 span {
+	margin-right: 15px;
+}
+
+.wechat-pay {
+	height: 21px;
+	position: absolute;
+	top: 44px;
+	right: 20px;
+}
+
+.overdue-box {
+	margin: 0 auto;
+	width: 100%;
+	padding: 5px 15px;
+	background-color: white;
+	box-sizing: border-box;
+	font-size: 12px;
+}
+
+.overdue-box p {
+	margin: 0;
+	line-height: 28px;
+	color: red;
+}
+
+.overdue-box p img {
+	max-width: 24px;
+	vertical-align: middle;
+}

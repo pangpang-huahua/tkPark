@@ -5,147 +5,38 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>取消预约</title>
-		<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/findCar.css" />
 		<link rel="stylesheet" type="text/css" href="../css/head.css" />
-		<style type="text/css">
-			body,
-			html {
-				background-color: white;
-			}
-			
-			ul,
-			li {
-				padding: 0;
-				margin: 0;
-				list-style: none;
-				line-height: 60px;
-				font-size: 16px;
-			}
-			
-			.el-col {
-				border-radius: 0;
-			}
-			
-			.border-right-sty {
-				border-right: 1px solid #EBEBEB;
-				text
-			}
-			
-			.border-bottom-sty {
-				border-bottom: 1px solid #EBEBEB;
-			}
-			
-			.box-left-sty {
-				margin-right: 10px;
-				text-align: right;
-			}
-			
-			.box-right-sty {
-				margin-left: 10px;
-				/*text-align: right;*/
-			}
-			
-			.el-input__inner {
-				border: 0;
-			}
-			
-			.appoinment-btn-box {
-				width: 90%;
-				margin: 20px auto;
-			}
-			
-			.appoinment-btn-box button {
-				width: 100%;
-			}
-			
-			.el-icon-location {
-				margin-left: 10px;
-				color: #409EFF;
-			}
-			/*选择器*/
-			
-			.piker-cars-box {
-				text-align: center;
-				width: 100%;
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				background-color: white;
-				box-shadow: 0px 0px 15px #838383;
-			}
-			
-			.piker-cars-box .operation-ul {
-				overflow: hidden;
-				border-bottom: #EAEAEA solid 1px;
-			}
-			
-			.piker-cars-box .operation-ul li {
-				list-style: none;
-				float: left;
-				width: 50%;
-				text-align: center;
-				line-height: 32px;
-				color: #4EB3FF;
-			}
-			
-			.confirm-appointment-box {
-				padding: 15px;
-			}
-			.cell-box-cancel{
-				padding: 0 10px;
-			}
-			
-			.cell-box-cancel img{
-				width: 24px;
-				margin-left: 8px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/cancelreser.css"/>
 	</head>
 
 	<body>
 		<div id="app">
-			<div class="headerBox">
-				<ul>
-					<li class="backIconLi">
-						<!--<i class="fal fa-angle-left"></i>-->
-						<img @click="goBack" class="backIcon"  src="../img/backIcon.png"/>
-					</li>
-					<li>预约车辆</li>
-					<li></li>
-				</ul>
-
-			</div>
+			
+			<mt-header title="取消预约">
+				<mt-button @click='goBack' icon="back"  slot="left"></mt-button>
+			</mt-header>
 			<div>
 				<div v-cloak>
-					<!--<mt-cell class='cell-box-cancel' title="停车场" :to='link' is-link>-->
 					<mt-cell class='cell-box-cancel' title="停车场">
 						<a :href="link"><span style="color: green">{{parkingName}}<img src="../img/navigation.png"/></span></a>
 					</mt-cell>
 					<mt-cell class='cell-box-cancel' title="车库">
 						<span style="color: green">{{carportName}}</span>
 					</mt-cell>
-					<!--<div>-->
 					<mt-cell class='cell-box-cancel' title="预约车辆">
 						<span style="color: green">{{checkedCar}}</span>
 					</mt-cell>
-
-					<!--</div>-->
 
 					<mt-cell class='cell-box-cancel' title="入场时间">
 						<span style="color: green" >{{checkedTime}}</span>
 
 					</mt-cell>
-					<!--<mt-cell title="预计停留时间">
-						<span style="color: green">{{stoppingTime}}</span>
-
-					</mt-cell>-->
 					<div class="confirm-appointment-box">
-						<!--<mt-button type="primary" size='large' @click='cancelApointment'>取消预约</mt-button>-->
 						<mt-button type='danger' size='large' plain  @click='cancelApointment'>取消预约</mt-button>
 					</div>
 
@@ -157,7 +48,6 @@
 		</div>
 
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -171,7 +61,6 @@
 			var getAwardIdFun = getAwardId; //获取活动的建立计划id
 			var sessionFun = setcodeval; //添加session
 			var getCode = getCode; //通过code获取用户信息
-			//			var getuserInfo = getuserInfo; //通过openid获取用户信息
 
 			var Main = {
 				data() {
@@ -180,22 +69,14 @@
 						//车库
 						carportId: '',
 						carportName: '',
-						
-						
 						checkedCar: '',
-						
 						//入场时间
-						
 						checkedTime: '',
-						
-						
 						//停车场
 						parkingName: ''
-
 					}
 				},
 				computed: {
-					
 
 				},
 				created: function() {
@@ -213,13 +94,11 @@
 					goBack : function(){
 						window.history.back();
 					},
-
 					//获取预约订单详情信息
 					getAppointmentIinfo: function() {
 						var _this = this ;
 						var params = new URLSearchParams();
 						params.append('id', getParam('orderId')); //车牌号
-
 						axios.post(baseUrl + '/api/park/booking/get', params, {
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -231,13 +110,10 @@
 									console.log(res.data)
 									_this.carportName = res.data.data.garageName,
 									_this.checkedCar = res.data.data.carNo,
-									
 									//入场时间
 									_this.checkedTime = res.data.data.enterTime,
-									
 									//预计停留时间
 //									_this.stoppingTime = res.data.data.,
-									
 									//停车场
 									_this.parkingName = res.data.data.parkingLotName
 									//									this.$toast("")
@@ -269,7 +145,6 @@
 							
 						})
 					}
-					//				/api/park/booking/get
 				}
 			}
 			var Ctor = Vue.extend(Main)

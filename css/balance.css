@@ -1,0 +1,25 @@
+html,
+body {
+	background-color: white;
+}
+
+.remainingSumBox {
+	padding: 50px 20px 0;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.mint-button--primary {
+	background-color: #343D4A;
+}
+
+.balanceP {
+	font-size: 12px;
+	margin: 0;
+}
+
+.balancePMoney {
+	font-size: 30px;
+	margin: 10px 0;
+	margin-bottom: 30px;
+}

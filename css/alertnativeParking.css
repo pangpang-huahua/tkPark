@@ -1,0 +1,88 @@
+.el-main {
+	text-align: left;
+}
+
+.staticbutton,
+.hotbotton {
+	border-radius: 3px;
+	background-color: white;
+	outline: none;
+	margin-right: 5px;
+}
+
+.staticbutton {
+	border: 1px solid #1CA81B;
+	color: #1CA81B;
+}
+
+.hotbotton {
+	border: 1px solid red;
+	color: red;
+}
+
+.el-button {
+	padding: 5px 8px;
+}
+
+.el-button.is-round {
+	padding: 6px 8px;
+}
+
+.margin-top-sty1 {
+	margin-top: 5px;
+}
+
+.searchBox {
+	line-height: 0;
+	margin-bottom: 10px;
+}
+
+.el-autocomplete {
+	width: 100%;
+}
+
+/*新增*/
+#chooseI {
+	color: #D9D9D9;
+	font-size: 20px;
+}
+
+.activeI i {
+	color: #26A2FF;
+	font-size: 20px;
+}
+
+.normalI i {
+	color: #D9D9D9;
+	font-size: 20px;
+}
+
+.cars-list {
+	padding: 10px 15px;
+	background-color: white;
+	border-bottom: 1px solid #ECECEC;
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	align-content: flex-start;
+}
+
+.grid-left-box {
+	width: 80%;
+}
+
+.grid-right-box {
+	width: 20%;
+}
+
+.p-style-1 {
+	margin: 0;
+	padding: 0;
+}
+
+.mint-search {
+	height: 100%;
+}

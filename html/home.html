@@ -8,8 +8,6 @@
 		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 		<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
 		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/fontawesome.css"/>-->
-		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.2.0-web/css/all.css" />-->
 		<link rel="stylesheet" type="text/css" href="../css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layoutcontanier.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
@@ -23,39 +21,34 @@
 					<div class="headerBox">
 						<ul>
 							<li>
-								<!--<i class="fas fa-angle-left"></i>-->
 							</li>
 							<li>
 								<h3>塔库泊车</h3></li>
 							<li>
-								<!--<a href="personalsetting.html"><i class="fas fa-cog"></i></a>-->
 								<a :href="personalsetUrl">
 									<img src="../img/setIcon.png"/>
-									<!--<i class="fas fa-cog"></i>-->
 								</a>
 							</li>
 						</ul>
 
 					</div>
 
-					<!--<h3 id="" style="">塔库泊车<a href="personalsetting.html"> <i class="el-icon-setting"></i></a></h3>-->
 					<div v-show="show.GoToLogin" class="loginBox">
 						<a :href="loginUrl"><button>登&nbsp;&nbsp;录</button></a>
 					</div>
 					<div v-show="show.userInfo">
-						
-					
 						<img id="userImg" :src="userHeadImg" />
 						<h4 id="userNickName" v-cloak>{{userTel}}</h4>
 					</div>
 				</div>
 				<div id="home_contanier_content">
 					<el-row :gutter="12">
-
 						<el-col :span="8">
 							<a href="findCar.html">
 								<div class="grid-content bg-purple">
+									<div>
 									<img src="../img/home_04.png" />
+									</div>
 									<p>停车缴费</p>
 								</div>
 							</a>
@@ -64,17 +57,20 @@
 						<el-col :span="8">
 							<a :href="nearparkinglotUrl">
 								<div class="grid-content bg-purple">
+									<div>
 									<img src="../img/home_06.png" />
+									</div>
 									<p>附近停车场</p>
 								</div>
 							</a>
 						</el-col>
 
 						<el-col :span="8">
-							<!--<a href="parkingrecord.html">-->
 							<a :href="parkingrecordUrl">
 								<div class="grid-content bg-purple">
+									<div>
 									<img src="../img/home_08.png" />
+									</div>
 									<p>停车记录</p>
 								</div>
 							</a>
@@ -82,46 +78,38 @@
 					</el-row>
 					<el-row :gutter="12">
 						<el-col :span="8">
-							<!--<a href="vehiclemanagement.html">-->
 							<a :href="vehiclemanagementUrl">
 								<div class="grid-content bg-purple">
+									<div>
 									<img src="../img/home_13.png" />
+									</div>
 									<p>车辆管理</p>
 								</div>
 							</a>
 						</el-col>
 						
 						<el-col :span="8">
-							<!--<a href="langcarrentl.html">-->
 							<a :href="langcarrentlUrl">
 								<div class="grid-content bg-purple">
+									<div>
 									<img src="../img/home_15.png" />
+									</div>
 									<p>车位长租</p>
 								</div>
 							</a>
 						</el-col>
 						<el-col :span="8">
-							<!--<a href="wallet.html">-->
 							<a :href="walletUrl">
 								<div class="grid-content bg-purple">
-									<img src="../img/home_13.png" />
+									<div>
+									<img src="../img/walletIcon.png" />
+									</div>
 									<p>钱包</p>
 								</div>
 							</a>
 						</el-col>
 
 					</el-row>
-					<!--<el-row :gutter="12">
-						<el-col :span="8">
-							<a href="parkingcoupon.html">
-								<div class="grid-content bg-purple">
-									<img src="../img/home_14.png" />
-									<p>停车券</p>
-								</div>
-							</a>
-						</el-col>
-
-					</el-row>-->
 				</div>
 			</div>
 		</div>
